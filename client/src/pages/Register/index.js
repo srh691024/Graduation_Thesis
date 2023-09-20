@@ -26,7 +26,7 @@ function Register() {
                     <div className={cx('line')}></div>
                     </div>
                 <OtherRegister />
-                <div className={cx('login-link')}>
+                <div className={cx('register-link')}>
                     <p>Have an account?</p>
                     <a href="/login">Login</a>
                 </div>

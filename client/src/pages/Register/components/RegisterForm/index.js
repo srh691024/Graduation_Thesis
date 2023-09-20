@@ -23,7 +23,7 @@ function RegisterForm() {
     const [checked, setChecked] = useState('')
 
     const handleSubmit = () => {
-
+        
         console.log({nameGender: checked})
     }
     return (
