@@ -1,0 +1,893 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+}
+
+article {
+    display: block;
+
+    .wrapper-post {
+        padding-bottom: 16px;
+        width: 100%;
+        flex-direction: column;
+        min-width: min(390px, 100%);
+        display: flex;
+        height: 100%;
+        border-bottom: 1px solid rgb(219, 219, 219);
+
+
+        .avatar-name-date {
+            padding-bottom: 12px;
+            padding-left: 4px;
+            display: block;
+
+            .and {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                flex-direction: row;
+                justify-content: flex-start;
+
+                .avatar-post {
+                    margin-right: 12px;
+                    display: flex;
+                    width: 40px;
+                    height: 40px;
+                    overflow: hidden;
+                    border-radius: 50%;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                }
+
+                .name-date {
+                    background-color: transparent;
+                    min-width: 0;
+                    display: flex;
+                    align-items: center;
+                    border-radius: 0;
+                    min-height: 0;
+                    position: static;
+                    flex-direction: row;
+                    align-self: auto;
+                    justify-content: flex-start;
+                    flex-grow: 1;
+
+                    .nd {
+                        width: 100%;
+                        border-radius: 0;
+                        justify-content: center;
+                        background-color: transparent;
+                        flex-direction: column;
+                        display: flex;
+                        flex-shrink: 0;
+                        align-self: auto;
+                        position: relative;
+                        flex-grow: 0;
+
+                        .nd-first {
+                            border-radius: 0;
+                            background-color: transparent;
+                            display: flex;
+                            align-items: center;
+                            flex-shrink: 0;
+                            position: static;
+                            flex-direction: row;
+                            align-self: auto;
+                            justify-content: flex-start;
+
+                            .name {
+                                display: block;
+
+                                .name-first {
+                                    border-radius: 0;
+                                    background-color: transparent;
+                                    display: flex;
+                                    align-items: center;
+                                    position: static;
+                                    flex-direction: row;
+                                    justify-content: flex-start;
+
+                                    span {
+                                        min-width: 0;
+                                        margin: 0;
+                                        color: rgb(0, 0, 0);
+                                        word-wrap: break-word;
+                                        font-weight: 600;
+                                        position: relative;
+                                        display: block;
+                                        font-family: var(--font-family);
+                                        white-space: pre-line;
+                                        max-width: 100%;
+                                        word-break: break-word;
+                                        unicode-bidi: isolate;
+
+                                        a {
+                                            text-decoration: none;
+                                            display: inline;
+                                            padding: 0;
+                                            background-color: transparent;
+                                            margin: 0;
+                                            cursor: pointer;
+                                            border: 0;
+                                            text-align: inherit;
+                                            list-style: none;
+                                            outline: none;
+                                            font-size: 13px;
+
+                                        }
+
+                                        a,
+                                        a:visited {
+                                            color: black;
+                                        }
+                                    }
+                                }
+                            }
+
+                            .date {
+                                background-color: transparent;
+                                display: flex;
+                                align-items: center;
+                                flex-shrink: 0;
+                                position: static;
+                                flex-direction: row;
+                                align-self: auto;
+                                justify-content: flex-start;
+                                flex-grow: 0;
+                                border-radius: 0;
+
+                                span {
+                                    margin: 0 4px;
+                                    display: inline-block;
+
+                                    .span-first {
+                                        font-weight: 400;
+                                        font-size: 20px;
+                                        min-width: 0;
+                                        margin: 0;
+                                        word-wrap: break-word;
+                                        color: rgb(115, 115, 115);
+                                        position: relative;
+                                        display: block;
+                                        white-space: pre-line;
+                                        font-family: var(--font-family);
+                                        max-width: 100%;
+                                        word-break: break-word;
+                                        unicode-bidi: isolate;
+                                    }
+                                }
+
+                                .date-first {
+                                    border-radius: 0;
+                                    background-color: transparent;
+                                    flex-direction: column;
+                                    display: flex;
+                                    flex-shrink: 0;
+                                    align-self: auto;
+                                    margin: 0;
+                                    flex-grow: 0;
+
+                                    a {
+                                        text-decoration: none;
+                                        display: inline;
+                                        padding: 0;
+                                        background-color: transparent;
+                                        margin: 0;
+                                        cursor: pointer;
+                                        text-align: inherit;
+                                        list-style: none;
+                                        outline: none;
+
+                                        span {
+                                            font-weight: 400;
+                                            min-width: 0;
+                                            margin: 0;
+                                            word-wrap: break-word;
+                                            color: rgb(115, 115, 115);
+                                            position: relative;
+                                            display: block;
+                                            font-family: var(--font-family);
+                                            max-width: 100%;
+                                            word-break: break-word;
+                                            unicode-bidi: isolate;
+                                            font-size: 12px;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        //written by authors
+                        .nd-second {
+                            border-radius: 0;
+                            background-color: transparent;
+                            display: flex;
+                            align-items: center;
+                            flex-shrink: 0;
+                            position: static;
+                            flex-direction: row;
+                            align-self: auto;
+                            justify-content: flex-start;
+                            flex-grow: 0;
+
+                            span {
+                                font-weight: 400;
+                                min-width: 0;
+                                margin: 0;
+                                color: rgb(0, 0, 0);
+                                word-wrap: break-word;
+                                position: relative;
+                                display: block;
+                                font-family: var(--font-family);
+                                white-space: pre-line;
+                                font-size: 11px;
+                                max-width: 100%;
+                                word-break: break-word;
+                                unicode-bidi: isolate;
+                            }
+                        }
+                    }
+                }
+
+                .action {
+                    border-radius: 0;
+                    background-color: transparent;
+                    display: flex;
+                    align-items: center;
+                    flex-shrink: 0;
+                    position: static;
+                    flex-direction: row;
+                    align-self: auto;
+                    justify-content: flex-start;
+                    flex-grow: 0;
+
+                    .action-first {
+                        border-radius: 0;
+                        background-color: transparent;
+                        flex-direction: column;
+                        display: flex;
+                        flex-shrink: 0;
+                        position: static;
+                        align-items: stretch;
+                        align-self: auto;
+                        justify-content: flex-start;
+                        margin-left: 8px;
+                        flex-grow: 0;
+
+                        .action-second {
+                            justify-content: center;
+                            padding: 0;
+                            background-color: transparent;
+                            margin: 0;
+                            border-style: none;
+                            border: 0;
+                            display: flex;
+                            align-items: center;
+                            cursor: pointer;
+                            text-align: inherit;
+                            list-style: none;
+                            text-decoration: none;
+                            outline: none;
+
+                            .action-third {
+                                justify-content: center;
+                                flex-direction: column;
+                                display: flex;
+                                align-items: center;
+
+                                .icon {
+                                    height: 23px;
+                                    width: 23px;
+                                    border-radius: 0;
+                                    justify-content: center;
+                                    background-color: transparent;
+                                    flex-direction: column;
+                                    display: flex;
+                                    align-items: center;
+                                    flex-shrink: 0;
+                                    align-self: auto;
+                                    position: relative;
+                                    flex-grow: 0;
+
+                                    .icon-dot {
+                                        display: block;
+                                        position: relative;
+                                        color: #FE6E91;
+                                        font-size: 22px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .image {
+            background-color: rgb(0, 0, 0);
+            border: 1px solid rgb(219, 219, 219);
+            border-radius: 4px;
+            justify-content: center;
+            flex-direction: column;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            position: relative;
+
+            .image-one {
+                border-width: 0;
+                padding: 0;
+                font-size: 100%;
+                flex-direction: column;
+                margin: 0;
+                display: flex;
+                flex-shrink: 0;
+                align-items: stretch;
+                position: relative;
+                vertical-align: baseline;
+
+                .image-two {
+                    width: 500px;
+                    display: block;
+                    font-size: 100%;
+
+                    .image-three {
+                        display: block;
+
+                        .image-four {
+                            background-color: rgb(239, 239, 239);
+                            display: block;
+                            width: 100%;
+                            position: relative;
+
+                            .img-one {
+                                // padding-bottom: 100%;
+                                display: block;
+                                overflow: hidden;
+                                position: relative;
+                                width: 500px;
+                                height: 500px;
+
+                                img {
+                                    object-fit: cover;
+                                    left: 0;
+                                    width: 100%;
+                                    user-select: none;
+                                    height: 100%;
+                                    top: 0;
+                                    // position: absolute;
+                                    border: 0;
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .actions {
+            position: relative;
+            display: block;
+
+            .actions-one {
+                background-color: rgb(var(--lodi-primary-background-color));
+                flex-direction: column;
+                display: flex;
+                height: 100%;
+                position: relative;
+
+                .actions-two {
+                    display: block;
+
+                    .sub-actions {
+                        display: grid;
+                        align-items: center;
+                        grid-template-columns: 1fr 1fr;
+                        margin: 4px 0;
+
+                        .like-comment-share {
+                            display: flex;
+
+                            .like {
+                                margin-left: -8px;
+
+                                .like-one {
+                                    padding: 8px;
+                                    justify-content: center;
+                                    background-color: transparent;
+                                    margin: 0;
+                                    border: 0;
+                                    border-style: none;
+                                    display: flex;
+                                    align-items: center;
+                                    cursor: pointer;
+                                    text-align: inherit;
+                                    list-style: none;
+                                    text-decoration: none;
+                                    outline: none;
+
+                                    .like-two {
+                                        justify-content: center;
+                                        flex-direction: column;
+                                        display: flex;
+                                        align-items: center;
+
+                                        .icon {
+                                            position: relative;
+                                            display: block;
+                                            font-size: 24px;
+                                            color: #FE6E91;
+                                            width: 22px;
+                                            height: 22px;
+                                        }
+                                    }
+                                }
+                            }
+
+                            span {
+
+                                .comment {
+                                    padding: 8px;
+                                    justify-content: center;
+                                    background-color: transparent;
+                                    margin: 0;
+                                    border-style: none;
+                                    border: 0;
+                                    display: flex;
+                                    align-items: center;
+                                    cursor: pointer;
+                                    text-align: inherit;
+                                    list-style: none;
+                                    text-decoration: none;
+                                    outline: none;
+
+                                    .comment-one {
+                                        justify-content: center;
+                                        flex-direction: column;
+                                        display: flex;
+                                        align-items: center;
+
+                                        .icon {
+                                            position: relative;
+                                            display: block;
+                                            font-size: 24px;
+                                            color: #FE6E91;
+                                            width: 22px;
+                                            height: 22px;
+                                        }
+                                    }
+                                }
+                            }
+
+                            button {
+                                align-items: center;
+                                background: transparent;
+                                border: none;
+                                cursor: pointer;
+                                display: flex;
+                                justify-content: center;
+                                padding: 8px;
+
+                                .share {
+                                    align-items: center;
+                                    display: flex;
+                                    justify-content: center;
+
+                                    .icon {
+                                        position: relative;
+                                        display: block;
+                                        font-size: 24px;
+                                        color: #FE6E91;
+                                        width: 22px;
+                                        height: 22px;
+                                    }
+                                }
+                            }
+                        }
+
+                        .like-comment-count {
+                            margin-left: auto;
+                            margin-right: 0;
+                            display: flex;
+
+                            span {
+                                .lcc-icon {
+                                    padding: 3px;
+                                    justify-content: center;
+                                    background-color: transparent;
+                                    margin: 0;
+                                    border-style: none;
+                                    border: 0;
+                                    display: flex;
+                                    align-items: center;
+                                    text-align: inherit;
+                                    list-style: none;
+                                    text-decoration: none;
+                                    outline: none;
+
+                                    .lcc-icon-one {
+                                        justify-content: center;
+                                        flex-direction: row;
+                                        display: flex;
+                                        align-items: center;
+
+                                        .lcc-count {
+                                            margin: 0 4px;
+                                            cursor: pointer;
+
+                                            span {
+                                                font-weight: 400;
+                                                min-width: 0;
+                                                margin: 0;
+                                                word-wrap: break-word;
+                                                color: rgb(88, 88, 88);
+                                                position: relative;
+                                                display: block;
+                                                font-family: var(--font-family);
+                                                max-width: 100%;
+                                                word-break: break-word;
+                                                unicode-bidi: isolate;
+                                                font-size: 13px;
+                                            }
+
+                                        }
+
+                                        .icon-count {
+                                            display: block;
+                                            cursor: pointer;
+
+                                            .icon {
+                                                position: relative;
+                                                display: block;
+                                                font-size: 18px;
+                                                color: #f89fb5;
+                                                width: 20px;
+                                                height: 20px;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    .content-post {
+                        border-radius: 0;
+                        background-color: transparent;
+                        flex-direction: column;
+                        display: flex;
+                        margin-top: 8px;
+                        position: static;
+                        align-items: stretch;
+                        justify-content: flex-start;
+
+                        .author-content {
+                            background-color: transparent;
+                            border-radius: 0;
+                            flex-shrink: 0;
+                            position: static;
+                            display: inline-block;
+                            align-self: auto;
+                            flex-grow: 0;
+
+                            .author {
+                                margin-right: 4px;
+                                display: inline-block;
+
+                                .author-one {
+                                    display: inline;
+
+                                    a {
+                                        outline: none;
+                                        list-style: none;
+                                        margin: 0;
+                                        border-radius: 2px;
+                                        border-style: none;
+                                        line-height: 18px;
+                                        padding: 0;
+                                        font-size: 13px;
+                                        z-index: 0;
+                                        position: relative;
+                                        border-width: 0;
+                                        outline-style: none;
+                                        cursor: pointer;
+                                        text-align: center;
+                                        border-color: rgba(0, 0, 0, 0.4);
+                                        min-height: 0;
+                                        user-select: none;
+                                        min-width: 0;
+                                        background-color: transparent;
+                                        appearance: none;
+                                        text-overflow: ellipsis;
+                                        display: inline;
+                                        font-weight: 600;
+                                        text-decoration: none;
+                                        color: black;
+                                    }
+                                }
+                            }
+
+                            span {
+                                display: inline !important;
+                                margin: 0 !important;
+                                color: #3E3341;
+                                font-weight: 400;
+                                font-size: 13px;
+                                line-height: 18px;
+                                font-family: var(--font-family);
+                                unicode-bidi: isolate;
+
+                                .content {
+                                    display: inline !important;
+                                    margin: 0 !important;
+                                    color: #3E3341;
+                                    font-weight: 400;
+                                    font-size: 13px;
+                                    line-height: 18px;
+                                    font-family: var(--font-family);
+                                    unicode-bidi: isolate;
+                                }
+                            }
+
+                        }
+                    }
+
+                    .sub-comment {
+                        border-radius: 0;
+                        background-color: transparent;
+                        flex-direction: column;
+                        display: flex;
+                        margin-top: 8px;
+                        position: static;
+                        justify-content: flex-start;
+
+
+                        .view-all-comment {
+                            border-radius: 0;
+                            background-color: transparent;
+                            flex-direction: column;
+                            display: flex;
+                            flex-shrink: 0;
+                            position: static;
+                            align-self: auto;
+                            justify-content: flex-start;
+                            margin-bottom: 8px;
+                            align-items: flex-start;
+                            flex-grow: 0;
+
+                            a {
+                                text-decoration: none;
+                                padding: 0;
+                                background-color: transparent;
+                                margin: 0;
+                                border: 0;
+                                display: flex;
+                                cursor: pointer;
+                                text-align: inherit;
+                                list-style: none;
+                                outline: none;
+
+                                span {
+                                    font-size: 13px;
+                                    font-weight: 400;
+                                    min-width: 0;
+                                    margin: 0;
+                                    word-wrap: break-word;
+                                    color: rgb(115, 115, 115);
+                                    position: relative;
+                                    display: block;
+                                    font-family: var(--font-family);
+                                    white-space: pre-line;
+                                    max-width: 100%;
+                                    word-break: break-word;
+                                    unicode-bidi: isolate;
+                                }
+                            }
+                        }
+
+                        ul {
+                            list-style-type: none;
+                            margin: 0;
+                            padding: 0;
+
+                            .comment {
+                                width: 100%;
+                                border-radius: 0;
+                                background-color: transparent;
+                                display: flex;
+                                align-items: center;
+                                position: static;
+                                justify-content: space-between;
+                                flex-direction: row;
+                                margin-bottom: 4px;
+
+                                .comment-one {
+                                    margin-right: 4px;
+                                    border-radius: 0;
+                                    background-color: transparent;
+                                    min-width: 0;
+                                    min-height: 0;
+                                    position: static;
+                                    align-self: auto;
+                                    display: block;
+                                    flex-grow: 1;
+
+                                    .comment-two {
+                                        display: block;
+
+                                        .comment-three {
+                                            border-radius: 0;
+                                            background-color: transparent;
+                                            min-width: 0;
+                                            min-height: 0;
+                                            position: relative;
+                                            display: block;
+
+                                            .name {
+                                                display: inline;
+
+                                                a {
+                                                    text-decoration: none;
+                                                    display: inline;
+                                                    padding: 0;
+                                                    background-color: transparent;
+                                                    margin: 0;
+                                                    border: 0;
+                                                    cursor: pointer;
+                                                    text-align: inherit;
+                                                    list-style: none;
+                                                    outline: none;
+
+                                                    .name-one {
+                                                        border-radius: 0;
+                                                        position: static;
+                                                        display: inline-block;
+
+                                                        .name-two {
+                                                            border-radius: 0;
+                                                            background-color: transparent;
+                                                            display: flex;
+                                                            align-items: center;
+                                                            flex-direction: row;
+                                                            justify-content: flex-start;
+                                                            position: relative;
+
+                                                            span {
+                                                                display: inline;
+                                                                margin: 0;
+                                                                color: #3E3341;
+                                                                font-weight: 600;
+                                                                font-size: 13px;
+                                                                font-family: var(--font-family);
+
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            .space {
+                                                display: inline;
+                                                margin: 0;
+                                                color: #3E3341;
+                                                font-weight: 400;
+                                                font-size: 13px;
+                                                font-family: var(--font-family);
+                                                unicode-bidi: isolate;
+                                            }
+
+                                            .content-comment {
+                                                display: inline;
+                                                margin: 0;
+                                                color: #3E3341;
+                                                font-weight: 400;
+                                                font-size: 13px;
+                                                font-family: var(--font-family);
+                                                unicode-bidi: isolate;
+
+                                                span {
+                                                    display: inline;
+                                                    margin: 0;
+                                                    color: #3E3341;
+                                                    font-weight: 400;
+                                                    font-size: 13px;
+                                                    font-family: var(--font-family);
+                                                    unicode-bidi: isolate;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    .add-comment {
+                        border-radius: 0;
+                        background-color: transparent;
+                        flex-direction: column;
+                        display: flex;
+                        margin-top: 8px;
+                        position: static;
+                        align-items: stretch;
+                        justify-content: flex-start;
+
+                        .section {
+                            border: none;
+                            padding: 0;
+                            color: rgb(115, 115, 115);
+                            flex-shrink: 0;
+                            font-size: 13px;
+                            position: relative;
+                            display: block;
+
+                            .section-one {
+                                padding: 0;
+                                background-color: rgb(var(--lodi-primary-background-color));
+                                border: none;
+                                border-radius: 38px;
+                                align-items: center;
+                                display: flex;
+                                flex-flow: row wrap;
+                                justify-content: flex-start;
+
+                                form {
+                                    padding: 0;
+                                    border: none;
+                                    border-radius: 38px;
+                                    margin: 0;
+                                    background-color: rgb(var(--lodi-primary-background-color));
+                                    display: flex;
+                                    flex-direction: row;
+                                    flex-grow: 1;
+                                    flex-shrink: 1;
+                                    font: inherit;
+                                    font-size: 100%;
+
+                                    .section-two {
+                                        align-items: center;
+                                        display: flex;
+                                        flex-direction: row;
+                                        flex-grow: 1;
+                                        flex-shrink: 1;
+                                        font: inherit;
+                                        font-size: 100%;
+                                        margin: 0;
+                                        padding: 0;
+                                        vertical-align: baseline;
+
+                                        textarea {
+                                            background-color: rgb(var(--lodi-primary-background-color));
+                                            resize: none;
+                                            width: 0;
+                                            max-height: 80px;
+                                            padding: 0;
+                                            border-style: none;
+                                            display: flex;
+                                            color: #3E3341;
+                                            font-size: inherit;
+                                            flex-grow: 1;
+                                            font-family: var(--font-family);
+                                            height: 18px;
+                                            outline: none;
+
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+
+        }
+    }
+}

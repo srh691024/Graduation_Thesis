@@ -1,23 +1,24 @@
 import config from '~/config';
 //Layouts 
-import { HeaderOnly } from '~/layouts';
+import { DefaultPrivateLayout } from '~/layouts';
 
-import PrivateHome from "~/pages/PrivateHome";
-import Login from "~/pages/Login";
-import PublicHome from "~/pages/PublicHome";
-import Register from "~/pages/Register";
-import DiaryPost from "~/pages/DiaryPost";
+
+import Login from "~/pages/Authen/Login";
+import Register from "~/pages/Authen/Register";
+import DiaryPost from "~/pages/PrivateCouple/DiaryPost";
+import { FinalRegister } from '~/components';
+import { ResetPassword } from '~/components';
 
 const publicRoutes = [
     { path: config.routes.login, component: Login },
-    { path: config.routes.register, component: Register }
+    { path: config.routes.register, component: Register },
+    { path: config.routes.finalregister, component: FinalRegister },
+    { path: config.routes.resetpassword, component: ResetPassword },
 
 ]
 
 const privateRoutes = [
-    { path: config.routes.privateHome, component: PrivateHome },
-    { path: config.routes.publicHome, component: PublicHome },
-    { path: config.routes.diaryPost, component: DiaryPost, layout: HeaderOnly },
+    { path: config.routes.diarypost, component: DiaryPost, layout: DefaultPrivateLayout },
 ]
 
 export { publicRoutes, privateRoutes }

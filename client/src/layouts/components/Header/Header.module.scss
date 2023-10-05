@@ -1,0 +1,267 @@
+.wrapper-header {
+    overflow-y: visible;
+    border-radius: 0;
+    background-color: transparent;
+    position: fixed;
+    width: fit-content;
+    flex-direction: column;
+    display: flex;
+    flex-shrink: 0;
+    align-items: stretch;
+    overflow-x: visible;
+    align-self: auto;
+    justify-content: flex-start;
+    z-index: 10;
+    height: 100vh;
+    flex-grow: 0;
+    top: 0;
+}
+
+.inner {
+    max-height: inherit;
+    justify-content: inherit;
+    flex-grow: inherit;
+    min-width: inherit;
+    height: inherit;
+    min-height: inherit;
+    width: inherit;
+    position: relative;
+    max-width: inherit;
+    display: inherit;
+    align-items: inherit;
+    flex-direction: inherit;
+    flex-shrink: inherit;
+
+    .inner-first {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        position: relative;
+        height: 100dvh;
+
+        .inner-second {
+            transform: translateX(0px);
+            border-right: 1px solid var(--lodi-color-pink);
+            z-index: 1;
+            display: block;
+
+            .inner-third {
+                transform: translateX(0px);
+                padding-bottom: 20px;
+                background-color: rgb(var(--lodi-primary-background));
+                padding: 8px 12px 0 12px;
+                flex-direction: column;
+                display: flex;
+                width: var(--header-width);
+                height: 100dvh;
+                align-items: flex-start;
+            }
+        }
+    }
+}
+
+.logo {
+    width: 100%;
+    flex-shrink: 0;
+    height: 92px;
+    position: relative;
+    display: block;
+
+    .logo-first {
+        height: 73px;
+        width: 54px;
+        display: block;
+        padding-bottom: 23px;
+        left: 0;
+        margin-top: 12px;
+        top: 0;
+        position: absolute;
+
+        .logo-second {
+            transform: scale(1);
+            display: block;
+
+            span {
+                max-height: inherit;
+                min-width: inherit;
+                height: inherit;
+                min-height: inherit;
+                width: inherit;
+                max-width: inherit;
+                display: inherit;
+
+                .logo-third {
+                    display: flex;
+                    align-items: center;
+                    position: relative;
+
+                    a {
+                        text-decoration: none;
+                        display: inline;
+                        padding: 0;
+                        background-color: transparent;
+                        touch-action: manipulation;
+                        margin: 0;
+                        border: 0;
+                        cursor: pointer;
+                        -webkit-tap-highlight-color: transparent;
+                        text-align: inherit;
+                        list-style: none;
+                        outline: none;
+
+                        .logo-fourth {
+                            margin: 4px 0 4px 0;
+                            padding: 6px;
+                            border-radius: 8px;
+                            display: inline-flex;
+
+                            .logo-image {
+                                display: block;
+
+                                .logo-image-first {
+                                    overflow-y: visible;
+                                    border-radius: 0;
+                                    background-color: transparent;
+                                    flex-direction: column;
+                                    display: flex;
+                                    align-items: stretch;
+                                    overflow-x: visible;
+                                    justify-content: flex-start;
+                                    position: relative;
+
+                                    .logo-image-second {
+                                        height: auto;
+                                        width: 42px;
+                                        display: block;
+
+                                        img {
+                                            position: relative;
+                                            display: block;
+                                            height: auto;
+                                            width: 42px;
+                                        }
+                                    }
+                                }
+
+                                a,
+                                a:visited {
+                                    color: rgb(0, 55, 107);
+                                }
+                            }
+                        }
+
+                        .logo-fourth:hover {
+                            background-color: rgb(247, 235, 240);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.actions {
+    width: 100%;
+    flex-grow: 1;
+    display: block;
+
+
+    .sub-action {
+        display: block;
+    }
+}
+
+.sub-first {
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    span {
+        flex-basis: inherit;
+        max-height: inherit;
+        justify-content: inherit;
+        flex-grow: inherit;
+        min-width: inherit;
+        height: inherit;
+        min-height: inherit;
+        width: inherit;
+        max-width: inherit;
+        display: inherit;
+        align-self: inherit;
+        align-items: inherit;
+        flex-direction: inherit;
+        flex-shrink: inherit;
+
+        .sub-second {
+            display: flex;
+            align-items: center;
+            position: relative;
+
+            a {
+                text-decoration: none;
+                display: inline;
+                padding: 0 0 0 0;
+                background-color: transparent;
+                margin: 0;
+                cursor: pointer;
+                text-align: inherit;
+                list-style: none;
+                outline: none;
+                border: 0;
+
+                .sub-third {
+                    margin: 4px 0 4px 0;
+                    padding: 8px 10px;
+                    border-radius: 8px;
+                    display: inline-flex;
+
+                    .icon {
+                        display: block;
+
+                        .icon-first {
+                            overflow-y: visible;
+                            border-radius: 0;
+                            background-color: transparent;
+                            flex-direction: column;
+                            display: flex;
+                            align-items: stretch;
+                            overflow-x: visible;
+                            justify-content: flex-start;
+                            position: relative;
+
+                            .icon-second {
+                                height: auto;
+                                width: 33px;
+                                display: block;
+
+                                .icon-third {
+                                    font-size: 24px;
+                                    color: #FE6E91;
+                                    padding: 3px;
+                                    width: 23px;
+                                    height: 23px;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .sub-third:hover {
+                    background-color: rgb(247, 235, 240);
+                }
+            }
+        }
+    }
+}
+
+
+
+.setting {
+    width: 100%;
+    flex-grow: 1;
+    display: block;
+
+    .setting-first {
+        display: block;
+    }
+}

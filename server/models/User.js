@@ -5,12 +5,12 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 
 const User = new Schema({
-    name: { type: String, required: true },
-    username: { type: String, required: true, unique: true },
-    gender: { type: String, required: true },
-    dob: { type: Date, required: true },
+    name: { type: String },
+    username: { type: String, unique: true },
+    gender: { type: String },
+    dob: { type: Date },
     avatar: { type: Buffer },
-    phone: { type: String, required: true, unique: true },
+    phone: { type: String, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
 
@@ -22,6 +22,7 @@ const User = new Schema({
     passwordChangedAt: { type: String, },
     passwordResetToken: { type: String, },
     passwordResetExpires: { type: String, },
+    registerToken: { type: String },
 
 }, {
     timestamps: true,

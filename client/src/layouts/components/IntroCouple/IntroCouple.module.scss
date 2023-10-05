@@ -1,0 +1,538 @@
+.wrapper {
+    flex-shrink: 1;
+    position: relative;
+    margin: 8px;
+    max-width: 380px;
+    min-width: 350px;
+    z-index: 0;
+    overflow-anchor: none;
+    flex-basis: 360px;
+    flex-grow: 18;
+    display: block;
+}
+
+.container {
+    position: sticky;
+    display: block;
+    margin-bottom: 16px;
+}
+
+.intro {
+    display: flex;
+    position: relative;
+    width: 100%;
+    flex-direction: column;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    background-color: rgb(var(--lodi-primary-background));
+}
+
+.intro-couple {
+    margin-bottom: 20px;
+    display: block;
+    border-bottom: 1px solid #e5d8d8;
+
+    .intro-cp {
+        display: flex;
+        padding: 0 35px;
+        justify-content: space-between;
+        flex-direction: column;
+        align-items: stretch;
+        position: relative;
+        z-index: 0;
+        margin: -6px;
+        flex-wrap: nowrap;
+        padding-bottom: 20px;
+    }
+}
+
+.text-intro-couple {
+    padding-top: 20px;
+    padding-bottom: 4px;
+}
+
+.info-intro-couple {
+    display: flex;
+    flex-direction: column;
+    padding-top: 16px;
+
+    .image-couple {
+        display: flex;
+        flex-direction: row;
+
+        .avatar-couple {
+            display: flex;
+            width: 110px;
+            height: 110px;
+            overflow: hidden;
+            border-radius: 50%;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+
+        .name-couple {
+            width: calc(100% - 120px);
+            align-self: center;
+            padding-left: 20px;
+        }
+    }
+
+    .love-date-couple {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        width: 100%;
+        margin-top: 15px;
+        margin-bottom: 10px;
+        border-top: 1px solid #e5d8d8;
+
+        .heart-couple {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding-top: 3px;
+
+            .icon {
+                position: relative;
+                color: rgb(229, 129, 146);
+                font-size: 160px;
+                animation: beat 0.9s infinite;
+                z-index: 1;
+                // text-shadow: 0 0 5px red, 0 0 45px red, 0 0 90px red;
+            }
+
+            @keyframes beat {
+                0% {
+                    transform: scale(1);
+                }
+
+                10% {
+                    transform: scale(1.01);
+                }
+
+                50% {
+                    transform: scale(1.05);
+                }
+            }
+
+            .text-on-icon {
+                display: flex;
+                position: absolute;
+                top: 65px;
+                z-index: 2;
+                align-self: auto;
+                justify-self: auto;
+                color: white;
+                font-size: 16px;
+            }
+        }
+
+        .love-date {
+            display: flex;
+            margin-top: 160px;
+            position: relative;
+            justify-self: center;
+            align-self: center;
+            padding-bottom: 10px;
+
+            span {
+                display: flex;
+                font-size: 17px;
+                font-style: italic;
+            }
+        }
+    }
+
+    .biography-couple {
+        display: flex;
+        position: relative;
+        justify-content: center;
+        align-items: stretch;
+        margin-top: 16px;
+        align-items: center;
+
+        span {
+            display: flex;
+        }
+    }
+
+    .follow-couple {
+        display: flex;
+        flex-direction: row;
+        position: relative;
+        justify-content: space-between;
+        align-items: baseline;
+        padding: 0 15px 10px 15px;
+
+        span {
+            font-weight: 600;
+            // font-size: 18px;
+        }
+    }
+}
+
+.edit-info-couple {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+
+    button {
+        border: none;
+        background-color: rgb(247, 227, 237);
+        width: 100%;
+        height: 38px;
+        display: flex;
+        position: relative;
+        justify-content: center;
+        border-radius: 5px;
+        align-items: center;
+        cursor: pointer;
+
+        span {
+            color: #3E3341;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 0 30px;
+            font-family: var(--font-family);
+        }
+    }
+}
+
+.intro-partner {
+    // margin-bottom: 20px;
+    display: block;
+    margin-top: 10px;
+
+    .intro-p {
+        display: flex;
+        padding: 0 20px;
+        justify-content: space-between;
+        flex-direction: column;
+        align-items: stretch;
+        position: relative;
+        z-index: 0;
+        margin: -6px;
+        flex-wrap: nowrap;
+        padding-bottom: 20px;
+
+        .partner {
+            display: flex;
+            padding: 0 20px 20px 20px;
+            justify-content: space-between;
+            flex-direction: column;
+            align-items: stretch;
+            position: relative;
+            z-index: 0;
+            margin: -6px;
+            flex-wrap: nowrap;
+            margin-bottom: 10px;
+
+            .image-partner {
+                display: flex;
+                flex-direction: row;
+
+                .avatar-partner {
+                    display: flex;
+                    width: 110px;
+                    height: 110px;
+                    overflow: hidden;
+                    border-radius: 50%;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                }
+
+                .name-partner {
+                    width: calc(100% - 120px);
+                    align-self: center;
+                    padding-left: 20px;
+                }
+            }
+
+            .dob-partner {
+                display: flex;
+                flex-direction: row;
+                position: relative;
+                justify-content: center;
+                align-items: center;
+                // margin: -6px;
+                flex-wrap: nowrap;
+                margin-top: 10px;
+
+                .dob {
+                    flex-shrink: 1;
+                    flex-direction: column;
+                    display: flex;
+                    flex-grow: 1;
+                    min-width: 0;
+                    position: relative;
+                    z-index: 0;
+                    max-width: 100%;
+                    padding: 6px;
+                    align-self: center;
+                    flex-basis: 0px;
+
+
+                    span {
+                        text-align: left;
+                        display: block;
+                        max-width: 100%;
+                        word-wrap: break-word;
+                        word-break: break-word;
+                        unicode-bidi: isolate;
+                    }
+                }
+            }
+
+            .sub-icon {
+                flex-direction: column;
+                display: flex;
+                flex-shrink: 0;
+                min-width: 0;
+                position: relative;
+                z-index: 0;
+                padding: 6px;
+                font-size: 24px;
+                color: #FE6E91;
+                width: 22px;
+                height: 22px;
+            }
+
+            .horoscope-partner {
+                display: flex;
+                flex-direction: row;
+                position: relative;
+                justify-content: flex-start;
+                align-items: stretch;
+                // margin: -6px;
+                flex-wrap: nowrap;
+
+                .horoscope-symbol {
+                    display: flex;
+                    flex-direction: column;
+                    position: relative;
+                    width: 27px;
+                    height: 27px;
+                    flex-shrink: 0;
+                    z-index: 0;
+                    margin: 6px;
+
+                    img {
+                        display: flex;
+                        position: relative;
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+
+                .horoscope-name {
+                    flex-shrink: 1;
+                    flex-direction: column;
+                    display: flex;
+                    flex-grow: 1;
+                    min-width: 0;
+                    position: relative;
+                    z-index: 0;
+                    max-width: 100%;
+                    padding: 6px;
+                    align-self: center;
+                    flex-basis: 0px;
+
+                    span {
+                        text-align: left;
+                        display: block;
+                        max-width: 100%;
+                        word-wrap: break-word;
+                        word-break: break-word;
+                        unicode-bidi: isolate;
+                    }
+                }
+            }
+
+            .address {
+                display: flex;
+                flex-direction: row;
+                position: relative;
+                justify-content: center;
+                align-items: center;
+                // margin: -6px;
+                flex-wrap: nowrap;
+
+                .address-title {
+                    flex-shrink: 1;
+                    flex-direction: column;
+                    display: flex;
+                    flex-grow: 1;
+                    min-width: 0;
+                    position: relative;
+                    z-index: 0;
+                    max-width: 100%;
+                    padding: 6px;
+                    align-self: center;
+                    flex-basis: 0px;
+
+                    span {
+                        text-align: left;
+                        display: block;
+                        max-width: 100%;
+                        word-wrap: break-word;
+                        word-break: break-word;
+                        unicode-bidi: isolate;
+                    }
+                }
+            }
+
+            .tiktok {
+                display: flex;
+                flex-direction: row;
+                position: relative;
+                justify-content: center;
+                align-items: center;
+                // margin: -6px;
+                flex-wrap: nowrap;
+
+                .link-tiktok {
+                    flex-shrink: 1;
+                    flex-direction: column;
+                    display: flex;
+                    flex-grow: 1;
+                    min-width: 0;
+                    position: relative;
+                    z-index: 0;
+                    max-width: 100%;
+                    padding: 6px;
+                    align-self: center;
+                    flex-basis: 0px;
+
+                    span {
+                        text-align: left;
+                        display: block;
+                        max-width: 100%;
+                        word-wrap: break-word;
+                        word-break: break-word;
+                        unicode-bidi: isolate;
+                    }
+                }
+            }
+
+            .facebook {
+                display: flex;
+                flex-direction: row;
+                position: relative;
+                justify-content: center;
+                align-items: center;
+                // margin: -6px;
+                flex-wrap: nowrap;
+
+                .link-facebook {
+                    flex-shrink: 1;
+                    flex-direction: column;
+                    display: flex;
+                    flex-grow: 1;
+                    min-width: 0;
+                    position: relative;
+                    z-index: 0;
+                    max-width: 100%;
+                    padding: 6px;
+                    align-self: center;
+                    flex-basis: 0px;
+
+                    span {
+                        text-align: left;
+                        display: block;
+                        max-width: 100%;
+                        word-wrap: break-word;
+                        word-break: break-word;
+                        unicode-bidi: isolate;
+                    }
+                }
+            }
+
+            .instagram {
+                display: flex;
+                flex-direction: row;
+                position: relative;
+                justify-content: center;
+                align-items: center;
+                // margin: -6px;
+                flex-wrap: nowrap;
+
+                .link-instagram {
+                    flex-shrink: 1;
+                    flex-direction: column;
+                    display: flex;
+                    flex-grow: 1;
+                    min-width: 0;
+                    position: relative;
+                    z-index: 0;
+                    max-width: 100%;
+                    padding: 6px;
+                    align-self: center;
+                    flex-basis: 0px;
+
+                    span {
+                        text-align: left;
+                        display: block;
+                        max-width: 100%;
+                        word-wrap: break-word;
+                        word-break: break-word;
+                        unicode-bidi: isolate;
+                    }
+                }
+            }
+
+            // .hobby{
+
+            // }
+
+            .edit-info-partner {
+                display: flex;
+                position: relative;
+                justify-content: center;
+                align-items: center;
+                margin-top: 5px;
+
+                button {
+                    border: none;
+                    background-color: rgb(247, 227, 237);
+                    width: 100%;
+                    height: 38px;
+                    display: flex;
+                    position: relative;
+                    justify-content: center;
+                    border-radius: 5px;
+                    align-items: center;
+                    cursor: pointer;
+
+                    span {
+                        color: #3E3341;
+                        font-size: 14px;
+                        font-weight: 600;
+                        padding: 0 30px;
+                        font-family: var(--font-family);
+                    }
+                }
+            }
+        }
+    }
+
+    .intro-p .partner:first-child {
+        border-bottom: 1px solid #e5d8d8;
+    }
+
+    .intro-p .partner:last-child {
+        margin-top: 10px;
+        margin-bottom: 0px;
+        padding-bottom: 5px;
+    }
+}

@@ -3,6 +3,13 @@
 
 :root{
 --primary:#f06f85;
+--font-family: 'Montserrat', sans-serif;
+--header-height: 0px;
+--lodi-primary-background: 255, 255, 255;
+--lodi-second-background: 252, 239, 246;
+--lodi-color-pink: #F9C0D5;
+--header-width: 78px;
+--button-height-medium: 35px;
 }
 
 *{
@@ -17,9 +24,10 @@ font-size: 62.5%;
 
 body{
     font-family: 'Montserrat', sans-serif;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     line-height: 1.5;
     text-rendering: optimizeSpeed;
+    background-color: rgb(var(--lodi-second-background));
 }
 
 //Scrollbar CSS

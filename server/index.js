@@ -15,7 +15,11 @@ const app = express();
 //middlewares
 app.use(express.urlencoded({ extended: true }));    //giúp đọc được data gửi theo kiểu array, object 
 app.use(express.json());    //giúp express đọc hiểu data mà client gửi lên kiểu json
-app.use(cors());
+app.use(cors({
+    origin: process.env.URL_CLIENT,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+}));
 app.use(cookieParser());
 
 app.get('/', (req, res) => { res.send("Hello word") });

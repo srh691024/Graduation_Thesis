@@ -1,9 +1,9 @@
 const routes = {
-    diaryPost: '/diary_post',
     login: '/login',
-    privateHome: '/',
-    publicHome: '/public_home',
-    register: '/register'
+    register: '/register',
+    finalregister: '/finalregister/:status',
+    resetpassword: '/resetpassword/:token',
+    diarypost: '/',
 };
 
 export default routes;

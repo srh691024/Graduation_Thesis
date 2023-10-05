@@ -4,6 +4,7 @@ const { generateAccessToken, generateRefreshToken } = require('../middlewares/jw
 const jwt = require('jsonwebtoken');
 const sendEmail = require('../utils/sendMail');
 const crypto = require('crypto');
+const getStringUntilCharacter = require('../utils/getStringUntilCharacter');
 
 // Refresh token => Cấp mới access token
 // Access token => Xác thực user, phần quyền user
@@ -37,24 +38,82 @@ const login = asyncHandler(async (req, res) => {
     }
 })
 
+// const register = asyncHandler(async (req, res) => {
+//     let { email, password, name, username, gender, dob, phone } = req.body;
+//     if (!email || !password)
+//         return res.status(400).json({
+//             success: false,
+//             message: `Missing inputs`
+//         })
+
+//     const userByEmail = await User.findOne({ email })
+//     if (userByEmail) throw new Error(`Email has existed!`)
+//     const userByPhone = await User.findOne({ phone })
+//     if (userByPhone) throw new Error(`Phone has existed!`)
+//     const userByUsername = await User.findOne({ username })
+//     if (userByUsername) throw new Error(`Username ${userByUsername.username} has existed`)
+//     if(!username.trim()){
+//         username = getStringUntilCharacter(email, '@')
+//         name = getStringUntilCharacter(email, '@')
+//     }
+//     // const newUser = await User.create(req.body)
+//     const newUser = await User.create({email, password, name,username, gender, dob, phone})
+//     return res.status(200).json({
+//         success: newUser ? true : false,
+//         message: newUser ? 'Register is successfully.Please go login' : 'Something went wrong'
+//     })
+// })
+
 const register = asyncHandler(async (req, res) => {
-    const { email, password, name, username, gender, dob, phone } = req.body;
-    if (!email || !password || !name || !username || !dob || !phone || !gender)
+    let { email, password, name, username, gender, dob, phone } = req.body;
+    if (!email || !password)
         return res.status(400).json({
             success: false,
             message: `Missing inputs`
         })
-
-    const user = await User.findOne({ email })
-    if (user) {
-        throw new Error(`User has existed!`)
-    } else {
-        const newUser = await User.create(req.body)
-        return res.status(200).json({
-            success: newUser ? true : false,
-            message: newUser ? 'Register is successfully.Please go login' : 'Something went wrong'
-        })
+    const userByEmail = await User.findOne({ email })
+    if (userByEmail) throw new Error(`Email has existed!`)
+    const userByPhone = await User.findOne({ phone })
+    if (userByPhone) throw new Error(`Phone has existed!`)
+    const userByUsername = await User.findOne({ username })
+    if (userByUsername) throw new Error(`Username ${userByUsername.username} has existed`)
+    if (!username.trim() && !name.trim()) {
+        username = getStringUntilCharacter(email, '@')
+        name = getStringUntilCharacter(email, '@')
     }
+    if (!username.trim() && name.trim()) {
+        username = name.trim()
+    }
+    const registerToken = crypto.createHash('sha256').update(crypto.randomBytes(32).toString('hex')).digest('hex')
+    res.cookie('dataRegister', { ...req.body, registerToken }, { httpOnly: true, maxAge: 15 * 60 * 1000 });
+    const html = `Please click the link below to verify your account. This link will expire after 15 minutes. 
+                    <a href=${process.env.URL_SERVER}/api/auth/final-register/${registerToken}>Click here</a>`
+    await sendEmail({ email, html, subject: 'Final Registration for Love Diary account' })
+    return res.json({
+        success: true,
+        message: 'Please check your email to verify your account'
+    })
+})
+
+const finalRegister = asyncHandler(async (req, res) => {
+    const cookie = req.cookies
+    const { registerToken } = req.params
+    if (!cookie || cookie?.dataRegister?.registerToken !== registerToken) {
+        res.clearCookie('dataRegister')
+        return res.redirect(`${process.env.URL_CLIENT}/finalregister/failed`)
+    }
+    const newUser = await User.create({
+        email: cookie?.dataRegister?.email,
+        password: cookie?.dataRegister?.password,
+        name: cookie?.dataRegister?.name,
+        username: cookie?.dataRegister?.username,
+        gender: cookie?.dataRegister?.gender,
+        dob: cookie?.dataRegister?.dob,
+        phone: cookie?.dataRegister?.phone
+    })
+    res.clearCookie('dataRegister')
+    if (newUser) return res.redirect(`${process.env.URL_CLIENT}/finalregister/success`)
+    else return res.redirect(`${process.env.URL_CLIENT}/finalregister/failed`)
 })
 
 const getCurrentUser = asyncHandler(async (req, res) => {
@@ -105,7 +164,7 @@ const logout = asyncHandler(async (req, res) => {
 // Change password
 
 const forgotPassword = asyncHandler(async (req, res) => {
-    const { email } = req.query
+    const { email } = req.body
     if (!email) throw new Error('Missing email')
     const user = await User.findOne({ email })
     if (!user) throw new Error('User not found')
@@ -113,15 +172,16 @@ const forgotPassword = asyncHandler(async (req, res) => {
     await user.save()
 
     const html = `Please click on the link below to change your password. This link will expire after 15 minutes. 
-                    <a href=${process.env.URL_SERVER}/api/auth/reset-password/${resetToken}>Click here</a>`
+                    <a href=${process.env.URL_CLIENT}/resetpassword/${resetToken}>Click here</a>`
     const data = {
         email,
-        html
+        html,
+        subject: 'Forgot your password'
     }
     const result = await sendEmail(data)
     return res.status(200).json({
-        success: true,
-        result
+        success: result.response?.includes('OK') ? true : false,
+        message: result.response?.includes('OK') ? 'Please check your email and follow the instructions' : 'An error occurred, please try again later!!!'
     })
 })
 
@@ -144,6 +204,7 @@ const resetPassword = asyncHandler(async (req, res) => {
 module.exports = {
     login,
     register,
+    finalRegister,
     getCurrentUser,
     refreshAccessToken,
     logout,
