@@ -1,0 +1,428 @@
+.wrapperr {
+    display: block;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    top: 0;
+    z-index: 3;
+
+}
+
+.wrapper-modal {
+    position: relative;
+    z-index: 0;
+    display: block;
+}
+
+.wrapper-one {
+    flex-direction: column;
+    display: flex;
+    position: relative;
+    min-height: 100vh;
+
+}
+
+.overlay {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.65);
+    display: block;
+}
+
+.exit {
+    z-index: 1;
+    top: 10px;
+    right: 10px;
+    position: absolute;
+    display: block;
+
+    .exit-button {
+        padding: 8px;
+        justify-content: center;
+        background-color: transparent;
+        margin: 0;
+        border-style: none;
+        border: 0;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        text-align: inherit;
+        list-style: none;
+        text-decoration: none;
+        outline: none;
+
+        .exit-button-one {
+            justify-content: center;
+            flex-direction: column;
+            display: flex;
+            align-items: center;
+
+            .icon {
+                position: relative;
+                display: block;
+                color: white;
+                fill: white;
+                height: 18px;
+                width: 18px;
+            }
+        }
+    }
+}
+
+.modal {
+    position: relative;
+    min-height: inherit;
+    max-height: inherit;
+    height: inherit;
+    width: inherit;
+    display: inherit;
+    justify-content: inherit;
+    flex-grow: inherit;
+    min-width: inherit;
+    max-width: inherit;
+    align-items: inherit;
+    flex-direction: inherit;
+    flex-shrink: inherit;
+
+    .modal-one {
+        justify-content: center;
+        flex-direction: column;
+        display: flex;
+        align-items: stretch;
+        flex-grow: 1;
+
+        .modal-two {
+            justify-content: center;
+            display: flex;
+            min-width: 0;
+            pointer-events: none;
+            align-items: flex-start;
+            min-height: 0;
+
+
+            .modal-start {
+                flex-direction: column;
+                display: flex;
+                overflow-x: hidden;
+                position: relative;
+                overflow-y: hidden;
+                z-index: 0;
+                pointer-events: all;
+                justify-content: center;
+                align-items: center;
+                outline: none;
+
+                .form {
+                    flex-shrink: 1;
+                    margin: 20px;
+                    position: relative;
+                    max-height: calc(100% - 40px);
+                    display: block;
+
+
+                    .form-one {
+                        border-radius: 12px;
+                        overflow-x: auto;
+                        max-height: calc(100vh - 40px);
+                        background-color: rgb(var(--lodi-primary-background));
+                        overflow-y: auto;
+                        display: block;
+
+
+                        .form-two {
+                            max-height: 260px;
+                            max-width: 600px;
+                            min-height: 260px;
+                            min-width: 550px;
+                            width: 766px;
+                            display: block;
+
+
+                            .form-three {
+                                border-radius: 0;
+                                background-color: transparent;
+                                min-width: 0;
+                                flex-direction: column;
+                                display: flex;
+                                overflow-x: hidden;
+                                min-height: 0;
+                                align-items: stretch;
+                                justify-content: flex-start;
+                                position: relative;
+                                overflow-y: hidden;
+
+                                .create {
+                                    width: 100%;
+                                    overflow-y: visible;
+                                    border-radius: 0;
+                                    background-color: transparent;
+                                    flex-direction: column;
+                                    display: flex;
+                                    flex-shrink: 0;
+                                    align-items: stretch;
+                                    overflow-x: visible;
+                                    align-items: auto;
+                                    justify-content: flex-start;
+                                    position: relative;
+                                    flex-grow: 0;
+
+                                    .create-one {
+                                        flex-direction: column;
+                                        display: flex;
+                                        align-items: stretch;
+
+                                        .create-two {
+                                            border-bottom: 1px solid rgb(219, 219, 219);
+                                            display: inline-block;
+                                            height: calc(44px - 1px);
+                                            position: relative;
+                                            width: 100%;
+
+                                            .create-three {
+                                                height: 100%;
+                                                width: 100%;
+                                                overflow-y: visible;
+                                                border-radius: 0;
+                                                justify-content: center;
+                                                background-color: transparent;
+                                                flex-direction: column;
+                                                display: flex;
+                                                align-items: center;
+                                                overflow-x: visible;
+                                                position: absolute;
+
+                                                h1 {
+                                                    width: calc(100% - 135.167px);
+                                                    align-items: center;
+                                                    border: 0;
+                                                    color: #3E3341;
+                                                    display: flex;
+                                                    flex-direction: column;
+                                                    flex-grow: 1;
+                                                    font: inherit;
+                                                    font-size: 14px;
+                                                    font-weight: 600;
+                                                    justify-content: center;
+                                                    line-height: 24px;
+                                                    margin: 0;
+                                                    min-width: 0;
+                                                    padding: 0;
+                                                    text-align: center;
+                                                    vertical-align: baseline;
+
+                                                    .title {
+                                                        display: block;
+                                                        overflow: hidden;
+                                                        text-overflow: ellipsis;
+                                                        white-space: nowrap;
+                                                        width: 100%;
+                                                    }
+                                                }
+                                            }
+
+                                            .back {
+                                                float: left;
+                                                align-items: center;
+                                                display: flex;
+                                                flex-basis: 48px;
+                                                flex-direction: column;
+                                                height: 100%;
+                                                justify-content: center;
+                                                position: relative;
+
+                                                .exit-one {
+                                                    overflow-y: visible;
+                                                    border-radius: 0;
+                                                    background-color: transparent;
+                                                    flex-direction: column;
+                                                    display: flex;
+                                                    flex-shrink: 0;
+                                                    align-items: stretch;
+                                                    overflow-x: visible;
+                                                    align-self: auto;
+                                                    justify-content: flex-start;
+                                                    position: relative;
+                                                    margin-left: 8px;
+                                                    flex-grow: 0;
+
+                                                    .exit-two {
+                                                        padding: 8px;
+                                                        justify-content: center;
+                                                        background-color: transparent;
+                                                        margin: 0;
+                                                        display: flex;
+                                                        align-items: center;
+                                                        cursor: pointer;
+                                                        text-align: inherit;
+                                                        border-style: none;
+                                                        border: 0;
+                                                        list-style: none;
+                                                        text-decoration: none;
+                                                        outline: none;
+
+                                                        .exit-three {
+                                                            justify-content: center;
+                                                            flex-direction: column;
+                                                            display: flex;
+                                                            align-items: center;
+
+                                                            span {
+                                                                display: inline-block;
+                                                                transform: rotate(0deg);
+
+                                                                .icon {
+                                                                    position: relative;
+                                                                    display: block;
+                                                                    color: #FE6E91;
+                                                                    font-size: 22px;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            .add {
+                                                float: right;
+                                                align-items: center;
+                                                display: flex;
+                                                flex-basis: 48px;
+                                                flex-direction: column;
+                                                height: 100%;
+                                                justify-content: center;
+                                                position: relative;
+
+                                                .add-one {
+                                                    overflow-y: visible;
+                                                    border-radius: 0;
+                                                    background-color: transparent;
+                                                    flex-direction: column;
+                                                    display: flex;
+                                                    flex-shrink: 0;
+                                                    align-items: stretch;
+                                                    overflow-x: visible;
+                                                    align-self: auto;
+                                                    justify-content: flex-start;
+                                                    position: relative;
+                                                    margin-right: 8px;
+                                                    flex-grow: 0;
+                                                    padding: 16px;
+
+
+                                                    .add-two {
+                                                        display: inline;
+                                                        font-weight: 600;
+                                                        height: auto;
+                                                        border-color: rgba(0, 0, 0, 0.4);
+                                                        border-radius: 2px;
+                                                        text-overflow: ellipsis;
+                                                        padding: 0;
+                                                        appearance: none;
+                                                        background-color: transparent;
+                                                        min-width: 0;
+                                                        flex-basis: auto;
+                                                        margin: 0;
+                                                        min-height: 0;
+                                                        flex-shrink: 0;
+                                                        text-align: center;
+                                                        cursor: pointer;
+                                                        outline-style: none;
+                                                        border-style: none;
+                                                        position: relative;
+                                                        z-index: 0;
+                                                        font-family: var(--font-family);
+                                                        outline: none;
+                                                        text-decoration: none;
+                                                        list-style: none;
+                                                        width: auto;
+                                                        color: #FE6E91;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                }
+
+                                .content {
+
+                                    flex-shrink: 1;
+                                    max-width: 600px;
+                                    flex-basis: auto;
+                                    min-height: 217px;
+                                    max-height: 217px;
+                                    flex-grow: 1;
+                                    min-width: 600px;
+                                    flex-direction: row;
+                                    display: flex;
+
+                                    .emotion {
+                                        display: flex;
+                                        flex-direction: column;
+                                        position: relative;
+                                        flex-shrink: 1;
+                                        flex-grow: 0;
+                                        margin: auto;
+                                        justify-content: center;
+                                        align-items: center;
+                                        border-radius: 50%;
+                                        background-color: transparent;
+                                        width: 100px;
+                                        padding: 8px;
+
+                                        label {
+                                            align-items: center;
+                                            justify-content: center;
+                                            align-self: center;
+                                            justify-self: center;
+                                            display: flex;
+                                            flex-direction: column;
+
+                                            font-size: 13px;
+                                        }
+                                        
+
+                                        input {
+                                            display: none;
+                                        }
+
+                                        img {
+                                            width: 70px;
+                                            height: auto;
+                                        }
+                                        img:hover{
+                                            width: 74px;
+                                            height: auto;
+                                        }
+
+                                        // input+label::before {
+                                        //     display: flex;
+                                        //     border: 2px solid #000;
+                                        //     border-radius: 50%;
+                                        //     margin-right: 10px;
+                                        // }
+
+                                        // input:checked+label::before {
+                                        //     background-color: #000;
+                                        // }
+
+
+                                    }
+
+                                    .emotion:hover {
+                                        background-color: rgb(247, 235, 240);
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

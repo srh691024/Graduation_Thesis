@@ -1,23 +1,19 @@
 import classNames from "classnames/bind";
 import images from "~/assets/images";
-import Post from "~/components/Post";
+import {Post, ModalNewDiary} from "~/components";
 import styles from "~/pages/PrivateCouple/DiaryPost/DiaryPost.module.scss"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { useState } from "react";
-import Modal from "react-modal";
 
 const cx = classNames.bind(styles);
 
 function DiaryPost() {
+    const [modal, setModal] = useState(false);
+    const toggleModal = ()=>{
+        setModal(!modal);
+    }
 
-    const [modalIsOpen, setIsOpen] = useState(false);
-    function openModal() {
-        setIsOpen(true);
-    }
-    function closeModal() {
-        setIsOpen(false);
-    }
     return (
         <div className={cx('container')}>
             <div className={cx('new-diary')}>
@@ -27,20 +23,14 @@ function DiaryPost() {
                             <div className={cx('avatar-new-diary')}>
                                 <img src={images.login_image} alt="" />
                             </div>
-                            <div className={cx('content-new-diary')} onClick={openModal}>
+                            <div className={cx('content-new-diary')} onClick={toggleModal} >
                                 <div className={cx('title')}>
                                     <span>Are there any memories today?</span>
                                 </div>
                                 <div className={cx('overlay')} ></div>
                             </div>
                             {/** Modal */}
-                            <Modal
-                                isOpen={modalIsOpen}
-                                onRequestClose={closeModal}
-                            >
-                                
-                                <button type="submit" onClick={closeModal}>Cancel</button>
-                            </Modal>
+                            {/* <ModalNewDiary/> */}
                         </div>
                     </div>
                 </div>

@@ -2,9 +2,7 @@ import { Fragment } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { publicRoutes, privateRoutes } from '~/routes';
 import DefaultLayout from "~/layouts";
-// import Modal from "react-modal";
 
-// Modal.setAppElement('#root');
 function App() {
   return (
     <Router>

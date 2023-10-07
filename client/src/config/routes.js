@@ -4,6 +4,8 @@ const routes = {
     finalregister: '/finalregister/:status',
     resetpassword: '/resetpassword/:token',
     diarypost: '/',
+    setting: '/setting',
+    
 };
 
 export default routes;

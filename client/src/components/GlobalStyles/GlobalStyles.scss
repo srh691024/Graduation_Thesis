@@ -1,34 +1,44 @@
 @import 'normalize.css';
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 
-:root{
---primary:#f06f85;
---font-family: 'Montserrat', sans-serif;
---header-height: 0px;
---lodi-primary-background: 255, 255, 255;
---lodi-second-background: 252, 239, 246;
---lodi-color-pink: #F9C0D5;
---header-width: 78px;
---button-height-medium: 35px;
+:root {
+    --primary: #f06f85;
+    --font-family: 'Montserrat', sans-serif;
+    --header-height: 0px;
+    --lodi-primary-background: 255, 255, 255;
+    --lodi-second-background: 252, 239, 246;
+    --lodi-color-pink: #F9C0D5;
+    --header-width: 78px;
+    --button-height-medium: 35px;
 }
 
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-html{
-font-size: 62.5%;
+html {
+    font-size: 62.5%;
+    // overflow-x: hidden;
 }
 
-body{
+body {
     font-family: 'Montserrat', sans-serif;
     font-size: 1.4rem;
     line-height: 1.5;
     text-rendering: optimizeSpeed;
     background-color: rgb(var(--lodi-second-background));
+    // padding: 0;
+    // margin: 0;
+
+
 }
+
+// html,
+// body, #root {
+//     height: 100%;
+// }
 
 //Scrollbar CSS
 html *::-webkit-scrollbar {

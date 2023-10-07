@@ -19,6 +19,13 @@ const images = {
     capricorn: require('~/assets/images/horoscopes/capricorn.png'),
     aquarius: require('~/assets/images/horoscopes/aquarius.png'),
     pisces: require('~/assets/images/horoscopes/pisces.png'),
+
+    //emotions
+    inlove: require('~/assets/images/emotions/inlove.png'),
+    happy: require('~/assets/images/emotions/happy.png'),
+    normal: require('~/assets/images/emotions/normal.png'),
+    sad: require('~/assets/images/emotions/sad.png'),
+    angry: require('~/assets/images/emotions/angry.png'),
 }
 
 export default images;

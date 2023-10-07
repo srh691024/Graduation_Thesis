@@ -3,6 +3,7 @@ import styles from './Header.module.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFaceSmile, faSquareCheck, faImages, faBell, faCalendarDays } from '@fortawesome/free-regular-svg-icons';
 import { faPeopleLine, faBars, faHouse, faBookBookmark} from '@fortawesome/free-solid-svg-icons';
+import { Notifications } from '~/components';
 
 import images from "~/assets/images";
 
@@ -214,6 +215,7 @@ function Header() {
                             </div>
                         </div>
                     </div>
+                    {/* <Notifications /> */}
                 </div>
             </div>
         </div>

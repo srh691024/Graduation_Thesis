@@ -3,6 +3,7 @@ import Header from '~/layouts/components/Header';
 import styles from '~/layouts/DefaultPrivateLayout/DefaultPrivateLayout.module.scss';
 import Themes from '~/layouts/components/Themes';
 import IntroCouple from "~/layouts/components/IntroCouple";
+import { ModalFeeling, ModalNewDiary, Notifications } from '~/components';
 
 const cx = classNames.bind(styles);
 
@@ -35,6 +36,9 @@ function DefaultLayout({ children }) {
                     </div>
                 </div>
             </div>
+            {/* <ModalNewDiary /> */}
+            {/* <ModalFeeling/> */}
+            {/* <Notifications /> */}
         </div >
     );
 }
