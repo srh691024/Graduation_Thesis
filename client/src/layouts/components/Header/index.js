@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFaceSmile, faSquareCheck, faImages, faBell, faCalendarDays } from '@fortawesome/free-regular-svg-icons';
 import { faPeopleLine, faBars, faHouse, faBookBookmark} from '@fortawesome/free-solid-svg-icons';
 import { Notifications } from '~/components';
+import { Link } from 'react-router-dom';
+import config from '~/config';
 
 import images from "~/assets/images";
 
@@ -21,7 +23,7 @@ function Header() {
                                     <div className={cx('logo-second')}>
                                         <span>
                                             <div className={cx('logo-third')}>
-                                                <a href="/">
+                                                <Link to={config.routes.diarypost}>
                                                     <div className={cx('logo-fourth')}>
                                                         <div className={cx('logo-image')}>
                                                             <div className={cx('logo-image-first')}>
@@ -31,7 +33,7 @@ function Header() {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </a>
+                                                </Link>
                                             </div>
                                         </span>
                                     </div>
@@ -42,7 +44,7 @@ function Header() {
                                     <div className={cx('sub-first')}>
                                         <span>
                                             <div className={cx('sub-second')}>
-                                                <a href='/' alt="">
+                                                <Link to={config.routes.diarypost}>
                                                     <div className={cx('sub-third')}>
                                                         <div className={cx('icon')}>
                                                             <div className={cx('icon-first')}>
@@ -52,7 +54,7 @@ function Header() {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </a>
+                                                </Link>
                                             </div>
                                         </span>
                                     </div>
@@ -61,7 +63,7 @@ function Header() {
                                     <div className={cx('sub-first')}>
                                         <span>
                                             <div className={cx('sub-second')}>
-                                                <a href='/' alt="">
+                                                <Link to={config.routes.diarypost}>
                                                     <div className={cx('sub-third')}>
                                                         <div className={cx('icon')}>
                                                             <div className={cx('icon-first')}>
@@ -71,7 +73,7 @@ function Header() {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </a>
+                                                </Link>
                                             </div>
                                         </span>
                                     </div>
@@ -80,7 +82,7 @@ function Header() {
                                     <div className={cx('sub-first')}>
                                         <span>
                                             <div className={cx('sub-second')}>
-                                                <a href='/' alt="">
+                                                <Link to={config.routes.diarypost}>
                                                     <div className={cx('sub-third')}>
                                                         <div className={cx('icon')}>
                                                             <div className={cx('icon-first')}>
@@ -90,7 +92,7 @@ function Header() {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </a>
+                                                </Link>
                                             </div>
                                         </span>
                                     </div>
@@ -99,7 +101,7 @@ function Header() {
                                     <div className={cx('sub-first')}>
                                         <span>
                                             <div className={cx('sub-second')}>
-                                                <a href='/' alt="">
+                                                <Link to={config.routes.diarypost}>
                                                     <div className={cx('sub-third')}>
                                                         <div className={cx('icon')}>
                                                             <div className={cx('icon-first')}>
@@ -109,7 +111,7 @@ function Header() {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </a>
+                                                </Link>
                                             </div>
                                         </span>
                                     </div>
@@ -118,7 +120,7 @@ function Header() {
                                     <div className={cx('sub-first')}>
                                         <span>
                                             <div className={cx('sub-second')}>
-                                                <a href='/' alt="">
+                                                <Link to={config.routes.diarypost}>
                                                     <div className={cx('sub-third')}>
                                                         <div className={cx('icon')}>
                                                             <div className={cx('icon-first')}>
@@ -128,7 +130,7 @@ function Header() {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </a>
+                                                </Link>
                                             </div>
                                         </span>
                                     </div>
@@ -137,7 +139,7 @@ function Header() {
                                     <div className={cx('sub-first')}>
                                         <span>
                                             <div className={cx('sub-second')}>
-                                                <a href='/' alt="">
+                                                <Link to={config.routes.diarypost}>
                                                     <div className={cx('sub-third')}>
                                                         <div className={cx('icon')}>
                                                             <div className={cx('icon-first')}>
@@ -147,7 +149,7 @@ function Header() {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </a>
+                                                </Link>
                                             </div>
                                         </span>
                                     </div>
@@ -156,7 +158,7 @@ function Header() {
                                     <div className={cx('sub-first')}>
                                         <span>
                                             <div className={cx('sub-second')}>
-                                                <a href='/' alt="">
+                                                <Link to={config.routes.diarypost}>
                                                     <div className={cx('sub-third')}>
                                                         <div className={cx('icon')}>
                                                             <div className={cx('icon-first')}>
@@ -166,7 +168,7 @@ function Header() {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </a>
+                                                </Link>
                                             </div>
                                         </span>
                                     </div>
@@ -175,7 +177,7 @@ function Header() {
                                     <div className={cx('sub-first')}>
                                         <span>
                                             <div className={cx('sub-second')}>
-                                                <a href='/' alt="">
+                                                <Link to={config.routes.diarypost}>
                                                     <div className={cx('sub-third')}>
                                                         <div className={cx('icon')}>
                                                             <div className={cx('icon-first')}>
@@ -185,7 +187,7 @@ function Header() {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </a>
+                                                </Link>
                                             </div>
                                         </span>
                                     </div>
@@ -196,7 +198,7 @@ function Header() {
                                     <div className={cx('sub-first')}>
                                         <span>
                                             <div className={cx('sub-second')}>
-                                                <a href='/' alt="">
+                                                <Link to={config.routes.settingEditProfile}>
                                                     <div className={cx('sub-third')}>
                                                         <div className={cx('icon')}>
                                                             <div className={cx('icon-first')}>
@@ -206,7 +208,7 @@ function Header() {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </a>
+                                                </Link>
                                             </div>
                                         </span>
                                     </div>

@@ -1,0 +1,119 @@
+.wrapper {
+    position: relative;
+    display: block;
+    z-index: 0;
+}
+
+.inner {
+
+    position: relative;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+
+
+    .inner-first {
+        flex-direction: column;
+        display: flex;
+        position: relative;
+       
+
+        .inner-second {
+            top: var(--header-height);
+            flex-direction: column;
+            min-height: calc(100vh - var(--header-height));
+            display: flex;
+            position: relative;
+
+            .inner-third {
+                flex-direction: column;
+                display: flex;
+                min-height: inherit;
+                position: relative;
+                z-index: 0;
+                margin-bottom: calc(-100vh + var(--header-height));
+
+                .inner-fourth {
+                    height: 100%;
+                    background-color: rgb(var(--lodi-primary-background));
+                    overflow-y: visible;
+                    border-radius: 0;
+                    flex-shrink: 0;
+                    position: static;
+                    justify-content: space-between;
+                    align-items: stretch;
+                    flex-direction: row;
+                    overflow-x: visible;
+                    align-self: auto;
+                    flex-grow: 0;
+                    display: flex;
+
+                }
+            }
+        }
+    }
+}
+
+.container {
+    width: calc(100% - var(--header-width));
+    margin-left: auto;
+    display: block;
+
+    .section {
+        min-height: 100vh;
+        flex-direction: column;
+        display: flex;
+        overflow-x: hidden;
+
+        .main {
+            background-color: rgb(var(--lodi-primary-background));
+            flex-direction: column;
+            display: flex;
+            flex-grow: 1;
+            order: 4;
+            position: relative;
+        }
+    }
+}
+
+.divide-column{
+    border-radius: 0;
+    overflow-y: visible;
+    background-color: transparent;
+    display: flex;
+    flex-shrink: 0;
+    position: static;
+    align-items: stretch;
+    flex-direction: row;
+    overflow-x: visible;
+    align-self: auto;
+    justify-content: flex-start;
+    flex-grow: 0;
+
+}
+
+.border-line{
+    overflow-y: visible;
+    margin: 24px 0 ;
+    border-radius: 0;
+    background-color: transparent;
+    flex-direction: column;
+    display: flex;
+    flex-shrink: 0;
+    position: static;
+    align-items: stretch;
+    overflow-x: visible;
+    align-self: auto;
+    justify-content: flex-start;
+    flex-grow: 0;
+
+    .border-line-one{
+        border-width: 0;
+        margin: 0;
+        height: 100%;
+        width: 1px;
+        background-color: rgb(219,219,219);
+        display: block;
+
+    }
+}

@@ -1,0 +1,262 @@
+.wrapper {
+    height: 100vh;
+    overflow-x: auto;
+    border-radius: 0;
+    background-color: transparent;
+    flex-direction: column;
+    display: flex;
+    flex-shrink: 0;
+    position: static;
+    align-items: stretch;
+    overflow-y: auto;
+    justify-content: flex-start;
+    flex-grow: 0;
+
+    .wrapper-one {
+        padding: 24px 0;
+        overflow-y: visible;
+        border-radius: 0;
+        background-color: transparent;
+        flex-direction: column;
+        display: flex;
+        flex-shrink: 0;
+        position: static;
+        align-items: stretch;
+        overflow-x: visible;
+        align-self: auto;
+        justify-content: flex-start;
+        flex-grow: 0;
+
+        .wrapper-two {
+            height: 100%;
+            overflow-y: visible;
+            border-radius: 0;
+            background-color: transparent;
+            display: flex;
+            flex-shrink: 0;
+            align-items: stretch;
+            flex-direction: row;
+            overflow-x: visible;
+            align-self: auto;
+            justify-content: flex-start;
+            flex-grow: 0;
+
+            .wrapper-three {
+                overflow-y: visible;
+                border-radius: 0;
+                background-color: transparent;
+                flex-direction: column;
+                margin: 0;
+                display: flex;
+                flex-shrink: 0;
+                position: static;
+                align-items: stretch;
+                overflow-x: visible;
+                align-self: auto;
+                justify-content: flex-start;
+                flex-grow: 0;
+
+                .wrapper-four {
+                    width: 315px;
+                    overflow-y: visible;
+                    border-radius: 0;
+                    background-color: transparent;
+                    flex-direction: column;
+                    display: flex;
+                    flex-shrink: 0;
+                    position: static;
+                    align-items: stretch;
+                    overflow-x: visible;
+                    align-self: auto;
+                    justify-content: flex-start;
+                    flex-grow: 0;
+
+                }
+            }
+        }
+    }
+}
+
+.header-setting {
+    margin: 0 48px 10px 36px;
+    overflow-y: visible;
+    border-radius: 0;
+    background-color: transparent;
+    flex-direction: column;
+    display: flex;
+    flex-shrink: 0;
+    position: static;
+    padding: 0 16px 16px 16px;
+    align-items: stretch;
+    overflow-x: visible;
+    align-self: auto;
+    justify-content: flex-start;
+    flex-grow: 0;
+    border-bottom: 1px solid rgb(219,219,219);
+
+    span {
+        overflow-y: visible;
+        min-width: 0;
+        margin: 0;
+        color: #3E3341;
+        font-weight: 700;
+        word-wrap: break-word;
+        overflow-x: visible;
+        position: relative;
+        font-size: 20px;
+        display: block;
+        font-family: var(--font-family);
+        white-space: pre-line;
+        max-width: 100%;
+        word-break: break-word;
+
+    }
+}
+
+.sub-edit {
+    margin: 0 48px 0 36px;
+    overflow-y: visible;
+    border-radius: 8px;
+    flex-direction: column;
+    display: flex;
+    flex-shrink: 0;
+    position: static;
+    align-items: stretch;
+    overflow-x: visible;
+    align-self: auto;
+    justify-content: flex-start;
+    flex-grow: 0;
+
+    a{
+        border-style: solid;
+        border-color: rgba(0,0,0,0.4);
+        border-width: 0;
+        padding: 0;
+        background-color: transparent;
+        border-radius: unset;
+        width: 100%;
+        min-width: 0;
+        flex-basis: auto;
+        margin: 0;
+        user-select: none;
+        min-height: 0;
+        flex-shrink: 0;
+        cursor: pointer;
+        outline-style: none;
+        position: relative;
+        display: block;
+        z-index: 0;
+        max-width: 100%;
+        text-align: inherit;
+        list-style: none;
+        outline: none;
+        text-decoration: none;
+
+        .text-sub-edit{
+            padding: 16px;
+            overflow-y: visible;
+            border-radius: 0;
+            flex-direction: column;
+            display: flex;
+            position: static;
+            align-items: stretch;
+            overflow-x: visible;
+            justify-content: flex-start;
+
+            .text-sub-edit-one{
+                justify-content: center;
+                min-width: 0;
+                flex-direction: column;
+                display: flex;
+                align-items: stretch;
+                position: relative;
+                z-index: 0;
+                flex-grow: 1;
+                .text-sub-edit-two{
+                    flex-wrap: nowrap;
+                    display: flex;
+                    align-items: center;
+                    flex-shrink: 0;
+                    justify-content: space-between;
+                    flex-direction: row;
+                    position: relative;
+                    z-index: 0;
+                    .text-sub-edit-three{
+                        flex-shrink: 1;
+                        min-width: 0;
+                        flex-basis: auto;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        flex-direction: row;
+                        position: relative;
+                        z-index: 0;
+                        flex-grow: 1;
+                        flex-wrap: wrap;
+                        .text-sub-edit-four{
+                            min-width: 0;
+                            flex-direction: column;
+                            display: flex;
+                            flex-shrink: 0;
+                            position: relative;
+                            z-index: 0;
+                            flex-grow: 1;
+                            max-width: 100%;
+                            .text-sub-edit-five{
+                                overflow-y: visible;
+                                border-radius: 0;
+                                background-color: transparent;
+                                min-width: 0;
+                                flex-direction: column;
+                                display: flex;
+                                min-height: 0;
+                                position: static;
+                                overflow-x: visible;
+                                align-self: auto;
+                                justify-content: flex-start;
+                                flex-grow: 1;
+                                align-items: flex-start;
+                                span{
+                                    font-size: 13px;
+                                    overflow-y: visible;
+                                    font-weight: 500;
+                                    min-width: 0;
+                                    margin: 0;
+                                    color: #3E3341;
+                                    word-wrap: break-word;
+                                    overflow-x: visible;
+                                    position: relative;
+                                    display: block;
+                                    font-family: var(--font-family);
+                                    white-space: pre-line;
+                                    max-width: 100%;
+                                    word-break: break-word;
+
+                                }   
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .hover-sub-edit{
+            border-radius: 8px;
+            background-color: rgba(0,0,0,0.05);
+            opacity: 0;
+            right: 0;
+            pointer-events: none;
+            bottom: 0;
+            transition-duration: 100ms;
+            transition-timing-function: cubic-bezier(0,0,1,1);
+            transition-property: opacity;
+            left: 0;
+            top: 0;
+            position: absolute;
+            display: block;
+        }
+    }
+}
+.sub-edit:hover{
+    background-color: rgba(0,0,0,0.04);
+}

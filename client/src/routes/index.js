@@ -1,11 +1,13 @@
 import config from '~/config';
 //Layouts 
-import { DefaultPrivateLayout } from '~/layouts';
+import { DefaultPrivateLayout, SettingPrivateLayout } from '~/layouts';
 
 
 import Login from "~/pages/Authen/Login";
 import Register from "~/pages/Authen/Register";
 import DiaryPost from "~/pages/PrivateCouple/DiaryPost";
+// import EditProfile from '~/pages/Settings/EditProfile';
+import { EditProfile, AccountPassword, PushNotifications } from '~/pages/Settings';
 import { FinalRegister } from '~/components';
 import { ResetPassword } from '~/components';
 
@@ -19,6 +21,9 @@ const publicRoutes = [
 
 const privateRoutes = [
     { path: config.routes.diarypost, component: DiaryPost, layout: DefaultPrivateLayout },
+    { path: config.routes.settingEditProfile, component: EditProfile, layout: SettingPrivateLayout },
+    { path: config.routes.settingAccountPassword, component: AccountPassword, layout: SettingPrivateLayout },
+    { path: config.routes.settingPushNotifications, component: PushNotifications, layout: SettingPrivateLayout },
 ]
 
 export { publicRoutes, privateRoutes }
