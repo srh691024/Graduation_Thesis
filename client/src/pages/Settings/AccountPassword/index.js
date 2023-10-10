@@ -45,7 +45,7 @@ function AccountPassword() {
                             </div>
                         </div>
                         <div className={cx('list-content')}>
-                        <div className={cx('list-content-title')}>Delete account</div>
+                            <div className={cx('list-content-title')}>Delete account</div>
                             <div className={cx('list-content-icon')}>
                                 <FontAwesomeIcon className={cx('icon')} icon={faChevronRight} />
                             </div>

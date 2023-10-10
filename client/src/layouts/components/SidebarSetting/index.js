@@ -70,14 +70,14 @@ function SidebarSetting() {
                                 </Link>
                             </div>
                             <div className={cx('sub-edit')}>
-                                <Link to={config.routes.settingEditProfile} >
+                                <Link to={config.routes.settingCommentControl} >
                                     <div className={cx('text-sub-edit')}>
                                         <div className={cx('text-sub-edit-one')}>
                                             <div className={cx('text-sub-edit-two')}>
                                                 <div className={cx('text-sub-edit-three')}>
                                                     <div className={cx('text-sub-edit-four')}>
                                                         <div className={cx('text-sub-edit-five')}>
-                                                            <span>How others can interact with you</span>
+                                                            <span>Comment control</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -88,7 +88,7 @@ function SidebarSetting() {
                                 </Link>
                             </div>
                             <div className={cx('sub-edit')}>
-                                <Link to={config.routes.settingEditProfile} >
+                                <Link to={config.routes.settingHelp} >
                                     <div className={cx('text-sub-edit')}>
                                         <div className={cx('text-sub-edit-one')}>
                                             <div className={cx('text-sub-edit-two')}>

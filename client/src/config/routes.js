@@ -7,6 +7,8 @@ const routes = {
     settingEditProfile: '/setting/editprofile',
     settingAccountPassword: '/setting/accountpassword',
     settingPushNotifications: '/setting/pushnotifications',
+    settingCommentControl: '/setting/commentcontrol',
+    settingHelp: '/setting/help',
 };
 
 export default routes;
