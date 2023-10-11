@@ -109,7 +109,7 @@ function SidebarSetting() {
                                 <span>Couple</span>
                             </div>
                             <div className={cx('sub-edit')}>
-                                <Link to={config.routes.settingEditProfile} >
+                                <Link to={config.routes.settingConnectLover} >
                                     <div className={cx('text-sub-edit')}>
                                         <div className={cx('text-sub-edit-one')}>
                                             <div className={cx('text-sub-edit-two')}>

@@ -9,6 +9,8 @@ const routes = {
     settingPushNotifications: '/setting/pushnotifications',
     settingCommentControl: '/setting/commentcontrol',
     settingHelp: '/setting/help',
+    settingConnectLover: '/setting/connectlover',
+
 };
 
 export default routes;

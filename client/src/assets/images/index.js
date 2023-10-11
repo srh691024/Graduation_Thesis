@@ -26,6 +26,13 @@ const images = {
     normal: require('~/assets/images/emotions/normal.png'),
     sad: require('~/assets/images/emotions/sad.png'),
     angry: require('~/assets/images/emotions/angry.png'),
+
+    //connect lover
+    envelopeHeart: require('~/assets/images/connectlover/envelope_heart.png'),
+    databaseManage: require('~/assets/images/connectlover/database-management.png'),
+    notebook: require('~/assets/images/connectlover/notebook.png'),
+    notification: require('~/assets/images/connectlover/notification.png'),
+    socialService: require('~/assets/images/connectlover/social-services.png'),
 }
 
 export default images;
