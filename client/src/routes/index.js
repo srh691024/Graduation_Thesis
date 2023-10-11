@@ -6,7 +6,7 @@ import { DefaultPrivateLayout, SettingPrivateLayout } from '~/layouts';
 import Login from "~/pages/Authen/Login";
 import Register from "~/pages/Authen/Register";
 import DiaryPost from "~/pages/PrivateCouple/DiaryPost";
-import { EditProfile, AccountPassword, PushNotifications , CommentControl, Help, ConnectLover} from '~/pages/Settings';
+import { EditProfile, AccountPassword, PushNotifications , CommentControl, Help, ConnectLover, ViewHistory} from '~/pages/Settings';
 import { FinalRegister, ResetPassword } from '~/components';
 
 const publicRoutes = [
@@ -25,6 +25,7 @@ const privateRoutes = [
     { path: config.routes.settingCommentControl, component: CommentControl, layout: SettingPrivateLayout },
     { path: config.routes.settingHelp, component: Help, layout: SettingPrivateLayout },
     { path: config.routes.settingConnectLover, component: ConnectLover, layout: SettingPrivateLayout },
+    { path: config.routes.settingViewConnectionsHistory, component: ViewHistory, layout: SettingPrivateLayout },
 ]
 
 export { publicRoutes, privateRoutes }

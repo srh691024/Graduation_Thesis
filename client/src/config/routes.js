@@ -10,7 +10,8 @@ const routes = {
     settingCommentControl: '/setting/commentcontrol',
     settingHelp: '/setting/help',
     settingConnectLover: '/setting/connectlover',
-
+    settingViewConnectionsHistory: '/setting/viewconnectionshistory',
+    
 };
 
 export default routes;

@@ -116,7 +116,7 @@ function SidebarSetting() {
                                                 <div className={cx('text-sub-edit-three')}>
                                                     <div className={cx('text-sub-edit-four')}>
                                                         <div className={cx('text-sub-edit-five')}>
-                                                            <span>Connect with your lover</span>
+                                                            <span>Manage connection</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -127,7 +127,7 @@ function SidebarSetting() {
                                 </Link>
                             </div>
                             <div className={cx('sub-edit')}>
-                                <Link to={config.routes.settingEditProfile} >
+                                <Link to={config.routes.settingViewConnectionsHistory} >
                                     <div className={cx('text-sub-edit')}>
                                         <div className={cx('text-sub-edit-one')}>
                                             <div className={cx('text-sub-edit-two')}>
@@ -144,7 +144,7 @@ function SidebarSetting() {
                                     <div className={cx('hover-sub-edit')}></div>
                                 </Link>
                             </div>
-                            <div className={cx('sub-edit')}>
+                            {/* <div className={cx('sub-edit')}>
                                 <Link to={config.routes.settingEditProfile} >
                                     <div className={cx('text-sub-edit')}>
                                         <div className={cx('text-sub-edit-one')}>
@@ -161,7 +161,7 @@ function SidebarSetting() {
                                     </div>
                                     <div className={cx('hover-sub-edit')}></div>
                                 </Link>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>

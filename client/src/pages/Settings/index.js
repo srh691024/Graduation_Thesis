@@ -4,3 +4,4 @@ export { default as PushNotifications } from '~/pages/Settings/PushNotifications
 export { default as CommentControl } from '~/pages/Settings/CommentControl';
 export { default as Help } from '~/pages/Settings/Help';
 export { default as ConnectLover } from '~/pages/Settings/ConnectLover';
+export { default as ViewHistory } from '~/pages/Settings/ViewHistory';

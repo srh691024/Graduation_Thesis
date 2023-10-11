@@ -2,7 +2,7 @@ import classNames from "classnames/bind";
 import styles from "~/pages/Settings/ConnectLover/ConnectLover.module.scss"
 import images from "~/assets/images";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClockRotateLeft } from "@fortawesome/free-solid-svg-icons";
+import { faClockRotateLeft, faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 
 const cx = classNames.bind(styles);
 
@@ -13,7 +13,7 @@ function ConnectLover() {
                 <div className={cx('header-edit-profile')}>
                     <div className={cx('header-edit-profile-one')}>
                         <div className={cx('header-edit-profile-two')}>
-                            <span>Connect with lover</span>
+                            <span>Manage connection</span>
                         </div>
                     </div>
                 </div>
@@ -25,7 +25,9 @@ function ConnectLover() {
                             <input type="text" placeholder="Enter the connection code" />
                         </div>
                     </div>
-                    <div className={cx('after-send-link')}>
+
+                    {/* Have request lover connection */}
+                    {/* <div className={cx('after-send-link')}>
                         <div className={cx('after-send-link-one')}>
                             <div className={cx('icon-envelope')}>
                                 <img src={images.envelopeHeart} alt="" />
@@ -45,7 +47,52 @@ function ConnectLover() {
                             </div>
                         </div>
                         <div className={cx('button-cancel-link')}>Cancel the invitation</div>
+                    </div> */}
+
+                    {/* Dont have connection */}
+                    {/* <div className={cx('after-send-link')}>
+                        <div className={cx('after-send-link-one')}>
+                            <div className={cx('icon-envelope')}>
+                                <img src={images.noConnection} alt="" />
+                            </div>
+                            <div className={cx('description-icon-first')}>There are no connections</div>
+                        </div>
+                    </div> */}
+
+                    {/* Have a connection */}
+                    <div className={cx('have-connection')}>
+                        <div className={cx('have-connection-one')}>
+                            <div className={cx('from-date')}>
+                                <div className={cx('date')}>From 10, October, 2023</div>
+                                <div className={cx('icon-option')}>
+                                <FontAwesomeIcon icon={faEllipsisVertical} />
+                                </div>
+                            </div>
+                            <div className={cx('connected-with')}>Connected with Choun</div>
+                            <div className={cx('avatar-partner')}>
+                                <div className={cx('avatar-name')}>
+                                    <div className={cx('avatar')}>
+                                        <img src={images.login_image} alt=""/>
+                                    </div>
+                                    <div className={cx('name')}>Thuy Duong</div>
+                                </div>
+                                <div className={cx('heart')}>
+                                    <img src={images.hearts} alt=""/>
+                                </div>
+                                <div className={cx('avatar-name')}>
+                                    <div className={cx('avatar')}>
+                                    <img src={images.login_image} alt=""/>
+                                    </div>
+                                    <div className={cx('name')}>Thuy Duong</div>
+                                </div>
+                            </div>
+                            <div className={cx('image-kiss')}>
+                                <img src={images.kiss} alt=""/>
+                            </div>
+                        </div>
                     </div>
+
+                    {/* Note connections */}
                     <div className={cx('note-when-connect')}>
                         <div className={cx('note-when-connect-one')}>
                             <div className={cx('header')}>Connect and start with Love Diary</div>

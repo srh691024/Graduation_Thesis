@@ -33,6 +33,10 @@ const images = {
     notebook: require('~/assets/images/connectlover/notebook.png'),
     notification: require('~/assets/images/connectlover/notification.png'),
     socialService: require('~/assets/images/connectlover/social-services.png'),
+    noConnection: require('~/assets/images/connectlover/forbidden.png'),
+    hearts: require('~/assets/images/connectlover/hearts.png'),
+    kiss: require('~/assets/images/connectlover/kiss.png'),
+    
 }
 
 export default images;

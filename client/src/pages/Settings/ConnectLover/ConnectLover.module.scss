@@ -182,6 +182,7 @@
             align-items: center;
             width: 100%;
             background-color: rgba(22, 24, 35, 0.03);
+            padding-bottom: 16px;
 
             .icon-envelope {
                 margin-top: 10px;
@@ -275,6 +276,119 @@
 
     }
 
+    .have-connection {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        // background-image: url('../../../assets/images/connectlover/background.jpg');
+
+
+
+
+        .have-connection-one {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            width: 100%;
+            background-color: rgba(22, 24, 35, 0.03);
+            padding: 16px 16px 0 16px;
+            border-radius: 8px;
+            border: 1px solid #FE6E91;
+
+            .from-date {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+
+                .date {
+                    display: flex;
+                    color: rgb(115, 115, 115);
+                    font-size: 12.5px;
+                }
+
+                .icon-option {
+                    color: #FE6E91;
+                    font-size: 19px;
+                    padding: 0 13px;
+                    border-radius: 8px;
+                    cursor: pointer;
+                }
+
+                .icon-option:hover {
+                    background-color: rgb(247, 235, 240);
+                }
+            }
+
+            .connected-with {
+                display: flex;
+                font-size: 20px;
+                font-weight: 600;
+                color: #3E3341;
+            }
+
+            .avatar-partner {
+                display: flex;
+                flex-direction: row;
+                margin-top: 32px;
+                justify-content: center;
+                width: 100%;
+
+                .avatar-name {
+                    display: flex;
+                    flex-direction: column;
+
+                    .avatar {
+                        display: flex;
+                        width: 100px;
+                        height: 100px;
+                        border-radius: 50%;
+                        overflow: hidden;
+
+                        img {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                        }
+                    }
+
+                    .name {
+                        display: flex;
+                        justify-self: center;
+                        align-self: center;
+                        font-weight: 500;
+                        font-size: 14px;
+                    }
+                }
+
+                .heart {
+                    display: flex;
+                    margin: 20px;
+
+                    img {
+                        width: 60px;
+                        height: 60px;
+
+                    }
+                }
+            }
+
+            .image-kiss {
+                display: flex;
+                justify-content: flex-end;
+                width: 100%;
+
+                img {
+                    width: 160px;
+
+                }
+            }
+        }
+    }
+
     .note-when-connect {
         display: flex;
         flex-direction: column;
@@ -285,6 +399,7 @@
         margin-top: 16px;
         border-top: 1px solid rgb(219, 219, 219);
         padding-bottom: 32px;
+        border-radius: 8px;
 
         .note-when-connect-one {
             flex-direction: column;
@@ -337,7 +452,7 @@
                 color: red;
                 font-style: italic;
                 margin-bottom: 16px;
-                
+
             }
 
             ul {
