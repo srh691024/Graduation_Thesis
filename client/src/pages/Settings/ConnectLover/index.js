@@ -27,7 +27,7 @@ function ConnectLover() {
                     </div>
 
                     {/* Have request lover connection */}
-                    {/* <div className={cx('after-send-link')}>
+                    <div className={cx('after-send-link')}>
                         <div className={cx('after-send-link-one')}>
                             <div className={cx('icon-envelope')}>
                                 <img src={images.envelopeHeart} alt="" />
@@ -47,17 +47,17 @@ function ConnectLover() {
                             </div>
                         </div>
                         <div className={cx('button-cancel-link')}>Cancel the invitation</div>
-                    </div> */}
+                    </div>
 
                     {/* Dont have connection */}
-                    {/* <div className={cx('after-send-link')}>
+                    <div className={cx('after-send-link')}>
                         <div className={cx('after-send-link-one')}>
                             <div className={cx('icon-envelope')}>
                                 <img src={images.noConnection} alt="" />
                             </div>
                             <div className={cx('description-icon-first')}>There are no connections</div>
                         </div>
-                    </div> */}
+                    </div>
 
                     {/* Have a connection */}
                     <div className={cx('have-connection')}>

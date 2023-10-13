@@ -8,6 +8,7 @@ import Register from "~/pages/Authen/Register";
 import DiaryPost from "~/pages/PrivateCouple/DiaryPost";
 import { EditProfile, AccountPassword, PushNotifications , CommentControl, Help, ConnectLover, ViewHistory} from '~/pages/Settings';
 import { FinalRegister, ResetPassword } from '~/components';
+import ImageDiary from '~/pages/PrivateCouple/ImageDiary';
 
 const publicRoutes = [
     { path: config.routes.login, component: Login },
@@ -18,7 +19,11 @@ const publicRoutes = [
 ]
 
 const privateRoutes = [
+    //private couple routes
     { path: config.routes.diarypost, component: DiaryPost, layout: DefaultPrivateLayout },
+    { path: config.routes.imagesDiary, component: ImageDiary, layout: DefaultPrivateLayout },
+
+    //setting routes
     { path: config.routes.settingEditProfile, component: EditProfile, layout: SettingPrivateLayout },
     { path: config.routes.settingAccountPassword, component: AccountPassword, layout: SettingPrivateLayout },
     { path: config.routes.settingPushNotifications, component: PushNotifications, layout: SettingPrivateLayout },

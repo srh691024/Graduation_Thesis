@@ -1,0 +1,25 @@
+.dropdown-item {
+    padding: 8px 20px;
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+
+    .icon {
+        font-size: 16px;
+        color: #FE6E91;
+        margin-right: 8px;
+        width: 18px;
+        height: 18px;
+    }
+
+    a {
+        text-decoration: none;
+        font-size: 13px;
+        color: #3E3341;
+        font-weight: 500;
+    }
+}
+
+.dropdown-item:hover {
+    background-color: rgb(247, 235, 240);
+}

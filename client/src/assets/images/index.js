@@ -36,6 +36,7 @@ const images = {
     noConnection: require('~/assets/images/connectlover/forbidden.png'),
     hearts: require('~/assets/images/connectlover/hearts.png'),
     kiss: require('~/assets/images/connectlover/kiss.png'),
+    recoveryConnection: require('~/assets/images/connectlover/package.png'),
     
 }
 
