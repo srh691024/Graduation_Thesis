@@ -21,6 +21,9 @@ const routes = {
     settingConnectLover: '/setting/connectlover',
     settingViewConnectionsHistory: '/setting/viewconnectionshistory',
 
+    //public couples
+    homepage: '/homepage',
+
 };
 
 export default routes;
