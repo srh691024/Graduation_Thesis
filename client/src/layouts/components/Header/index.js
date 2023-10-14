@@ -3,16 +3,18 @@ import styles from './Header.module.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFaceSmile, faSquareCheck, faImages, faBell, faCalendarDays } from '@fortawesome/free-regular-svg-icons';
 import { faPeopleLine, faBars, faHouse, faBookBookmark } from '@fortawesome/free-solid-svg-icons';
-import { Notifications } from '~/components';
+import { Notifications, ModalFeeling } from '~/components';
 import { Link } from 'react-router-dom';
 import config from '~/config';
 import { useState } from 'react';
 import images from "~/assets/images";
+import { createPortal } from 'react-dom';
 
 const cx = classNames.bind(styles)
 
 function Header() {
     const [openNotification, setOpenNotification] = useState(false);
+    const [showModalFeeling, setShowModalFeeling] = useState(false);
     return (
         <div className={cx('wrapper-header')}>
             <div className={cx('inner')}>
@@ -64,7 +66,7 @@ function Header() {
                                     <div className={cx('sub-first')}>
                                         <span>
                                             <div className={cx('sub-second')}>
-                                                <Link to={config.routes.diarypost}>
+                                                <Link onClick={() => setShowModalFeeling(true)}>
                                                     <div className={cx('sub-third')}>
                                                         <div className={cx('icon')}>
                                                             <div className={cx('icon-first')}>
@@ -75,6 +77,10 @@ function Header() {
                                                         </div>
                                                     </div>
                                                 </Link>
+                                                {showModalFeeling && createPortal(
+                                                    <ModalFeeling onClose={() => setShowModalFeeling(false)} />,
+                                                    document.body
+                                                )}
                                             </div>
                                         </span>
                                     </div>
@@ -121,7 +127,7 @@ function Header() {
                                     <div className={cx('sub-first')}>
                                         <span>
                                             <div className={cx('sub-second')}>
-                                                <Link to={config.routes.diarypost}>
+                                                <Link to={config.routes.anniversary}>
                                                     <div className={cx('sub-third')}>
                                                         <div className={cx('icon')}>
                                                             <div className={cx('icon-first')}>
@@ -178,7 +184,7 @@ function Header() {
                                     <div className={cx('sub-first')}>
                                         <span>
                                             <div className={cx('sub-second')}>
-                                                <a href='#' onClick={() => { setOpenNotification(!openNotification) }}>
+                                                <Link onClick={() => { setOpenNotification(!openNotification) }}>
                                                     <div className={cx('sub-third')}>
                                                         <div className={cx('icon')}>
                                                             <div className={cx('icon-first')}>
@@ -188,7 +194,7 @@ function Header() {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </a>
+                                                </Link>
                                             </div>
                                         </span>
                                     </div>
@@ -218,10 +224,9 @@ function Header() {
                             </div>
                         </div>
                     </div>
-
+                    <Notifications text={openNotification ? 'active' : 'inactive'} />
                 </div>
             </div>
-            <Notifications text={openNotification?'active': 'inactive'} />
         </div>
     )
 }

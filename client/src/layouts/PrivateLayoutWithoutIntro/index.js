@@ -1,10 +1,10 @@
-import classNames from 'classnames/bind';
-import styles from '~/layouts/DefaultPrivateLayout/DefaultPrivateLayout.module.scss';
-import {IntroCouple, Header, Themes} from "~/layouts/components";
+import classNames from "classnames/bind";
+import styles from "~/layouts/PrivateLayoutWithoutIntro/PrivateLayoutWithoutIntro.module.scss"
+import {Header, Themes} from "../components";
+
 
 const cx = classNames.bind(styles);
-
-function DefaultLayout({ children }) {
+function PrivateLayoutWithoutIntro({ children }) {
     return (
         <>
             <div className={cx('wrapper')}>
@@ -22,7 +22,6 @@ function DefaultLayout({ children }) {
                                                     <div className={cx('inner-diarypost')}>
                                                         <div className={cx('divide-column')}>
                                                             {children}
-                                                            <IntroCouple />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -39,4 +38,4 @@ function DefaultLayout({ children }) {
     );
 }
 
-export default DefaultLayout;
+export default PrivateLayoutWithoutIntro;

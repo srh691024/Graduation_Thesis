@@ -1,15 +1,13 @@
 import config from '~/config';
 //Layouts 
-import { DefaultPrivateLayout, SettingPrivateLayout } from '~/layouts';
+import { DefaultPrivateLayout, SettingPrivateLayout, PrivateLayoutWithoutIntro } from '~/layouts';
 
 
 import Login from "~/pages/Authen/Login";
 import Register from "~/pages/Authen/Register";
-import DiaryPost from "~/pages/PrivateCouple/DiaryPost";
 import { EditProfile, AccountPassword, PushNotifications , CommentControl, Help, ConnectLover, ViewHistory} from '~/pages/Settings';
 import { FinalRegister, ResetPassword } from '~/components';
-import ImageDiary from '~/pages/PrivateCouple/ImageDiary';
-import Todolist from '~/pages/PrivateCouple/Todolist';
+import {ImageDiary, Todolist, DiaryPost, Anniversary} from '~/pages/PrivateCouple';
 
 const publicRoutes = [
     { path: config.routes.login, component: Login },
@@ -24,6 +22,7 @@ const privateRoutes = [
     { path: config.routes.diarypost, component: DiaryPost, layout: DefaultPrivateLayout },
     { path: config.routes.imagesDiary, component: ImageDiary, layout: DefaultPrivateLayout },
     { path: config.routes.todolist, component: Todolist, layout: DefaultPrivateLayout },
+    { path: config.routes.anniversary, component: Anniversary, layout: PrivateLayoutWithoutIntro },
 
     //setting routes
     { path: config.routes.settingEditProfile, component: EditProfile, layout: SettingPrivateLayout },

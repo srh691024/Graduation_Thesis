@@ -1,0 +1,274 @@
+.divide-column {
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    margin: -8px;
+    flex-wrap: wrap;
+    align-items: stretch;
+}
+
+.wrapper-newAnni {
+    flex-shrink: 1;
+    position: relative;
+    margin: 8px;
+    max-width: 380px;
+    min-width: 350px;
+    z-index: 0;
+    overflow-anchor: none;
+    flex-basis: 360px;
+    flex-grow: 18;
+    display: block;
+}
+
+.container-newAnni {
+    position: sticky;
+    display: block;
+    margin-bottom: 16px;
+}
+
+.intro-newAnni {
+    display: flex;
+    position: relative;
+    width: 100%;
+    flex-direction: column;
+    background-color: rgb(var(--lodi-second-background));
+}
+
+.new-diary {
+    display: block;
+
+    .new-diary-sub {
+        margin-bottom: 16px;
+        display: block;
+
+        .new-diary-flex {
+            display: flex;
+            position: relative;
+            width: 100%;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            background-color: rgb(var(--lodi-primary-background));
+            border-radius: 10px;
+
+            .content {
+                display: flex;
+                flex-direction: row;
+                padding: 16px;
+                align-items: center;
+                flex-grow: 1;
+                width: 100%;
+
+                .avatar-new-diary {
+                    display: flex;
+                    width: 40px;
+                    height: 40px;
+                    overflow: hidden;
+                    border-radius: 50%;
+                    margin: 5px;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                }
+
+                .content-new-diary {
+                    display: flex;
+                    align-items: center;
+                    flex-direction: row;
+                    position: relative;
+                    flex-grow: 1;
+                    height: 70%;
+                    padding: 8px 12px 8px 12px;
+                    cursor: pointer;
+                    margin: 0;
+                    border: 0;
+                    border-radius: 20px;
+                    justify-content: flex-start;
+                    min-height: 40px;
+                    list-style: none;
+                    outline: none;
+                    text-align: inherit;
+                    text-decoration: none;
+                    -webkit-tap-highlight-color: transparent;
+                    touch-action: manipulation;
+                    background-color: rgb(247, 235, 240);
+
+                    .title {
+                        width: 100%;
+                        color: #3E3341;
+                        word-wrap: break-word;
+                        word-break: break-word;
+                        hyphens: auto;
+                        display: block;
+
+                        span {
+                            position: relative;
+                            overflow-y: hidden;
+                            overflow-x: hidden;
+                        }
+                    }
+
+                    .overlay {
+                        right: 0;
+                        position: absolute;
+                        opacity: 0;
+                        pointer-events: none;
+                        background-color: rgba(0, 0, 0, 0.5);
+                        bottom: 10px;
+                        transition-property: opacity;
+                        left: 0;
+                        top: 10px;
+                        transition-duration: 100ms;
+                        transition-timing-function: cubic-bezier(0, 0, 1, 1);
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.listAnni {
+    display: block;
+    background-color: rgb(var(--lodi-primary-background));
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 16px;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    .actions-with-anni {
+        flex-direction: row;
+        display: flex;
+        padding-bottom: 16px;
+        border-bottom: 1px solid rgb(219, 219, 219);
+
+        .action {
+            justify-content: center;
+            align-items: center;
+            background-color: rgb(247, 235, 240);
+            margin: auto;
+            width: 100px;
+            height: 30px;
+            display: flex;
+            border-radius: 8px;
+            cursor: pointer;
+
+            span {
+                font-weight: 600;
+                font-size: 14px;
+                color: #3E3341;
+            }
+        }
+
+        .action:hover {
+            background-color: #FE6E91;
+        }
+
+        .action:hover span {
+            color: rgb(var(--lodi-primary-background));
+        }
+    }
+
+    .list-of-annies {
+        max-height: 387px;
+        height: 387px;
+        overflow: auto;
+        flex-direction: column;
+        display: flex;
+
+        .anniItem {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            padding:10px 30px;
+            background-color: #FE6E91;
+            margin: 0 16px 16px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+
+            .row {
+                .nameAnni {
+                    color: rgb(var(--lodi-primary-background));
+                    font-size: 18px;
+                    font-weight: 600;
+
+                    span {}
+                }
+
+                .descipAnni {
+                    color: rgb(219, 219, 219);
+                    font-size: 11px;
+                    font-weight: 400;
+
+                }
+
+                .countDayFuture {
+                    margin-left: 10px;
+                    color: rgb(var(--lodi-primary-background));
+                    font-size: 13px;
+                    font-weight: 400;
+                    .number{
+                        font-size: 18px;
+                        font-weight: 600;
+                    }
+                }
+            }
+
+
+        }
+    }
+
+    .list-of-annies .anniItem:first-child {
+        margin-top: 16px;
+    }
+}
+
+
+.container {
+    flex-shrink: 1;
+    position: relative;
+    margin: 8px;
+    max-width: 700px;
+    min-width: 0;
+    z-index: 0;
+    flex-basis: 500px;
+    display: block;
+    flex-grow: 25;
+    background-color: transparent;
+    height: 100%;
+}
+
+
+
+.diary-post {
+    display: block;
+
+    .diary-post-sub {
+        margin-bottom: 16px;
+        display: block;
+
+        .sub {
+            display: flex;
+            position: relative;
+            width: 100%;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            background-color: rgb(var(--lodi-primary-background));
+            border-radius: 10px;
+            flex-grow: 0;
+
+            .diary-first {
+                display: flex;
+                flex-direction: column;
+                position: relative;
+                width: 100%;
+                flex-grow: 0;
+                padding: 16px;
+            }
+        }
+    }
+}

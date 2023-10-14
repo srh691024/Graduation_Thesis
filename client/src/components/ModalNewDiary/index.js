@@ -7,14 +7,15 @@ import images from "~/assets/images";
 
 const cx = classNames.bind(styles);
 
-function ModalNewDiary() {
+function ModalNewDiary({onClose}) {
+
 
     return (
         <div className={cx('wrapperr')}>
             <div className={cx('wrapper-modal')}>
                 <div className={cx('wrapper-one')}>
                     <div className={cx('overlay')}></div>
-                    <div className={cx('exit')}>
+                    <div className={cx('exit')} onClick={onClose}>
                         <div className={cx('exit-button')}>
                             <div className={cx('exit-button-one')}>
                                 <FontAwesomeIcon className={cx('icon')} icon={faXmark} />
@@ -37,7 +38,7 @@ function ModalNewDiary() {
                                                                         <div className={cx('title')}>Create new diary</div>
                                                                     </h1>
                                                                 </div>
-                                                                <div className={cx('back')}>
+                                                                <div className={cx('back')} onClick={onClose}>
                                                                     <div className={cx('exit-one')}>
                                                                         <div className={cx('exit-two')}>
                                                                             <div className={cx('exit-three')}>

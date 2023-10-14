@@ -10,6 +10,7 @@ const routes = {
     diarypost: '/',
     imagesDiary: '/imagesdiary',
     todolist: '/todolist',
+    anniversary: '/anniversary',
 
     //setting pages
     settingEditProfile: '/setting/editprofile',
@@ -19,7 +20,7 @@ const routes = {
     settingHelp: '/setting/help',
     settingConnectLover: '/setting/connectlover',
     settingViewConnectionsHistory: '/setting/viewconnectionshistory',
-    
+
 };
 
 export default routes;

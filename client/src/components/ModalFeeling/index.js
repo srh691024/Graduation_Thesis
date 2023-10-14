@@ -7,7 +7,7 @@ import { useState } from "react";
 
 const cx = classNames.bind(styles);
 
-function ModalFeeling() {
+function ModalFeeling({ onClose }) {
     const [selectedEmotion, setSelectedEmotion] = useState('');
 
     const handleEmotionChange = (event) => {
@@ -20,7 +20,7 @@ function ModalFeeling() {
             <div className={cx('wrapper-modal')}>
                 <div className={cx('wrapper-one')}>
                     <div className={cx('overlay')}></div>
-                    <div className={cx('exit')}>
+                    <div className={cx('exit')} onClick={onClose}>
                         <div className={cx('exit-button')}>
                             <div className={cx('exit-button-one')}>
                                 <FontAwesomeIcon className={cx('icon')} icon={faXmark} />
@@ -43,7 +43,7 @@ function ModalFeeling() {
                                                                         <div className={cx('title')}>How do your feel today?</div>
                                                                     </h1>
                                                                 </div>
-                                                                <div className={cx('back')}>
+                                                                <div className={cx('back')} onClick={onClose}>
                                                                     <div className={cx('exit-one')}>
                                                                         <div className={cx('exit-two')}>
                                                                             <div className={cx('exit-three')}>
