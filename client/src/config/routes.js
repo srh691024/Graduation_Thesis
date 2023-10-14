@@ -9,6 +9,7 @@ const routes = {
     //private couple
     diarypost: '/',
     imagesDiary: '/imagesdiary',
+    todolist: '/todolist',
 
     //setting pages
     settingEditProfile: '/setting/editprofile',

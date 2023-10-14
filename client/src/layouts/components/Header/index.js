@@ -139,7 +139,7 @@ function Header() {
                                     <div className={cx('sub-first')}>
                                         <span>
                                             <div className={cx('sub-second')}>
-                                                <Link to={config.routes.diarypost}>
+                                                <Link to={config.routes.todolist}>
                                                     <div className={cx('sub-third')}>
                                                         <div className={cx('icon')}>
                                                             <div className={cx('icon-first')}>

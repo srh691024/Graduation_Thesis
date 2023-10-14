@@ -9,6 +9,7 @@ import DiaryPost from "~/pages/PrivateCouple/DiaryPost";
 import { EditProfile, AccountPassword, PushNotifications , CommentControl, Help, ConnectLover, ViewHistory} from '~/pages/Settings';
 import { FinalRegister, ResetPassword } from '~/components';
 import ImageDiary from '~/pages/PrivateCouple/ImageDiary';
+import Todolist from '~/pages/PrivateCouple/Todolist';
 
 const publicRoutes = [
     { path: config.routes.login, component: Login },
@@ -22,6 +23,7 @@ const privateRoutes = [
     //private couple routes
     { path: config.routes.diarypost, component: DiaryPost, layout: DefaultPrivateLayout },
     { path: config.routes.imagesDiary, component: ImageDiary, layout: DefaultPrivateLayout },
+    { path: config.routes.todolist, component: Todolist, layout: DefaultPrivateLayout },
 
     //setting routes
     { path: config.routes.settingEditProfile, component: EditProfile, layout: SettingPrivateLayout },

@@ -1,0 +1,445 @@
+.center-column {
+    flex: 1 1 0px;
+    display: flex;
+    overflow: hidden;
+
+    .main {
+        flex: 1 1 0px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background-color: var(--bg-secondary);
+        transition: background-color 0.3s;
+
+        .taskToolbar {
+            margin: 0 24px 16px 24px;
+            height: auto;
+            display: block;
+            position: relative;
+            flex-shrink: 0;
+
+            .taskToolbar-top {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                height: 48px;
+
+                .taskToolbar-headline {
+                    margin-right: 20px;
+                    min-width: 100px;
+                    flex: 1 1 0px;
+
+                    .taskToolbar-titleContainer {
+                        align-items: center;
+                        display: flex;
+
+                        .taskToolbar-titleItem {
+                            min-width: 20px;
+
+                            h2 {
+                                color: #FE6E91;
+                                white-space: nowrap;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                font-size: 21px;
+                                font-weight: 600;
+                                padding: 6px 8px;
+                                justify-content: center;
+                                align-items: center;
+                                display: flex;
+                                width: 100%;
+
+                                span {
+                                    margin-left: 5px;
+                                    color: #3E3341;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .taskToolbar-right {
+                    display: flex;
+
+                    .taskToolbar-actions {
+                        display: flex;
+                        align-items: center;
+
+                        .taskToolbar-actionsItem {
+                            align-self: flex-start;
+                            flex-shrink: 0;
+                            box-shadow: none;
+                            cursor: pointer;
+                            position: relative;
+
+                            .sortingOptions {
+                                button {
+                                    padding: 2px 12px;
+                                    margin-left: 2px;
+                                    position: relative;
+                                    cursor: pointer;
+                                    font-size: 1.4rem;
+                                    padding: 9px 12px;
+                                    border: none;
+                                    width: auto;
+                                    height: auto;
+                                    border-radius: 4px;
+                                    background-color: transparent;
+
+
+                                    .toolbarButton-inner {
+                                        display: flex;
+                                        align-items: center;
+
+                                        .toolbarButton-icon {
+                                            position: relative;
+                                            color: #FE6E91;
+                                            font-size: 16px;
+                                            margin-right: 8px;
+                                        }
+                                    }
+                                }
+
+                                button:hover {
+                                    background-color: rgb(247, 235, 240);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .flex-container {
+            position: relative;
+            flex: 1 1 0px;
+            display: flex;
+            overflow: hidden;
+
+            .flexBoxFix {
+                flex-direction: column;
+                display: flex;
+                flex: 1;
+                overflow: hidden;
+
+                .main-background {
+                    overflow: hidden;
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    flex: 1 1 0px;
+
+                    .addToTop {
+                        margin: 0 24px;
+                        z-index: 2;
+                        display: flex;
+
+                        .addTask {
+                            overflow: hidden;
+                            display: flex;
+                            border-radius: 4px;
+                            box-shadow: 0px 0.3px 0.9px rgba(0, 0, 0, 0.1), 0px 1.6px 3.6px rgba(0, 0, 0, 0.1);
+                            background-color: rgb(var(--lodi-primary-background));
+                            width: 100%;
+                            flex-direction: column;
+
+                            .baseTask {
+                                min-height: 52px;
+                                padding: 0 16px;
+                                overflow: hidden;
+                                position: relative;
+                                flex-shrink: 0;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+
+                                .button-addTask {
+                                    flex-shrink: 0;
+                                    flex-basis: 0;
+                                    cursor: pointer;
+                                    width: 100%;
+                                    color: #FE6E91;
+                                    display: flex;
+                                    font-size: 18px;
+                                }
+
+                                input {
+                                    background-color: rgb(var(--lodi-primary-background));
+                                    height: 40px;
+                                    border-radius: 2px;
+                                    padding: 16px 14px;
+                                    font-size: 14px;
+                                    border: none;
+                                    width: 100%;
+                                    font-weight: 500;
+                                    display: flex;
+                                }
+
+                                input:focus-visible {
+                                    outline: none;
+                                }
+
+                                .taskCreation {
+                                    display: flex;
+                                    flex-direction: row;
+                                    flex-wrap: nowrap;
+                                    overflow-x: auto;
+
+                                    .dateButton-container {
+
+                                        display: flex;
+                                        margin: 0 10px;
+                                        cursor: pointer;
+
+                                        .icon {
+                                            color: #FE6E91;
+                                            font-size: 18px;
+
+                                        }
+                                    }
+                                }
+
+                                button {
+                                    margin-left: auto;
+                                    right: 0;
+                                    background-color: #FE6E91;
+                                    border: none;
+                                    width: auto;
+                                    font-weight: 600;
+                                    text-align: right;
+                                    position: relative;
+                                    color: rgb(var(--lodi-primary-background));
+                                    height: 25px;
+                                    padding: 0 8px;
+                                    border-radius: 4px;
+
+                                }
+                            }
+                        }
+
+                        .addTask .baseTask:first-child {
+                            border-bottom: 1px solid rgb(219, 219, 219);
+                        }
+                    }
+
+                    .tasks {
+                        overflow: hidden;
+                        display: flex;
+                        z-index: 1;
+                        width: 100%;
+
+                        .task-one {
+                            flex: 1;
+                            display: flex;
+
+                            .task-scroll {
+                                position: relative;
+                                flex: 1;
+                                overflow-y: scroll;
+                                overflow-x: hidden;
+
+                                .task-scroll-one {
+                                    margin-left: 24px;
+                                    margin-right: 16px;
+                                    padding: 4px 0 24px;
+
+                                    .task {
+                                        display: flex;
+                                        flex-direction: column;
+                                        animation: slideFadeDown 250ms forwards;
+                                    }
+
+                                    .taskItem-body {
+                                        background-color: rgb(var(--lodi-primary-background));
+                                        box-shadow: 0px 0.3px 0.9px rgba(0, 0, 0, 0.1), 0px 1.6px 3.6px rgba(0, 0, 0, 0.1);
+                                        margin-top: 8px;
+                                        border-radius: 4px;
+                                        padding: 0px 16px;
+                                        min-height: 52px;
+                                        display: flex;
+                                        align-items: center;
+                                        position: relative;
+                                        word-wrap: break-word;
+                                        word-break: break-word;
+                                        flex-wrap: wrap;
+
+                                        .check-done {
+                                            padding: 0px;
+                                            cursor: pointer;
+                                            height: 32px;
+                                            width: 32px;
+                                            position: relative;
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: center;
+
+                                            .circle {
+                                                color: #FE6E91;
+                                                display: flex;
+                                                font-size: 18px;
+
+                                            }
+
+                                            .check {
+                                                color: #FE6E91;
+                                                position: absolute;
+                                                transition: opacity 100ms;
+                                                opacity: 0;
+                                                display: flex;
+                                                font-size: 10px;
+                                            }
+
+                                        }
+
+                                        .check-done:hover .check {
+                                            opacity: 1;
+                                        }
+
+                                        .content-body {
+                                            text-align: left;
+                                            position: relative;
+                                            flex: 1 1 0px;
+                                            min-height: 52px;
+                                            padding: 8px 14px;
+                                            overflow: hidden;
+                                            cursor: pointer;
+                                            background: none;
+                                            width: 100%;
+                                            height: 100%;
+                                            border: none;
+                                            box-shadow: none;
+
+                                            .done {
+                                                text-decoration: line-through;
+                                                color: rgb(115, 115, 115);
+                                            }
+
+                                            .name-task {
+                                                font-size: 14px;
+                                                font-family: var(--font-family);
+                                            }
+
+                                            .other-filter {
+                                                display: flex;
+                                                align-items: center;
+                                                font-size: 11px;
+                                                color: rgb(115, 115, 115);
+                                                flex-wrap: wrap;
+                                                font-family: var(--font-family);
+
+                                                .sub-other {
+                                                    display: flex;
+                                                    align-items: center;
+                                                    flex-wrap: wrap;
+                                                    margin-right: 10px;
+                                                    margin-top: 5px;
+                                                    background-color: rgb(219, 219, 219);
+                                                    border-radius: 3px;
+                                                    padding: 1px;
+                                                }
+                                            }
+                                        }
+
+                                        .star-important {
+                                            display: inline;
+
+                                            span {
+                                                margin-left: 4px;
+                                                padding: 0px;
+                                                cursor: pointer;
+                                                height: 24px;
+                                                width: 24px;
+                                                text-align: center;
+                                                display: flex;
+                                                flex-direction: column;
+                                                justify-content: center;
+                                                font-size: 17px;
+                                            }
+                                        }
+                                    }
+
+
+                                    .taskCard {
+                                        display: flex;
+                                        flex-direction: column;
+                                        background-color: transparent;
+                                        margin-bottom: 0;
+                                        box-shadow: none;
+                                        overflow: hidden;
+
+                                        .taskCard-header {
+                                            cursor: pointer;
+                                            box-sizing: border-box;
+                                            display: flex;
+                                            flex-direction: row;
+                                            align-items: center;
+                                            min-height: 52px;
+
+                                            .taskCard-headerActions {
+                                                display: flex;
+                                                align-items: center;
+                                                overflow: hidden;
+                                                justify-content: center;
+                                                width: 32px;
+                                                height: 32px;
+
+                                                .chevDown {
+                                                    text-align: center;
+                                                    transform: rotate(0deg);
+                                                    transition: transform 200ms ease;
+                                                    padding: 0px;
+                                                    cursor: pointer;
+                                                    width: 18px;
+                                                    height: 18px;
+                                                    color: #FE6E91;
+                                                    font-weight: 600;
+                                                }
+                                            }
+
+                                            .taskCard-labels {
+                                                display: flex;
+                                                align-items: baseline;
+                                                padding: 8px 8px;
+
+                                                .taskCard-label {
+                                                    font-weight: 600;
+                                                    color: #FE6E91;
+                                                }
+
+                                                .taskCard-subLabel {
+                                                    margin-left: 10px;
+                                                    font-size: 14px;
+                                                    color: rgb(115, 115, 115);
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    .completedTask {
+                                        display: flex;
+                                        flex-direction: column;
+                                        animation: slideFadeDown 250ms forwards;
+
+                                    }
+
+                                    @keyframes slideFadeDown {
+                                        0% {
+                                            transform: translate3d(0, -100%, 0);
+                                            opacity: 0;
+                                        }
+
+                                        100% {
+                                            transform: translate3d(0, 0, 0);
+                                            opacity: 1;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

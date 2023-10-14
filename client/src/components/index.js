@@ -5,3 +5,4 @@ export { default as ModalNewDiary } from '~/components/ModalNewDiary';
 export { default as ModalFeeling } from '~/components/ModalFeeling';
 export { default as Notifications } from '~/components/Notifications';
 export { default as DropDownItem } from '~/components/DropDownItem';
+export { default as SubTodo } from '~/components/SubTodo';
