@@ -4,9 +4,9 @@ import images from "~/assets/images";
 
 const cx = classNames.bind(styles);
 
-function Notifications() {
+function Notifications(props) {
     return (
-        <div className={cx('wrapper-noti')}>
+        <div className={cx('wrapper-noti', props.text)}>
             <div className={cx('noti')}>
                 <div className={cx('noti-one')}>
                     <div className={cx('noti-two')}>

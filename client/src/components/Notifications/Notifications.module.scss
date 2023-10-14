@@ -7,6 +7,19 @@
 
 }
 
+.wrapper-noti.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    transition: 200ms ease;
+}
+.wrapper-noti.inactive {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-10px);
+    transition: 200ms ease;
+}
+
 .noti {
     display: block;
 
@@ -253,7 +266,7 @@
                                 line-height: 0;
                                 display: block;
 
-                                a{
+                                a {
                                     display: inline;
                                     padding: 0;
                                     background-color: transparent;
@@ -265,7 +278,7 @@
                                     text-decoration: none;
                                     outline: none;
 
-                                    img{
+                                    img {
                                         object-position: right;
                                         object-fit: cover;
                                         border: 0;
