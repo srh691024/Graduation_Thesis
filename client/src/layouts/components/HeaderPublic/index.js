@@ -25,7 +25,7 @@ function HeaderPublic() {
                             <span className={cx('spanSpliter')}></span>
                             <button className={cx('buttonSearch')}>
                                 <div className={cx('searchIconContainer')}>
-                                    <FontAwesomeIcon className={cx('iconSearch')} icon={faMagnifyingGlass}/>
+                                    <FontAwesomeIcon className={cx('iconSearch')} icon={faMagnifyingGlass} />
                                 </div>
                             </button>
                         </form>
@@ -33,13 +33,17 @@ function HeaderPublic() {
                 </div>
                 <div className={cx('header-right-container')}>
                     <div className={cx('notification')}>
-                        <FontAwesomeIcon className={cx('styleNoti')} icon={faBell}/>
+                        <FontAwesomeIcon className={cx('styleNoti')} icon={faBell} />
                     </div>
                     <div className={cx('profile')}>
-                        <img src={images.login_image} alt=""/>
+                        <Link to={config.routes.diarypost}>
+                            <img src={images.login_image} alt="" />
+                        </Link>
                     </div>
                     <div className={cx('profile')}>
-                        <img src={images.login_image} alt=""/>
+                        <Link>
+                            <img src={images.login_image} alt="" />
+                        </Link>
                     </div>
                 </div>
             </div>

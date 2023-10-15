@@ -8,7 +8,7 @@ import Register from "~/pages/Authen/Register";
 import { EditProfile, AccountPassword, PushNotifications , CommentControl, Help, ConnectLover, ViewHistory} from '~/pages/Settings';
 import { FinalRegister, ResetPassword } from '~/components';
 import {ImageDiary, Todolist, DiaryPost, Anniversary} from '~/pages/PrivateCouple';
-import { Homepage } from '~/pages/PublicCouples';
+import { Homepage, Search } from '~/pages/PublicCouples';
 
 const publicRoutes = [
     { path: config.routes.login, component: Login },
@@ -27,6 +27,7 @@ const privateRoutes = [
 
     //public couples routes
     { path: config.routes.homepage, component: Homepage, layout: PublicLayout },
+    { path: config.routes.search, component: Search, layout: PublicLayout },
 
     //setting routes
     { path: config.routes.settingEditProfile, component: EditProfile, layout: SettingPrivateLayout },

@@ -23,6 +23,7 @@ const routes = {
 
     //public couples
     homepage: '/homepage',
+    search: '/search',
 
 };
 

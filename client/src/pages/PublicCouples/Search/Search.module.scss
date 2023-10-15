@@ -1,0 +1,468 @@
+.wrapper {
+    display: flex;
+    margin: 0px auto;
+    position: relative;
+    min-width: 420px;
+    justify-content: center;
+
+    .searchContainer {
+        flex: 1 1 auto;
+        padding: 16px 16px 67px;
+        width: 800px;
+        max-width: 800px;
+
+    }
+}
+
+.tabsContainer {
+    background: rgb(var(--lodi-second-background));
+    height: 50px;
+    margin-top: -16px;
+    position: sticky;
+    top: 60px;
+    z-index: 100;
+    padding-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .tabsList {
+        display: flex;
+
+        .navContainer {
+            display: flex;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+
+            .navList {
+                position: relative;
+                display: flex;
+                transition: transform 0.3s ease 0s;
+
+                .tab {
+                    justify-content: flex-start;
+                    width: auto;
+                    padding-right: 80px;
+                    display: inline-flex;
+                    align-items: center;
+                    cursor: pointer;
+                    font-weight: 600;
+                    text-align: center;
+                    padding-top: 10px;
+                    padding-bottom: 10px;
+                    font-size: 18px;
+                    line-height: 22px;
+                    color: #3E3341;
+                    transition: all 0s ease 0s, all 0.3s ease 0s;
+                }
+            }
+
+            .tabInk {
+                left: 0px;
+                width: 27px;
+                transition: width 0.3s ease 0s, left 0.3s ease 0s, right 0.3s ease 0s;
+                height: 2px;
+                background: #FE6E91;
+                position: absolute;
+                pointer-events: none;
+                bottom: 0px;
+                border-radius: 4px;
+                font-weight: 700;
+
+            }
+        }
+    }
+
+    .tabsList::before {
+        content: "";
+        position: absolute;
+        bottom: 0px;
+        right: 12px;
+        left: 0px;
+        border-bottom: 1px solid #FE6E91;
+        transform: scaleY(0.5);
+    }
+}
+
+.panelContainer {
+    margin-top: 16px;
+    width: calc(100% - 12px);
+
+    .threeColumnContainer {
+        width: 100%;
+
+        .diaryFeed {
+            display: flex;
+            flex-wrap: wrap;
+
+            .blockContainer {
+                width: calc(100% - 12px);
+                clear: both;
+
+                .titleContainer {
+                    height: 30px;
+                    padding-bottom: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+
+                    h2 {
+                        font-family: var(--font-family);
+                        font-weight: 600;
+                        font-size: 16px;
+                        margin: 0px;
+                    }
+
+                    .pSeeMore {
+                        color: #FE6E91;
+                        font-family: var(--font-family);
+                        font-weight: 600;
+                        font-size: 14px;
+                        margin: 0px;
+                        display: inline-flex;
+                        align-items: center;
+                        cursor: pointer;
+
+                        .icon {
+                            color: #FE6E91;
+                            width: 14px;
+                            height: 14px;
+                        }
+                    }
+                }
+
+                .link {
+                    display: flex;
+                    flex-direction: row;
+                    position: relative;
+
+                    .styleAvatarCoupleLink {
+                        flex: 0 0 64px;
+                        margin: 16px;
+
+                        .divContainer {
+                            width: 60px;
+                            height: 60px;
+                            position: relative;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+
+                            .avatarContainer {
+                                width: 60px;
+                                height: 60px;
+                                display: inline-block;
+                                margin: 0;
+                                padding: 0;
+                                // font-feature-settings: "tnum";
+                                position: relative;
+                                overflow: hidden;
+                                color: #fff;
+                                white-space: nowrap;
+                                text-align: center;
+                                vertical-align: middle;
+                                line-height: 32px;
+                                border-radius: 50%;
+                                border-color: rgba(22, 24, 35, .12);
+                                border-width: 0.5px;
+                                cursor: pointer;
+                                background-color: rgba(136, 136, 136, 0.5);
+
+                                img {
+                                    width: 100%;
+                                    height: 100%;
+                                    object-fit: cover;
+                                }
+                            }
+                        }
+                    }
+
+                    .styleInforWrapper {
+                        color: #3E3341;
+                        font-family: var(--font-family);
+                        font-size: 14px;
+                        flex: 1 1 0%;
+                        margin: 16px 0px;
+
+                        .pTitle {
+                            font-weight: 700;
+                            font-size: 18px;
+                            font-family: var(--font-family);
+                        }
+
+                        .subTitleWrapper {
+                            color: rgba(115, 115, 115, 0.5);
+                            font-family: var(--font-family);
+                            font-size: 14px;
+                            margin-top: 1px;
+
+                            .userSubTitle {
+                                font-family: var(--font-family);
+                                font-weight: 400;
+                                font-size: 14px;
+                                display: inline;
+                            }
+
+                            strong {
+                                color: rgb(22, 24, 35);
+                                font-weight: 600;
+
+                                span {
+                                    color: rgba(22, 24, 35, 0.75);
+                                    font-weight: 400;
+                                }
+                            }
+                        }
+
+                        .pDesc {
+                            margin-top: 4px;
+
+                            strong {
+                                font-weight: 400;
+                            }
+                        }
+                    }
+                }
+
+                .titleDivide {
+                    height: 32px;
+                    width: 100%;
+                }
+            }
+
+            .listOfDiary {
+                width: 100%;
+
+                .grid-image {
+                    overflow-y: visible;
+                    overflow-x: visible;
+                    flex-direction: column;
+                    display: flex;
+                    align-items: stretch;
+                    justify-content: flex-start;
+                    position: relative;
+                    padding: 0;
+
+                    .grid-three-images {
+                        align-items: stretch;
+                        display: flex;
+                        flex-direction: row;
+                        flex-shrink: 0;
+                        position: relative;
+                        margin-bottom: 4px;
+
+                        .one-image-in-grid {
+                            margin-right: 12px;
+                            display: block;
+                            position: relative;
+                            // width: 209px;
+                            // height: 209px;
+                            border-radius: 2px;
+                            width: calc(33.3% - 12px);
+                            margin-inline-end: 12px;
+
+
+                            a {
+                                text-decoration: none;
+                                display: block;
+                                cursor: pointer;
+                                list-style: none;
+                                outline: none;
+                                position: relative;
+                                border-radius: 4px;
+                                overflow: hidden;
+
+                                .image {
+                                    background-color: rgb(239, 239, 239);
+                                    width: 100%;
+                                    height: 100%;
+                                    display: block;
+                                    position: relative;
+
+                                    .image-one {
+                                        display: block;
+                                        overflow: hidden;
+                                        padding-bottom: 100%;
+                                        position: relative;
+
+                                        img {
+                                            object-fit: cover;
+                                            left: 0;
+                                            width: 100%;
+                                            user-select: none;
+                                            height: 100%;
+                                            top: 0;
+                                            position: absolute;
+
+                                        }
+                                    }
+
+                                    .image-two {
+                                        bottom: 0;
+                                        left: 0;
+                                        right: 0;
+                                        top: 0;
+                                        position: absolute;
+                                        display: block;
+
+                                    }
+                                }
+
+                                .overlay-with-like-comment {
+                                    bottom: 0;
+                                    // display: flex;
+                                    flex-direction: column;
+                                    justify-content: center;
+                                    left: 0;
+                                    position: absolute;
+                                    right: 0;
+                                    top: 0;
+                                    background: rgba(0, 0, 0, 0.3);
+                                    display: none;
+
+                                    ul {
+                                        align-items: center;
+                                        border: 0;
+                                        display: flex;
+                                        font: inherit;
+                                        font-size: 100%;
+                                        height: 100%;
+                                        justify-content: center;
+                                        margin: 0;
+                                        padding: 0;
+                                        vertical-align: baseline;
+                                        width: 100%;
+
+                                        li {
+                                            border: 0;
+                                            display: inline-flex;
+                                            flex-direction: row-reverse;
+                                            font: inherit;
+                                            font-size: 100%;
+                                            margin: 0;
+                                            // margin-right: 30px;
+                                            padding: 0;
+                                            vertical-align: baseline;
+
+                                            .count {
+                                                font-size: 18px;
+                                                color: white;
+                                                font-weight: 600;
+                                                position: relative;
+                                                max-width: 100%;
+
+                                            }
+
+                                            .icon {
+                                                border: 0;
+                                                font: inherit;
+                                                font-size: 100%;
+                                                margin: 0;
+                                                margin-right: 7px;
+                                                margin-top: 2px;
+                                                padding: 0;
+                                                vertical-align: baseline;
+                                                color: white;
+                                                font-size: 17px;
+                                            }
+                                        }
+                                    }
+
+                                    ul li:first-child {
+                                        margin-right: 30px;
+                                    }
+                                }
+
+                            }
+
+                            a:hover .overlay-with-like-comment {
+                                display: flex;
+                            }
+                        }
+
+                        .infoDiary {
+                            pointer-events: auto;
+                            padding: 0px 8px;
+
+                            .cardBottomInfo {
+                                font-family: var(--font-family);
+                                font-weight: 400;
+                                padding-top: 4px;
+                                padding-bottom: 26px;
+
+                                .cardCaption {
+                                    display: inline;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                    margin-top: 4px;
+                                    word-break: break-word;
+                                    cursor: pointer;
+
+                                    .divContainer {
+                                        font-size: 16px;
+                                        word-break: break-word;
+                                    }
+                                }
+
+                                .useNameCouple {
+                                    color: #3E3341;
+                                    font-family: var(--font-family);
+                                    font-size: 16px;
+                                    display: flex;
+                                    justify-content: space-between;
+                                    align-items: center;
+                                    margin-top: 4px;
+
+                                    .userInfo {
+                                        display: flex;
+                                        align-items: center;
+
+                                        .avatarContainer {
+                                            flex-shrink: 0;
+                                            width: 24px;
+                                            height: 24px;
+                                            display: inline-block;
+                                            margin: 0px;
+                                            padding: 0px;
+                                            position: relative;
+                                            overflow: hidden;
+                                            color: rgb(255, 255, 255);
+                                            white-space: nowrap;
+                                            text-align: center;
+                                            vertical-align: middle;
+                                            border-radius: 50%;
+                                            background-color: rgba(136, 136, 136, 0.5);
+                                            img{
+                                                width: 100%;
+                                                height: 100%;
+                                                object-fit: cover;
+                                            }
+                                        }
+
+                                        p {
+                                            margin-right: 4px;
+                                            margin-left: 4px;
+                                            max-width: 100px;
+                                            overflow: hidden;
+                                            text-overflow: ellipsis;
+                                        }
+                                    }
+
+                                    .dateCreate {
+                                        display: flex;
+                                        flex-shrink: 0;
+                                        align-items: center;
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.bottonContainer {}
