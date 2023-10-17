@@ -1,0 +1,106 @@
+.wrapper {
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 240px;
+    transition: all 0.4s ease-in-out;
+    background: rgb(var(--lodi-primary-background));
+    z-index: 99;
+}
+
+.logoContainer {
+    background-color: rgb(var(--lodi-primary-background));
+    height: 71px;
+    border-top-right-radius: 14px;
+
+    .logoInner {
+        text-align: center;
+
+        .logo {
+            line-height: 71px;
+            text-decoration: none;
+            background-color: transparent;
+
+            img {
+                height: 60px;
+                vertical-align: middle;
+                border-style: none;
+
+            }
+        }
+    }
+}
+
+.navContainer {
+    margin-top: 16px;
+    overflow: hidden;
+    height: 100%;
+    padding: 16px 20px;
+
+    .navInner {
+        background-color: rgb(var(--lodi-primary-background));
+        width: 100%;
+        padding-top: 16px;
+        border: 0;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        position: relative;
+        text-decoration: none;
+
+        ul {
+            border: 0;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            text-decoration: none;
+            list-style-type: none;
+
+            li {
+                .subItem {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: flex-start;
+                    align-items: center;
+                    padding: 13px 15px;
+                    border-radius: 14px;
+                    cursor: pointer;
+                    margin-bottom: 10px;
+
+                    .iconItem {
+                        font-size: 20px;
+                        color: rgb(62, 51, 65);
+                        padding: 5px;
+                        margin-right: 10px;
+                        justify-content: center;
+                        display: flex;
+
+                        .icon {
+                            width: 24px;
+                            height: 24px;
+                        }
+                    }
+
+                    .titleItem {
+                        color: rgb(62, 51, 65);
+                        font-size: 15px;
+                        font-weight: 600;
+                    }
+                }
+
+                .subItem:hover {
+                    background-color: #FE6E91;
+
+                    .iconItem {
+                        color: rgb(var(--lodi-primary-background));
+                    }
+
+                    .titleItem {
+                        color: rgb(var(--lodi-primary-background));
+                    }
+                }
+            }
+        }
+    }
+}

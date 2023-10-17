@@ -21,10 +21,12 @@ const routes = {
     settingConnectLover: '/setting/connectlover',
     settingViewConnectionsHistory: '/setting/viewconnectionshistory',
 
-    //public couples
+    //public couples routes
     homepage: '/homepage',
     search: '/search',
 
+    //admin routes
+    dashboard: '/admin/dashboard',
 };
 
 export default routes;

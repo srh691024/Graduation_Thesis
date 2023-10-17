@@ -2,12 +2,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --primary: #f06f85;
+    --primary-pink: 240, 111, 133; // rgb(240,111,133)
+    --primary-color-text: 62, 51, 65; //rgb(62,51,65)
+    --lodi-color-pink-litle: 249, 192, 213; //rgb(249, 192, 213)
+    --lodi-color-pink-much: 254, 110, 145; //rgb(254, 110, 145)
+
     --font-family: 'Montserrat', sans-serif;
     --header-height: 0px;
     --lodi-primary-background: 255, 255, 255;
-    --lodi-second-background: 252, 239, 246;
-    --lodi-color-pink: #F9C0D5;
+    --lodi-second-background: 254, 241, 248; //rgb(254,241,248)
+    
+    
     --header-width: 78px;
     --button-height-medium: 35px;
 }

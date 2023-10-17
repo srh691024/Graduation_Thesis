@@ -6,3 +6,8 @@ export { default as ModalFeeling } from '~/components/ModalFeeling';
 export { default as Notifications } from '~/components/Notifications';
 export { default as DropDownItem } from '~/components/DropDownItem';
 export { default as SubTodo } from '~/components/SubTodo';
+export { default as CombinationChart} from '~/components/ChartsAdmin/CombinationChart';
+export { default as TotalAccountvsCouple} from '~/components/ChartsAdmin/TotalAccountvsCouple';
+export { default as DoughnutChart} from '~/components/ChartsAdmin/DoughnutChart';
+export { default as LineChart} from '~/components/ChartsAdmin/LineChart';
+export { default as ActiveUserChart} from '~/components/ChartsAdmin/ActiveUserChart';

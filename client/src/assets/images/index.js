@@ -37,7 +37,12 @@ const images = {
     hearts: require('~/assets/images/connectlover/hearts.png'),
     kiss: require('~/assets/images/connectlover/kiss.png'),
     recoveryConnection: require('~/assets/images/connectlover/package.png'),
-    
+
+    //dashboard
+    group: require('~/assets/images/dashboard/group.png'),
+    couple: require('~/assets/images/dashboard/couple.png'),
+    interaction: require('~/assets/images/dashboard/interaction.png'),
+    post : require('~/assets/images/dashboard/post.png'),
 }
 
 export default images;

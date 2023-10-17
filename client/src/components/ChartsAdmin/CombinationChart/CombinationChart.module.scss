@@ -1,0 +1,18 @@
+.wrapper {
+    width: 100%;
+    margin-top: 36px;
+    background-color: rgb(var(--lodi-primary-background));
+    border-radius: 14px;
+    box-shadow: 1px 0px 15px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+}
+
+.mixedChart {
+    width: 100%;
+}
+.titleChart{
+    color: rgb(var(--primary-color-text));
+    font-size: 22px;
+    font-weight: 600;
+
+}

@@ -1,6 +1,6 @@
 import config from '~/config';
 //Layouts 
-import { DefaultPrivateLayout, SettingPrivateLayout, PrivateLayoutWithoutIntro, PublicLayout } from '~/layouts';
+import { DefaultPrivateLayout, SettingPrivateLayout, PrivateLayoutWithoutIntro, PublicLayout, AdminLayout } from '~/layouts';
 
 
 import Login from "~/pages/Authen/Login";
@@ -9,6 +9,7 @@ import { EditProfile, AccountPassword, PushNotifications , CommentControl, Help,
 import { FinalRegister, ResetPassword } from '~/components';
 import {ImageDiary, Todolist, DiaryPost, Anniversary} from '~/pages/PrivateCouple';
 import { Homepage, Search } from '~/pages/PublicCouples';
+import { Dashboard } from '~/pages/Admin';
 
 const publicRoutes = [
     { path: config.routes.login, component: Login },
@@ -37,6 +38,9 @@ const privateRoutes = [
     { path: config.routes.settingHelp, component: Help, layout: SettingPrivateLayout },
     { path: config.routes.settingConnectLover, component: ConnectLover, layout: SettingPrivateLayout },
     { path: config.routes.settingViewConnectionsHistory, component: ViewHistory, layout: SettingPrivateLayout },
+
+    //admin routes
+    { path: config.routes.dashboard, component: Dashboard, layout: AdminLayout},
 ]
 
 export { publicRoutes, privateRoutes }

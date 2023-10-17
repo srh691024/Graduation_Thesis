@@ -1,0 +1,25 @@
+.wrapper {
+    margin-top: 32px;
+    background-color: rgb(var(--lodi-primary-background));
+    box-shadow: 1px 0px 15px rgba(0, 0, 0, 0.2);
+    border-radius: 14px;
+    margin-right: 32px;
+    padding: 22px;
+    width: 500px;
+    justify-content: center;
+    align-items: center;
+}
+
+.nameChart {
+    font-size: 22px;
+    color: rgb(var(--primary-color-text));
+    font-weight: 600;
+}
+
+.doughnutChart {
+    width: 256px !important;
+    height: 256px !important;
+    margin-left: auto;
+    margin-right: auto;
+
+}

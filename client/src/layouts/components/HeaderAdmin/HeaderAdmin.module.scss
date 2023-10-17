@@ -1,0 +1,100 @@
+.wrapper {
+    display: flex;
+
+    .nav {
+        background-color: rgb(var(--lodi-primary-background));
+        border: none;
+        box-shadow: 1px 0px 20px rgba(0, 0, 0, 0.2);
+        display: flex;
+        width: 100%;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 10px 50px;
+        position: relative;
+
+        .navContainer {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .notificationContainer {
+                position: relative;
+                display: flex;
+                margin-right: 36px;
+
+                .iconNoti {
+                    display: flex;
+                    font-size: 20px;
+                    margin-right: 15px;
+
+                    .icon {
+                        width: 22px;
+                        height: 22px;
+                        color: rgb(var(--primary-color-text));
+                    }
+
+                    .num {
+                        position: absolute;
+                        top: -6px;
+                        right: 98px;
+                        width: 20px;
+                        height: 20px;
+                        border-radius: 50%;
+                        border: 2px solid rgb(var(--lodi-primary-background));
+                        background: red;
+                        color: rgb(var(--lodi-primary-background));
+                        font-weight: 600;
+                        font-size: 12px;
+                        display: flex;
+                        justify-content: center;
+                    }
+                }
+
+                .titleNoti {
+                    display: flex;
+                    font-size: 14px;
+                    color: rgb(var(--primary-color-text));
+                    font-weight: 600;
+                    font-family: var(--font-family);
+
+                    span {}
+                }
+            }
+
+            .adminContainer {
+                position: relative;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                .avatarAdminContainer {
+                    width: 40px;
+                    height: 40px;
+                    overflow: hidden;
+                    border-radius: 50%;
+                    margin-right: 8px;
+                    cursor: pointer;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                }
+            }
+        }
+    }
+
+    .nav::before {
+        content: '';
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        bottom: -40px;
+        left: 0;
+        border-radius: 50%;
+        box-shadow: -20px -20px 0 rgb(var(--lodi-primary-background));
+
+    }
+}
