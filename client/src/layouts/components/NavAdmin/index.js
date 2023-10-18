@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
 import { Link } from "react-router-dom";
 import images from "~/assets/images";
+import config from "~/config";
 import styles from '~/layouts/components/NavAdmin/NavAdmin.module.scss'
 
 const cx = classNames.bind(styles);
@@ -23,44 +24,44 @@ function NavAdmin() {
                 <div className={cx('navInner')}>
                     <ul>
                         <li>
-                            <div className={cx('subItem')}>
+                            <Link to={config.routes.dashboard} className={cx('subItem')}>
                                 <div className={cx('iconItem')}>
                                     <FontAwesomeIcon className={cx('icon')} icon={faRectangleList} />
                                 </div>
                                 <div className={cx('titleItem')}>Dashboard</div>
-                            </div>
+                            </Link>
                         </li>
                         <li>
-                            <div className={cx('subItem')}>
+                            <Link to={config.routes.accounts} className={cx('subItem')}>
                                 <div className={cx('iconItem')}>
                                     <FontAwesomeIcon className={cx('icon')} icon={faUsersViewfinder} />
                                 </div>
                                 <div className={cx('titleItem')}>Accounts</div>
-                            </div>
+                            </Link>
                         </li>
                         <li>
-                            <div className={cx('subItem')}>
+                            <Link to={config.routes.posts} className={cx('subItem')}>
                                 <div className={cx('iconItem')}>
                                     <FontAwesomeIcon className={cx('icon')} icon={faPenToSquare} />
                                 </div>
                                 <div className={cx('titleItem')}>Post</div>
-                            </div>
+                            </Link>
                         </li>
                         <li>
-                            <div className={cx('subItem')}>
+                            <Link to={config.routes.supports} className={cx('subItem')}>
                                 <div className={cx('iconItem')}>
                                     <FontAwesomeIcon className={cx('icon')} icon={faEnvelopeOpenText} />
                                 </div>
                                 <div className={cx('titleItem')}>Support</div>
-                            </div>
+                            </Link>
                         </li>
                         <li>
-                            <div className={cx('subItem')}>
+                            <Link className={cx('subItem')}>
                                 <div className={cx('iconItem')}>
                                     <FontAwesomeIcon className={cx('icon')} icon={faGear} />
                                 </div>
                                 <div className={cx('titleItem')}>Setting</div>
-                            </div>
+                            </Link>
                         </li>
                     </ul>
                 </div>

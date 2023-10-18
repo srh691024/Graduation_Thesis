@@ -27,6 +27,9 @@ const routes = {
 
     //admin routes
     dashboard: '/admin/dashboard',
+    accounts: '/admin/accounts',
+    posts: '/admin/posts',
+    supports: '/admin/supports',
 };
 
 export default routes;

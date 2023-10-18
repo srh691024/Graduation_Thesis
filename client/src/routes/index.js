@@ -9,7 +9,7 @@ import { EditProfile, AccountPassword, PushNotifications , CommentControl, Help,
 import { FinalRegister, ResetPassword } from '~/components';
 import {ImageDiary, Todolist, DiaryPost, Anniversary} from '~/pages/PrivateCouple';
 import { Homepage, Search } from '~/pages/PublicCouples';
-import { Dashboard } from '~/pages/Admin';
+import { Accounts, Dashboard, Posts, Supports } from '~/pages/Admin';
 
 const publicRoutes = [
     { path: config.routes.login, component: Login },
@@ -41,6 +41,9 @@ const privateRoutes = [
 
     //admin routes
     { path: config.routes.dashboard, component: Dashboard, layout: AdminLayout},
+    { path: config.routes.accounts, component:Accounts , layout: AdminLayout},
+    { path: config.routes.posts, component:Posts , layout: AdminLayout},
+    { path: config.routes.supports, component:Supports , layout: AdminLayout},
 ]
 
 export { publicRoutes, privateRoutes }
