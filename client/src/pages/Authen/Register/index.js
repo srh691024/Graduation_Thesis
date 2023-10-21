@@ -11,7 +11,7 @@ function Register() {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('register-decoration')}>
-                <img className={cx('register-image')} src={images.register_image} alt="Register"></img>
+                {/* <img className={cx('register-image')} src={images.register_image} alt="Register"></img> */}
             </div>
             <div className={cx('overlay')}></div>
 

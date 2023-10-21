@@ -15,7 +15,7 @@ Modal.setAppElement('#root');
 function Login() {
     const [email, setEmail] = useState('');
     const handleForgotPassword = async () => {
-        const response = await authServices.forgotPassword({ email });
+        const response = await authServices.apiForgotPassword({ email });
         if (response.success) {
             Swal.fire('Success', response.message, 'success');
         } else Swal.fire('Oops!', response.message, 'error');
@@ -32,7 +32,7 @@ function Login() {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('login-decoration')}>
-                <img className={cx('login-image')} src={images.login_image} alt="Login"></img>
+                {/* <img className={cx('login-image')} src={images.register_image} alt="Login"/> */}
             </div>
             <div className={cx('overlay')}></div>
 

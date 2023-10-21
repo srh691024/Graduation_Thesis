@@ -2,19 +2,43 @@ import classNames from 'classnames/bind';
 import styles from './Header.module.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFaceSmile, faSquareCheck, faImages, faBell, faCalendarDays } from '@fortawesome/free-regular-svg-icons';
-import { faPeopleLine, faBars, faHouse, faBookBookmark } from '@fortawesome/free-solid-svg-icons';
+import { faPeopleLine, faBars, faHouse, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { Notifications, ModalFeeling } from '~/components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import config from '~/config';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import images from "~/assets/images";
 import { createPortal } from 'react-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCurrentUser } from '~/store/user/asyncAction';
+import { logout, clearMessage } from '~/store/user/userSlice';
+import Swal from "sweetalert2";
 
 const cx = classNames.bind(styles)
 
 function Header() {
+    const navigate = useNavigate()
+    const dispatch = useDispatch();
     const [openNotification, setOpenNotification] = useState(false);
     const [showModalFeeling, setShowModalFeeling] = useState(false);
+
+    const { isLoggedIn, current, mes } = useSelector(state => state.user);
+    useEffect(() => {
+        const setTimeoutId = setTimeout(() => {
+            if (isLoggedIn) dispatch(getCurrentUser());
+
+        }, 300)
+        return () => { clearTimeout(setTimeoutId); }
+    }, [dispatch, isLoggedIn]);
+
+    useEffect(() => {
+        if (mes) Swal.fire('Oops!', mes, 'info').then(() => {
+
+            dispatch(clearMessage());
+            navigate(`${config.routes.login}`);
+        })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [mes])
     return (
         <div className={cx('wrapper-header')}>
             <div className={cx('inner')}>
@@ -108,25 +132,6 @@ function Header() {
                                     <div className={cx('sub-first')}>
                                         <span>
                                             <div className={cx('sub-second')}>
-                                                <Link to={config.routes.diarypost}>
-                                                    <div className={cx('sub-third')}>
-                                                        <div className={cx('icon')}>
-                                                            <div className={cx('icon-first')}>
-                                                                <div className={cx('icon-second')}>
-                                                                    <FontAwesomeIcon className={cx('icon-third')} icon={faBookBookmark} />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </Link>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className={cx('sub-action')}>
-                                    <div className={cx('sub-first')}>
-                                        <span>
-                                            <div className={cx('sub-second')}>
                                                 <Link to={config.routes.anniversary}>
                                                     <div className={cx('sub-third')}>
                                                         <div className={cx('icon')}>
@@ -199,6 +204,53 @@ function Header() {
                                         </span>
                                     </div>
                                 </div>
+                                {isLoggedIn && current ?
+                                    <>
+                                        <div className={cx('sub-action')}>
+                                            <div className={cx('sub-first')}>
+                                                <span>
+                                                    <div className={cx('sub-second')}>
+                                                        <Link to={config.routes.diarypost} >
+                                                            <div className={cx('sub-third')}>
+                                                                <div className={cx('icon')}>
+                                                                    <div className={cx('icon-first')}>
+                                                                        <div className={cx('icon-second')}>
+                                                                            {/* <FontAwesomeIcon className={cx('icon-third')} icon={faBookBookmark} /> */}
+                                                                            <div className={cx('imgAvatar')}>
+                                                                                <img className={cx('avatarUser')} src={images.login_image} alt='' />
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </Link>
+                                                    </div>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className={cx('sub-action')}>
+                                            <div className={cx('sub-first')}>
+                                                <span>
+                                                    <div className={cx('sub-second')}>
+                                                        <Link onClick={() => dispatch(logout())} >
+                                                            <div className={cx('sub-third')}>
+                                                                <div className={cx('icon')}>
+                                                                    <div className={cx('icon-first')}>
+                                                                        <div className={cx('icon-second')}>
+                                                                            <FontAwesomeIcon className={cx('icon-third')} icon={faArrowRightFromBracket} />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </Link>
+                                                    </div>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </>
+                                    : null
+                                }
                             </div>
                             <div className={cx('setting')}>
                                 <div className={cx('setting-first')}>
@@ -220,7 +272,6 @@ function Header() {
                                         </span>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>

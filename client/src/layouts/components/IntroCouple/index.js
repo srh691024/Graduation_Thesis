@@ -4,10 +4,45 @@ import images from "~/assets/images";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faCakeCandles, faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { faTiktok, faFacebookF, faInstagram } from "@fortawesome/free-brands-svg-icons";
+import { useState, useEffect } from "react";
+import * as coupleServices from '../../../services/coupleServices'
+import { useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { getCurrentUser } from '~/store/user/asyncAction';
+import { formatDate } from '~/helpers'
 
 const cx = classNames.bind(styles);
 
 function IntroCouple() {
+    const { usernameCouple } = useParams()
+    const dispatch = useDispatch();
+    const { isLoggedIn, current } = useSelector(state => state.user);
+
+    const [infoCreatedUser, setInfoCreatedUser] = useState({})
+    const [infoCouple, setInfoCouple] = useState({});
+    const fetchCouple = async () => {
+        const couple = await coupleServices.apiGetCouple(usernameCouple)
+        if (couple.success) setInfoCouple(couple.result)
+        const createdUser = await coupleServices.apiGetCreatedUserByCouple(couple.result.createdUser)
+        if (createdUser.success) setInfoCreatedUser(createdUser.result)
+
+    }
+
+
+
+
+
+    useEffect(() => {
+        fetchCouple()
+    }, [])
+    useEffect(() => {
+        const setTimeoutId = setTimeout(() => {
+            if (isLoggedIn) dispatch(getCurrentUser());
+
+        }, 300)
+        return () => { clearTimeout(setTimeoutId); }
+    }, [dispatch, isLoggedIn]);
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -23,21 +58,28 @@ function IntroCouple() {
                                         <img src={images.login_image} alt='' />
                                     </div>
                                     <div className={cx('name-couple')}>
-                                        <h3>Name couple </h3>
+                                        <h3>
+                                            {infoCouple.nameCouple}
+                                        </h3>
                                     </div>
                                 </div>
                                 <div className={cx('biography-couple')}>
                                     <span>
-                                        “Love means you never have to say you’re sorry”
+                                        {/* “Love means you never have to say you’re sorry” */}
+                                        {infoCouple.biography}
                                     </span>
                                 </div>
                                 <div className={cx('love-date-couple')}>
                                     <div className={cx('heart-couple')}>
                                         <FontAwesomeIcon className={cx('icon')} icon={faHeart} />
-                                        <span className={cx('text-on-icon')}>900 days</span>
+                                        <span className={cx('text-on-icon')}>
+                                            days
+                                        </span>
                                     </div>
                                     <div className={cx('love-date')}>
-                                        <span>from 07/03/2020</span>
+                                        <span>from
+                                            {infoCouple.startLoveDate}
+                                        </span>
                                     </div>
                                 </div>
 
@@ -46,18 +88,25 @@ function IntroCouple() {
                                         <span> 900 followings</span>
                                     </div>
                                     <div className={cx('follower')}>
-                                        <span> 1023 follwers</span>
+                                        <span>
+                                            {infoCouple.followers}
+                                            follwers</span>
                                     </div>
                                     <div className={cx('like')}>
-                                        <span> 100k likes</span>
+                                        <span>
+                                            {infoCouple.totalLikes}
+                                            likes</span>
                                     </div>
                                 </div>
                             </div>
-                            <div className={cx('edit-info-couple')}>
-                                <button><span>Edit our profile</span></button>
-                            </div>
+                            {isLoggedIn ?
+                                <><div className={cx('edit-info-couple')}>
+                                    <button><span>Edit our profile</span></button>
+                                </div>
+                                </>
+                                : null
+                            }
                         </div>
-
                     </div>
                     <div className={cx('intro-partner')}>
                         <div className={cx('intro-p')}>
@@ -67,13 +116,13 @@ function IntroCouple() {
                                         <img src={images.login_image} alt="" />
                                     </div>
                                     <div className={cx('name-partner')}>
-                                        <h3>Thùy Dương</h3>
+                                        <h3>{infoCreatedUser.name}</h3>
                                     </div>
                                 </div>
                                 <div className={cx('dob-partner')}>
                                     <FontAwesomeIcon className={cx('sub-icon')} icon={faCakeCandles} />
                                     <div className={cx('dob')}>
-                                        <span>22/08/2001</span>
+                                        <span>{infoCreatedUser.dob ? infoCreatedUser.dob : 'Null'}</span>
                                     </div>
                                 </div>
                                 <div className={cx('horoscope-partner')}>
@@ -109,11 +158,13 @@ function IntroCouple() {
                                     </div>
                                 </div>
                                 {/* <div className={cx('hobby')}>Hobby</div> */}
-                                <div className={cx('edit-info-partner')}>
-                                    <button>
-                                        <span>Edit your Infomation</span>
-                                    </button>
-                                </div>
+                                {isLoggedIn ?
+                                    <div className={cx('edit-info-partner')}>
+                                        <button>
+                                            <span>Edit your Infomation</span>
+                                        </button>
+                                    </div> : null
+                                }
                             </div>
                             <div className={cx('partner')}>
                                 <div className={cx('image-partner')}>
@@ -121,7 +172,7 @@ function IntroCouple() {
                                         <img src={images.login_image} alt="" />
                                     </div>
                                     <div className={cx('name-partner')}>
-                                        <h3>Thùy Dương</h3>
+                                        <h3>{infoCouple.tempNameLover}</h3>
                                     </div>
                                 </div>
                                 <div className={cx('dob-partner')}>
@@ -163,6 +214,13 @@ function IntroCouple() {
                                     </div>
                                 </div>
                                 {/* <div className={cx('hobby')}>Hobby</div> */}
+                                {isLoggedIn ?
+                                    <div className={cx('edit-info-partner')}>
+                                        <button>
+                                            <span>Edit your Infomation</span>
+                                        </button>
+                                    </div> : null
+                                }
                             </div>
                         </div>
 

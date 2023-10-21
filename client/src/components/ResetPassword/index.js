@@ -1,19 +1,23 @@
 import classNames from "classnames/bind";
 import styles from '~/components/ResetPassword/ResetPassword.module.scss'
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import * as authServices from '~/services/authServices';
 import Swal from "sweetalert2";
+import config from '~/config';
+
 
 const cx = classNames.bind(styles);
 
 function ResetPassword() {
+    const navigate = useNavigate();
     const [password, setPassword] = useState('');
     const { token } = useParams()
     const handleResetPassword = async () => {
-        const response = await authServices.resetPassword({ password, token })
+        const response = await authServices.apiResetPassword({ password, token })
         if (response.success) {
-            Swal.fire('Success', response.message, 'success');
+            await Swal.fire('Success', response.message, 'success')
+            navigate(`${config.routes.login}`)
         } else Swal.fire('Oops!', response.message, 'error');
     }
 

@@ -56,6 +56,21 @@
                 height: 100dvh;
                 align-items: flex-start;
             }
+
+            .imgAvatar {
+                width: 30px;
+                height: 30px;
+                overflow: hidden;
+                border-radius: 50%;
+                border: 1px solid rgb(var(--primary-color-text));
+
+                .avatarUser {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
+
         }
     }
 }

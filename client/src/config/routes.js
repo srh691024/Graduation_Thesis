@@ -7,7 +7,7 @@ const routes = {
     resetpassword: '/resetpassword/:token',
 
     //private couple
-    diarypost: '/',
+    diarypost: '/:usernameCouple',
     imagesDiary: '/imagesdiary',
     todolist: '/todolist',
     anniversary: '/anniversary',

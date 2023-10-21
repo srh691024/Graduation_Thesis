@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 const sendEmail = require('../utils/sendMail');
 const crypto = require('crypto');
 const getStringUntilCharacter = require('../utils/getStringUntilCharacter');
+const Couple = require('../models/Couple');
+const { response } = require('express');
 
 // Refresh token => Cấp mới access token
 // Access token => Xác thực user, phần quyền user
@@ -15,26 +17,28 @@ const login = asyncHandler(async (req, res) => {
             success: false,
             message: `Missing inputs`
         })
+    const findUser = await User.findOne({ email: email })
+    if (!findUser) throw new Error('User not found')
 
     const response = await User.findOne({ email })
     if (response && await response.isCorrectPassword(password)) {
         // Tách password và role ra khỏi response 
-        const { password, role, ...userData } = response.toObject()
+        const { password, role, refreshToken, ...userData } = response.toObject()
         // Tạo access token
         const accessToken = generateAccessToken(response._id, role)
         // Tạo refresh token
-        const refreshToken = generateRefreshToken(response._id)
+        const newRefreshToken = generateRefreshToken(response._id)
         // Save refresh token into database
-        await User.findByIdAndUpdate(response._id, { refreshToken }, { new: true }) //new:true -- trả về data sau khi update
+        await User.findByIdAndUpdate(response._id, { refreshToken: newRefreshToken }, { new: true }) //new:true -- trả về data sau khi update
         // Lưu refresh token vào cookie 
-        res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 }) //số mili giây trong 7 ngày
+        res.cookie('refreshsToken', newRefreshToken, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 }) //số mili giây trong 7 ngày
         return res.status(200).json({
             success: true,
             accessToken,
             userData
         })
     } else {
-        throw new Error(`Invalid credentials`)
+        throw new Error(`Wrong email or password`)
     }
 })
 
@@ -65,7 +69,9 @@ const login = asyncHandler(async (req, res) => {
 // })
 
 const register = asyncHandler(async (req, res) => {
-    let { email, password, name, username, gender, dob, phone } = req.body;
+    let { email, password, name, username
+        // ,gender, dob, phone 
+    } = req.body;
     if (!email || !password)
         return res.status(400).json({
             success: false,
@@ -73,19 +79,23 @@ const register = asyncHandler(async (req, res) => {
         })
     const userByEmail = await User.findOne({ email })
     if (userByEmail) throw new Error(`Email has existed!`)
-    const userByPhone = await User.findOne({ phone })
-    if (userByPhone) throw new Error(`Phone has existed!`)
+    // const userByPhone = await User.findOne({ phone })
+    // if (userByPhone) throw new Error(`Phone has existed!`)
     const userByUsername = await User.findOne({ username })
     if (userByUsername) throw new Error(`Username ${userByUsername.username} has existed`)
     if (!username.trim() && !name.trim()) {
         username = getStringUntilCharacter(email, '@')
         name = getStringUntilCharacter(email, '@')
     }
-    if (!username.trim() && name.trim()) {
+    if (!username.trim()) {
         username = name.trim()
     }
+    const newUser = {
+        email, password, name, username
+        // , gender, dob, phone 
+    }
     const registerToken = crypto.createHash('sha256').update(crypto.randomBytes(32).toString('hex')).digest('hex')
-    res.cookie('dataRegister', { ...req.body, registerToken }, { httpOnly: true, maxAge: 15 * 60 * 1000 });
+    res.cookie('dataRegister', { ...newUser, registerToken }, { httpOnly: true, maxAge: 15 * 60 * 1000 });
     const html = `Please click the link below to verify your account. This link will expire after 15 minutes. 
                     <a href=${process.env.URL_SERVER}/api/auth/final-register/${registerToken}>Click here</a>`
     await sendEmail({ email, html, subject: 'Final Registration for Love Diary account' })
@@ -102,18 +112,48 @@ const finalRegister = asyncHandler(async (req, res) => {
         res.clearCookie('dataRegister')
         return res.redirect(`${process.env.URL_CLIENT}/finalregister/failed`)
     }
+    const userByEmail = await User.findOne({ email: cookie?.dataRegister.email })
+    if (userByEmail) return res.redirect(`${process.env.URL_CLIENT}/finalregister/failed`)
+
     const newUser = await User.create({
         email: cookie?.dataRegister?.email,
         password: cookie?.dataRegister?.password,
         name: cookie?.dataRegister?.name,
         username: cookie?.dataRegister?.username,
-        gender: cookie?.dataRegister?.gender,
-        dob: cookie?.dataRegister?.dob,
-        phone: cookie?.dataRegister?.phone
     })
-    res.clearCookie('dataRegister')
-    if (newUser) return res.redirect(`${process.env.URL_CLIENT}/finalregister/success`)
-    else return res.redirect(`${process.env.URL_CLIENT}/finalregister/failed`)
+
+    const currentTime = new Date();
+    // const pastTime = new Date(currentTime);
+    // // Tính số mili giây giữa thời gian hiện tại và thời gian trước đó
+    // const timeDifference = currentTime.getTime() - pastTime.getTime();
+
+    // // Chuyển đổi thời gian chênh lệch thành số ngày
+    // const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    if (newUser) {
+        const newTmpCouple = await Couple.create({
+            createdUser: newUser._id,
+            startLoveDate: currentTime,
+            isConnected: false,
+            userNameCouple: getStringUntilCharacter(cookie?.dataRegister.email, '@'),
+        })
+        res.clearCookie('dataRegister')
+        if (newTmpCouple) {
+            return res.redirect(`${process.env.URL_CLIENT}/finalregister/success`)
+        } else {
+            await User.findOneAndDelete({ email: cookie?.dataRegister.email })
+            return res.redirect(`${process.env.URL_CLIENT}/finalregister/failed`)
+        }
+    } else {
+        return res.redirect(`${process.env.URL_CLIENT}/finalregister/failed`)
+    }
+
+
+    // res.clearCookie('dataRegister')
+    // if (newTmpCouple) {
+    //     return res.redirect(`${process.env.URL_CLIENT}/finalregister/success`)
+    // } else if (!newUser || !newTmpCouple) {
+    //     return res.redirect(`${process.env.URL_CLIENT}/finalregister/failed`)
+    // }
 })
 
 const getCurrentUser = asyncHandler(async (req, res) => {
@@ -121,7 +161,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 
     const user = await User.findById(_id).select('-refreshToken -password -role')
     return res.status(200).json({
-        success: false,
+        success: user ? true : false,
         result: user ? user : 'User not found'
     })
 })
@@ -201,6 +241,44 @@ const resetPassword = asyncHandler(async (req, res) => {
     })
 })
 
+const getAllUsers = asyncHandler(async (req, res) => {
+    const response = await User.find().select('-refreshToken -password -role')
+    return res.status(200).json({
+        success: response ? true : false,
+        users: response
+    })
+})
+
+const deleteUser = asyncHandler(async (req, res) => {
+    const { _id } = req.user  //id lấy từ token của user
+    if (!_id) throw new Error(`Missing inputs`)
+    const response = await User.findByIdAndDelete(_id)
+    return res.status(200).json({
+        success: response ? true : false,
+        deletedUser: response ? `User with email ${response.email} deleted` : 'Delete user failed'
+    })
+})
+
+const updateUser = asyncHandler(async (req, res) => {
+    const { _id } = req.user
+    if (!_id || Object.keys(req.body).length === 0) throw new Error(`Missing inputs`)
+
+    const response = await User.findByIdAndUpdate(_id, req.body, { new: true }).select('-password -role')
+    return res.status(200).json({
+        success: response ? true : false,
+        updatedUser: response ? response : 'Update failed'
+    })
+})
+const banUserByAdmin = asyncHandler(async (req, res) => {
+    const { uid } = req.params
+    if (Object.keys(req.body).length === 0) throw new Error(`Missing inputs`)
+
+    const response = await User.findByIdAndUpdate(uid, req.body, { new: true }).select('-password -role')
+    return res.status(200).json({
+        success: response ? true : false,
+        updatedUser: response ? response : 'Update failed'
+    })
+})
 module.exports = {
     login,
     register,
@@ -210,4 +288,8 @@ module.exports = {
     logout,
     forgotPassword,
     resetPassword,
+    getAllUsers,
+    deleteUser,
+    updateUser,
+    banUserByAdmin,
 };

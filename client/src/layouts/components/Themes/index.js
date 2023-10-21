@@ -3,10 +3,27 @@ import styles from "~/layouts/components/Themes/Themes.module.scss";
 import images from "~/assets/images";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
+import { useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import * as coupleServices from '../../../services/coupleServices'
 
 const cx = classNames.bind(styles)
 
 function Themes() {
+    const { usernameCouple } = useParams()
+    const [infoCreatedUser, setInfoCreatedUser] = useState({})
+    const [infoCouple, setInfoCouple] = useState({});
+    const fetchCouple = async () => {
+        const couple = await coupleServices.apiGetCouple(usernameCouple)
+        if (couple.success) setInfoCouple(couple.result)
+        const createdUser = await coupleServices.apiGetCreatedUserByCouple(couple.result.createdUser)
+        if (createdUser.success) setInfoCreatedUser(createdUser.result)
+    }
+
+    useEffect(() => {
+        fetchCouple()
+    }, [])
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('inner')}>
@@ -32,7 +49,7 @@ function Themes() {
             </div>
             <div className={cx('avatar-couple')}>
                 <div className={cx('partner-name')}>
-                    <p>Name Partner 1</p>
+                    <p>{infoCreatedUser.name}</p>
                 </div>
                 <div className={cx('avatar-partner')}>
                     <img className={cx('circle-image')} src={images.login_image} alt='' />
@@ -53,7 +70,7 @@ function Themes() {
                     <img className={cx('circle-image')} src={images.login_image} alt='' />
                 </div>
                 <div className={cx('partner-name')}>
-                    <p>Name Partner 2</p>
+                    <p>{infoCouple.tempNameLover}</p>
                 </div>
             </div>
         </div>

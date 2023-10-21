@@ -21,29 +21,29 @@ const publicRoutes = [
 
 const privateRoutes = [
     //private couple routes
-    { path: config.routes.diarypost, component: DiaryPost, layout: DefaultPrivateLayout },
-    { path: config.routes.imagesDiary, component: ImageDiary, layout: DefaultPrivateLayout },
-    { path: config.routes.todolist, component: Todolist, layout: DefaultPrivateLayout },
-    { path: config.routes.anniversary, component: Anniversary, layout: PrivateLayoutWithoutIntro },
+    { path: config.routes.diarypost, component: DiaryPost, layout: DefaultPrivateLayout, logginRequired: false },
+    { path: config.routes.imagesDiary, component: ImageDiary, layout: DefaultPrivateLayout,logginRequired: true },
+    { path: config.routes.todolist, component: Todolist, layout: DefaultPrivateLayout, logginRequired: true },
+    { path: config.routes.anniversary, component: Anniversary, layout: PrivateLayoutWithoutIntro , logginRequired: true},
 
     //public couples routes
-    { path: config.routes.homepage, component: Homepage, layout: PublicLayout },
-    { path: config.routes.search, component: Search, layout: PublicLayout },
+    { path: config.routes.homepage, component: Homepage, layout: PublicLayout , logginRequired: true},
+    { path: config.routes.search, component: Search, layout: PublicLayout, logginRequired: true},
 
     //setting routes
-    { path: config.routes.settingEditProfile, component: EditProfile, layout: SettingPrivateLayout },
-    { path: config.routes.settingAccountPassword, component: AccountPassword, layout: SettingPrivateLayout },
-    { path: config.routes.settingPushNotifications, component: PushNotifications, layout: SettingPrivateLayout },
-    { path: config.routes.settingCommentControl, component: CommentControl, layout: SettingPrivateLayout },
-    { path: config.routes.settingHelp, component: Help, layout: SettingPrivateLayout },
-    { path: config.routes.settingConnectLover, component: ConnectLover, layout: SettingPrivateLayout },
-    { path: config.routes.settingViewConnectionsHistory, component: ViewHistory, layout: SettingPrivateLayout },
+    { path: config.routes.settingEditProfile, component: EditProfile, layout: SettingPrivateLayout, logginRequired: true },
+    { path: config.routes.settingAccountPassword, component: AccountPassword, layout: SettingPrivateLayout , logginRequired: true},
+    { path: config.routes.settingPushNotifications, component: PushNotifications, layout: SettingPrivateLayout, logginRequired: true },
+    { path: config.routes.settingCommentControl, component: CommentControl, layout: SettingPrivateLayout, logginRequired: true },
+    { path: config.routes.settingHelp, component: Help, layout: SettingPrivateLayout, logginRequired: true },
+    { path: config.routes.settingConnectLover, component: ConnectLover, layout: SettingPrivateLayout , logginRequired: true},
+    { path: config.routes.settingViewConnectionsHistory, component: ViewHistory, layout: SettingPrivateLayout , logginRequired: true},
 
     //admin routes
-    { path: config.routes.dashboard, component: Dashboard, layout: AdminLayout},
-    { path: config.routes.accounts, component:Accounts , layout: AdminLayout},
-    { path: config.routes.posts, component:Posts , layout: AdminLayout},
-    { path: config.routes.supports, component:Supports , layout: AdminLayout},
+    { path: config.routes.dashboard, component: Dashboard, layout: AdminLayout, logginRequired: true},
+    { path: config.routes.accounts, component:Accounts , layout: AdminLayout, logginRequired: true},
+    { path: config.routes.posts, component:Posts , layout: AdminLayout, logginRequired: true},
+    { path: config.routes.supports, component:Supports , layout: AdminLayout, logginRequired: true},
 ]
 
 export { publicRoutes, privateRoutes }

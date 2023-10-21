@@ -9,13 +9,15 @@ const User = new Schema({
     username: { type: String, unique: true },
     gender: { type: String },
     dob: { type: Date },
-    avatar: { type: Buffer },
-    phone: { type: String, unique: true },
+    horoscope: { type: String, default: 'Aries' },
+    address: { type: String },
+    tiktokLink: { type: String },
+    facebookLink: { type: String },
+    instagramLink: { type: String },
+    avatar: { type: Array },
+    phone: { type: String },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-
-    // role: {type: Schema.Types.ObjectId, ref: 'Role'},
-
     role: { type: String, default: 'user', },
     isBlocked: { type: Boolean, default: false },
     refreshToken: { type: String },
@@ -23,7 +25,12 @@ const User = new Schema({
     passwordResetToken: { type: String, },
     passwordResetExpires: { type: String, },
     registerToken: { type: String },
-
+    followings: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+        }
+    ]
 }, {
     timestamps: true,
 })

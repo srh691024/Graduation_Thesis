@@ -9,7 +9,7 @@
 .input-box {
     width: 100%;
     height: 50px;
-    margin: 25px 0;
+    margin: 18px 0;
     position: relative;
 
     input{
@@ -19,7 +19,7 @@
         outline: none;
         border: 2px solid rgba(255, 255, 255, 0.2);
         border-radius: 40px;
-        font-size: 18px;
+        font-size: 14px;
         padding: 20px 45px 20px 20px;
         font-style: italic;
     }
@@ -35,7 +35,7 @@
 
 .gender-p {
     color: #3E3341;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .gender {
@@ -70,6 +70,7 @@
     border-radius: 45px;
     border: none;
     outline: none;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
+    cursor: pointer;
 }

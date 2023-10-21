@@ -118,11 +118,11 @@
             text-align: center;
             background-color: #FE6E91;
             font-family: var(--font-family);
-            // height: 32px;
             font-size: 14px;
             position: relative;
             width: 100%;
             margin: 0 30px 0 0;
+            border: none;
 
         }
 
@@ -158,6 +158,7 @@
                 text-align: left;
                 width: 100%;
                 outline: none;
+                min-width: 220px;
 
             }
 
@@ -165,7 +166,35 @@
                 border: 1.5px solid #FE6E91;
             }
 
+            small {
+                color: red;
+
+            }
         }
+
+        .buttonSubmit {
+            font-weight: 500;
+            justify-content: center;
+            border-radius: 8px;
+            padding: 8px 0;
+            flex-basis: auto;
+            color: white;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            text-align: center;
+            background-color: #FE6E91;
+            font-family: var(--font-family);
+            font-size: 14px;
+            position: relative;
+            width: 200px;
+            margin: 0 30px 0 0;
+            border: none;
+
+
+        }
+
+
     }
 
     .after-send-link {
@@ -282,6 +311,8 @@
         justify-content: center;
         align-items: center;
         width: 100%;
+        margin-top: 16px;
+
         .have-connection-one {
             display: flex;
             flex-direction: column;

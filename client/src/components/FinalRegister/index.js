@@ -11,6 +11,7 @@ function FinalRegister() {
     const { status } = useParams();
     const navigate = useNavigate();
     useEffect(() => {
+        
         if (status === 'failed') Swal.fire('Oops!', 'Register failed', 'error').then(() => {
             navigate(`${config.routes.register}`);
         });

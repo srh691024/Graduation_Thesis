@@ -29,9 +29,7 @@ ChartJS.register(
 function ActiveUserChart() {
 
     const [chartData, setChartData] = useState({
-        labels: Array.from({ length: 10 }
-            // , (_, i) => new Date().toLocaleTimeString()
-        ),
+        labels: Array.from({ length: 10 }),
         datasets: [
             {
                 label: 'Active Users',
@@ -51,7 +49,7 @@ function ActiveUserChart() {
         });
     };
     useEffect(() => {
-        const interval = setInterval(updateChartData, 5000); // Update every 2 seconds
+        const interval = setInterval(updateChartData, 3000); // Update every 2 seconds
 
         return () => clearInterval(interval); // Clear interval on component unmount
     }, []);
