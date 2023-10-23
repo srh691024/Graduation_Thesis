@@ -11,8 +11,8 @@
     --header-height: 0px;
     --lodi-primary-background: 255, 255, 255;
     --lodi-second-background: 254, 241, 248; //rgb(254,241,248)
-    
-    
+
+
     --header-width: 78px;
     --button-height-medium: 35px;
 }
@@ -21,7 +21,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Montserrat', sans-serif; 
+    font-family: 'Montserrat', sans-serif;
 }
 
 html {
@@ -52,4 +52,27 @@ html *::-webkit-scrollbar-thumb {
 html *::-webkit-scrollbar-track {
     border-radius: 0;
     background-color: rgba(0, 0, 0, 0);
+}
+
+.slick-prev,
+.slick-next {
+    color: black;
+    // background-color: grey;
+    z-index: 1000;
+    opacity: 0.6;
+}
+.slick-next::before, .slick-prev::before{
+    font-size: 30px;
+}
+.slick-next{
+    right: 9px;
+}
+.slick-prev{
+    left: 0;
+}
+
+
+.slick-list {
+    max-width: 500px;
+
 }

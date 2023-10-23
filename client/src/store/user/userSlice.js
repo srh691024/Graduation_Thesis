@@ -5,7 +5,7 @@ export const userSlice = createSlice({
     name: 'user',
     initialState: {
         isLoggedIn: false,
-        current: null,
+        current: {},
         token: null,
         isLoading: false,
         mes: '',
@@ -14,6 +14,8 @@ export const userSlice = createSlice({
         login: (state, action) => {
             state.isLoggedIn = action.payload.isLoggedIn
             state.token = action.payload.token
+            state.current = action.payload.userData
+            console.log(state.current)
         },
         logout: (state, action) => {
             state.isLoggedIn = false
@@ -42,7 +44,7 @@ export const userSlice = createSlice({
         builder.addCase(actions.getCurrentUser.rejected, (state, action) => {
             // Tắt trạng thái loading, lưu thông báo lỗi vào store
             state.isLoading = false;
-            state.current = null;
+            state.current = {};
             state.isLoggedIn = false;
             state.token = null;
             state.mes = 'Your login session has expired. Please log in again!'

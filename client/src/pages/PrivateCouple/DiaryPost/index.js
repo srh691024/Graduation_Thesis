@@ -4,14 +4,27 @@ import { ModalNewDiary, Post } from "~/components";
 import styles from "~/pages/PrivateCouple/DiaryPost/DiaryPost.module.scss"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { useParams } from "react-router-dom";
+import * as postServices from '~/services/postServices'
+import moment from "moment";
 
 const cx = classNames.bind(styles);
 
 function DiaryPost() {
+    const { usernameCouple } = useParams()
+    const [postsByCouple, setPostsByCouple] = useState([])
 
     const [showModalNewDiary, setShowModalNewDiary] = useState(false);
+    useEffect(() => {
+        async function fetchPostByCouple() {
+            const response = await postServices.apiGetPostsByCouple(usernameCouple)
+            if (response.success) setPostsByCouple(response.result)
+            console.log(response)
+        }
+        fetchPostByCouple()
+    }, [usernameCouple])
     return (
         <div className={cx('container')}>
             <div className={cx('new-diary')}>
@@ -43,42 +56,31 @@ function DiaryPost() {
                 <div className={cx('diary-post-sub')}>
                     <div className={cx('sub')}>
                         <div className={cx('diary-first')}>
-                            <div className={cx('diary')}>
-                                <Post />
-                                <div className={cx('date-diary-post')}>
-                                    <div className={cx('date-nd-heart')}>
-                                        <div className={cx('date')}>
-                                            <span>
-                                                20/10/2021
-                                            </span>
+                            {postsByCouple.length > 0 ?
+                                postsByCouple.map((post, index) => (
+                                    <div className={cx('diary')} key={index}>
+                                        <Post post={post} />
+                                        <div className={cx('date-diary-post')}>
+                                            <div className={cx('date-nd-heart')}>
+                                                <div className={cx('date')}>
+                                                    <span>
+                                                        {moment(post?.dateAnni)?.format('DD-MM-YYYY')}
+                                                        {/* 20/10/2021 */}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className={cx('heart-line')}>
+                                                <div className={cx('heart')}>
+                                                    <FontAwesomeIcon className={cx('heart-one')} icon={faHeart} />
+                                                </div>
+                                                <div className={cx('line')}></div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className={cx('heart-line')}>
-                                        <div className={cx('heart')}>
-                                            <FontAwesomeIcon className={cx('heart-one')} icon={faHeart} />
-                                        </div>
-                                        <div className={cx('line')}></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className={cx('diary')}>
-                                <Post />
-                                <div className={cx('date-diary-post')}>
-                                    <div className={cx('date-nd-heart')}>
-                                        <div className={cx('date')}>
-                                            <span>
-                                                20/10/2021
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className={cx('heart-line')}>
-                                        <div className={cx('heart')}>
-                                            <FontAwesomeIcon className={cx('heart-one')} icon={faHeart} />
-                                        </div>
-                                        <div className={cx('line')}></div>
-                                    </div>
-                                </div>
-                            </div>
+                                ))
+
+
+                                : <><div>No posts found</div></>}
                         </div>
                     </div>
                 </div>

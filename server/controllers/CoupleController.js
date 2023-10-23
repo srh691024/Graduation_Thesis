@@ -35,6 +35,19 @@ const getCreateUserByCouple = asyncHandler(async (req, res) => {
     })
 })
 
+const getLoverUserByCouple = asyncHandler(async (req, res) => {
+    const { loverUserId } = req.params
+    if (!loverUserId) return res.status(200).json({
+        success: false,
+        message: `You haven't connected with your lover yet`
+    })
+    const loverUser = await User.findOne({ _id: loverUserId })
+    return res.status(200).json({
+        success: loverUser ? true : false,
+        result: loverUser ? loverUser : 'Something went wrong'
+    })
+})
+
 const sendInvitation = asyncHandler(async (req, res) => {
     const { email } = req.body
     const { _id } = req.user
@@ -101,10 +114,11 @@ const acceptInvitation = asyncHandler(async (req, res) => {
         coupleByInvitationId.tempNameLover = ''
         coupleByInvitationId.tempDobLover = null
         coupleByInvitationId.tempHoroscope = ''
+        coupleByInvitationId.startConnectedDate = new Date()
         await coupleByInvitationId.save()
         await notAcceptedInvitation.deleteOne()
         const oldCouple = await Couple.findOneAndDelete({ createdUser: _id })
-        
+
         // await Couple.updateOne({ loverUserId: _id })
         // await notAcceptedInvitation.deleteOne()
     }
@@ -124,6 +138,11 @@ const getCurrentInvitation = asyncHandler(async (req, res) => {
     })
 })
 
+const disconnectConnection = asyncHandler(async (req, res) => {
+    
+})
+
+
 module.exports = {
     getCouple,
     getCoupleByCurrentUser,
@@ -131,4 +150,6 @@ module.exports = {
     sendInvitation,
     getCurrentInvitation,
     acceptInvitation,
+    getLoverUserByCouple,
+    disconnectConnection,
 }

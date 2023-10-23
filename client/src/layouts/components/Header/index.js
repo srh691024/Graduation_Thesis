@@ -17,6 +17,7 @@ import Swal from "sweetalert2";
 const cx = classNames.bind(styles)
 
 function Header() {
+    const {couple} = useSelector(state => state.couple)
     const navigate = useNavigate()
     const dispatch = useDispatch();
     const [openNotification, setOpenNotification] = useState(false);
@@ -50,7 +51,7 @@ function Header() {
                                     <div className={cx('logo-second')}>
                                         <span>
                                             <div className={cx('logo-third')}>
-                                                <Link to={config.routes.diarypost}>
+                                                <Link to={`/diarypost/${couple.userNameCouple}`}>
                                                     <div className={cx('logo-fourth')}>
                                                         <div className={cx('logo-image')}>
                                                             <div className={cx('logo-image-first')}>
@@ -71,7 +72,7 @@ function Header() {
                                     <div className={cx('sub-first')}>
                                         <span>
                                             <div className={cx('sub-second')}>
-                                                <Link to={config.routes.diarypost}>
+                                                <Link to={`/diarypost/${couple.userNameCouple}`}>
                                                     <div className={cx('sub-third')}>
                                                         <div className={cx('icon')}>
                                                             <div className={cx('icon-first')}>
@@ -217,7 +218,7 @@ function Header() {
                                                                         <div className={cx('icon-second')}>
                                                                             {/* <FontAwesomeIcon className={cx('icon-third')} icon={faBookBookmark} /> */}
                                                                             <div className={cx('imgAvatar')}>
-                                                                                <img className={cx('avatarUser')} src={images.login_image} alt='' />
+                                                                                <img className={cx('avatarUser')} src={current.avatar} alt='' />
                                                                             </div>
 
                                                                         </div>

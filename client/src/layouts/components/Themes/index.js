@@ -13,16 +13,18 @@ function Themes() {
     const { usernameCouple } = useParams()
     const [infoCreatedUser, setInfoCreatedUser] = useState({})
     const [infoCouple, setInfoCouple] = useState({});
-    const fetchCouple = async () => {
-        const couple = await coupleServices.apiGetCouple(usernameCouple)
-        if (couple.success) setInfoCouple(couple.result)
-        const createdUser = await coupleServices.apiGetCreatedUserByCouple(couple.result.createdUser)
-        if (createdUser.success) setInfoCreatedUser(createdUser.result)
-    }
-
+    const [infoLoverUser, setInfoLoverUser] = useState({})
     useEffect(() => {
+        async function fetchCouple() {
+            const couple = await coupleServices.apiGetCouple(usernameCouple)
+            if (couple.success) setInfoCouple(couple.result)
+            const createdUser = await coupleServices.apiGetCreatedUserByCouple(couple.result.createdUser)
+            if (createdUser.success) setInfoCreatedUser(createdUser.result)
+            const loverUser = await coupleServices.apiGetLoverUserByCouple(couple.result.loverUserId)
+            if (loverUser.success) setInfoLoverUser(loverUser.result)
+        }
         fetchCouple()
-    }, [])
+    }, [usernameCouple])
 
     return (
         <div className={cx('wrapper')}>
@@ -52,7 +54,7 @@ function Themes() {
                     <p>{infoCreatedUser.name}</p>
                 </div>
                 <div className={cx('avatar-partner')}>
-                    <img className={cx('circle-image')} src={images.login_image} alt='' />
+                    <img className={cx('circle-image')} src={infoCreatedUser.avatar} alt='' />
                 </div>
                 <div className={cx('heart')}>
                     <img src={images.heart1} alt='' />
@@ -67,10 +69,10 @@ function Themes() {
                     </div>
                 </div>
                 <div className={cx('avatar-partner')}>
-                    <img className={cx('circle-image')} src={images.login_image} alt='' />
+                    <img className={cx('circle-image')} src={infoLoverUser.avatar} alt='' />
                 </div>
                 <div className={cx('partner-name')}>
-                    <p>{infoCouple.tempNameLover}</p>
+                    <p>{infoLoverUser.name ? infoLoverUser.name : infoCouple.tempNameLover}</p>
                 </div>
             </div>
         </div>

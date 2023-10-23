@@ -1,5 +1,5 @@
 import classNames from "classnames/bind";
-import styles from '~/components/ModalNoteSendLink/ModalNoteSendLink.module.scss'
+import styles from '~/components/ModalDisconnect/ModalDisconnect.module.scss'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { useFormik } from 'formik';
@@ -7,26 +7,24 @@ import * as Yup from 'yup';
 import * as coupleServices from '~/services/coupleServices';
 import Swal from "sweetalert2";
 
-const cx = classNames.bind(styles);
-function ModalNoteSendLink({ onClose }) {
+const cx = classNames.bind(styles)
+
+function ModalDisconnect({ onClose }) {
     const formik = useFormik({
         initialValues: {
-            email: '',
+            agree: '',
         },
         validationSchema: Yup.object({
-            email: Yup.string()
-                .email('Invalid email format')
-                .matches(/^[\w\-.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Please enter a valid email')
-                .required('Email is required'),
+            agree: Yup.string()
+                .required('Acceptance is required')
+                .test('match', 'The acceptance does not match.', function (value) {
+                    // Giá trị cần so sánh, ví dụ: "compareValue"
+                    const compareValue = "I Agree";
+                    return value === compareValue;
+                }),
         }),
         onSubmit: async (values) => {
-            const sendInvitation = await coupleServices.apiSendInvitation(values);
-            if (sendInvitation.success) {
-                Swal.fire('Congratulations', sendInvitation.result, 'success')
-            } else {
-                Swal.fire('Oops!', sendInvitation.result, 'error');
-            }
-            onClose()
+
         }
     })
     return (
@@ -47,7 +45,7 @@ function ModalNoteSendLink({ onClose }) {
                                                             <div className={cx('create-two')}>
                                                                 <div className={cx('create-three')}>
                                                                     <h1>
-                                                                        <div className={cx('title')}>Note when send invitation link</div>
+                                                                        <div className={cx('title')}>Please check before you disconnect!!!</div>
                                                                     </h1>
                                                                 </div>
                                                                 <div className={cx('back')} onClick={onClose}>
@@ -66,29 +64,29 @@ function ModalNoteSendLink({ onClose }) {
                                                     </div>
                                                     <div className={cx('content')}>
                                                         <ul>
-                                                            <li>Connect is a feature that allows couples to share common data while using Love Diary, so both of you can see and comment on each other's activities.</li>
-                                                            <li>If the connection invitation doesn't work, please enter the connection code directly provided in the message containing the link.</li>
-                                                            <li>After the connection is established, the shared data between the two individuals will be retrieved from the data of the person who sent the connection invitation.</li>
-                                                            <li>Note: The data of the invitation recipient will be permanently deleted as soon as they press 'accept invitation' and cannot be recovered.</li>
-                                                            <li>We recommend discussing, prior to the connection, whose data will be used as shared data.</li>
+                                                            <li>All data will be deleted when you disconnect.</li>
+                                                            <li>You can only restore within 30 days.</li>
+                                                            <li>To connect with your partner and retrieve data from a previous couple, you need to log in with the same account used at that time.</li>
+                                                            <li>If you delete your account, you won't be able to recover the data, even if the time limit hasn't expired.</li>
+                                                            <li>If you agree to disconnect, please enter 'I agree' in the box below and click 'Disconnect'.</li>
                                                             <li className={cx('special')}>
                                                                 <div className={cx('enter-link')}>
                                                                     <input
                                                                         type="text"
-                                                                        name="email"
-                                                                        placeholder="Enter your lover email"
-                                                                        value={formik.values.email}
+                                                                        name="agree"
+                                                                        placeholder="I agree"
+                                                                        value={formik.values.agree}
                                                                         onChange={formik.handleChange} />
                                                                 </div>
                                                                 {
-                                                                    formik.errors.email && formik.touched.email && (
-                                                                        <small className={cx('validate-login')}>{formik.errors.email}</small>
+                                                                    formik.errors.agree && formik.touched.agree && (
+                                                                        <small className={cx('validate-login')}>{formik.errors.agree}</small>
                                                                     )
                                                                 }
                                                             </li>
                                                             <li className={cx('special')}>
                                                                 <button type="button" className={cx('buttonSendLink')} onClick={formik.handleSubmit}>
-                                                                    Send connection invitation
+                                                                    Disconnect
                                                                 </button>
                                                             </li>
                                                         </ul>
@@ -104,7 +102,7 @@ function ModalNoteSendLink({ onClose }) {
                 </div>
             </div>
         </div>
-        );
+    );
 }
 
-export default ModalNoteSendLink;
+export default ModalDisconnect;

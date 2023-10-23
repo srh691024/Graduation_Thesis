@@ -7,10 +7,11 @@ const routes = {
     resetpassword: '/resetpassword/:token',
 
     //private couple
-    diarypost: '/:usernameCouple',
-    imagesDiary: '/imagesdiary',
-    todolist: '/todolist',
-    anniversary: '/anniversary',
+    // diarypost: '/:usernameCouple',
+    diarypost: '/diarypost/:usernameCouple',
+    imagesDiary: '/imagesdiary/:usernameCouple',
+    todolist: '/todolist/:usernameCouple',
+    anniversary: '/anniversary/:usernameCouple',
 
     //setting pages
     settingEditProfile: '/setting/editprofile',

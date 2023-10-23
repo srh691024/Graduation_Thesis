@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));    //giúp đọc được data
 app.use(express.json());    //giúp express đọc hiểu data mà client gửi lên kiểu json
 app.use(cors({
     origin: process.env.URL_CLIENT,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     credentials: true,
 }));
 app.use(cookieParser());

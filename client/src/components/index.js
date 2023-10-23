@@ -12,3 +12,4 @@ export { default as DoughnutChart} from '~/components/ChartsAdmin/DoughnutChart'
 export { default as LineChart} from '~/components/ChartsAdmin/LineChart';
 export { default as ActiveUserChart} from '~/components/ChartsAdmin/ActiveUserChart';
 export { default as ModalNoteSendLink} from '~/components/ModalNoteSendLink';
+export { default as PreviewImage} from '~/components/PreviewImage';

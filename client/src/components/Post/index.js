@@ -4,10 +4,21 @@ import images from "~/assets/images";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis, faHeart as faHearts, faComment as faComments } from "@fortawesome/free-solid-svg-icons";
 import { faHeart, faComment, faShareFromSquare } from "@fortawesome/free-regular-svg-icons";
+import moment from "moment";
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 const cx = classNames.bind(styles);
 
-function Post() {
+function Post({ post }) {
+    const settings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+    };
     return (
         <div className={cx('wrapper')}>
             <article>
@@ -15,7 +26,7 @@ function Post() {
                     <div className={cx('avatar-name-date')}>
                         <div className={cx('and')}>
                             <div className={cx('avatar-post')}>
-                                <img src={images.login_image} alt='' />
+                                <img src={post.couple.avatarCouple} alt='' />
                             </div>
                             <div className={cx('name-date')}>
                                 <div className={cx('nd')}>
@@ -23,7 +34,7 @@ function Post() {
                                         <div className={cx('name')} >
                                             <div className={cx('name-first')}>
                                                 <span>
-                                                    <a href="/" >Name couple</a>
+                                                    <a href="/" >{post.couple.nameCouple}</a>
                                                 </span>
                                             </div>
                                         </div>
@@ -33,13 +44,13 @@ function Post() {
                                             </span>
                                             <div className={cx('date-first')}>
                                                 <a href="/">
-                                                    <span>2d</span>
+                                                    <span>{moment(post?.createdAt)?.fromNow()}</span>
                                                 </a>
                                             </div>
                                         </div>
                                     </div>
                                     <div className={cx('nd-second')}>
-                                        <span>Written by Thuy Duong</span>
+                                        <span>Written by {post.author.name}</span>
                                     </div>
                                 </div>
                             </div>
@@ -56,20 +67,25 @@ function Post() {
                             </div>
                         </div>
                     </div>
-                    <div className={cx('image')}>
-                        <div className={cx('image-one')}>
-                            <div className={cx('image-two')}>
-                                <div className={cx('image-three')}>
-                                    <div className={cx('image-four')}>
-                                        <div className={cx('img-one')}>
-                                            <img src={images.login_image} alt="" />
+                    <Slider className={cx('carousel')} {...settings}>
+                        {post.images.map((image, index) => (
+                            <div className={cx('image')} key={index}>
+                                <div className={cx('image-one')}>
+                                    <div className={cx('image-two')}>
+                                        <div className={cx('image-three')}>
+                                            <div className={cx('image-four')}>
+                                                <div className={cx('img-one')}>
+                                                    <img src={image} alt="" />
+                                                </div>
+                                                <div className={cx('img-two')}></div>
+                                            </div>
                                         </div>
-                                        <div className={cx('img-two')}></div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        ))}
+
+                    </Slider>
                     <div className={cx('actions')}>
                         <div className={cx('actions-one')}>
                             <div className={cx('actions-two')}>
@@ -102,7 +118,7 @@ function Post() {
                                             <div className={cx('lcc-icon')}>
                                                 <div className={cx('lcc-icon-one')}>
                                                     <div className={cx('lcc-count')}>
-                                                        <span>12</span>
+                                                        <span>{post.likes.length}</span>
                                                     </div>
                                                     <div className={cx('icon-count')}>
                                                         <FontAwesomeIcon className={cx('icon')} icon={faHearts} />
@@ -114,7 +130,7 @@ function Post() {
                                             <div className={cx('lcc-icon')}>
                                                 <div className={cx('lcc-icon-one')}>
                                                     <div className={cx('lcc-count')}>
-                                                        <span>12</span>
+                                                        <span>{post.comments.length}</span>
                                                     </div>
                                                     <div className={cx('icon-count')}>
                                                         <FontAwesomeIcon className={cx('icon')} icon={faComments} />
@@ -128,18 +144,18 @@ function Post() {
                                     <div className={cx('author-content')}>
                                         <div className={cx('author')}>
                                             <div className={cx('author-one')}>
-                                                <a href="/" alt="">Thuy Duong</a>
+                                                <a href="/" alt="">{post.author.name}</a>
                                             </div>
                                         </div>
                                         <span>
-                                            <span className={cx('content')}>Content of diary post</span>
+                                            <span className={cx('content')}>{post.content}</span>
                                         </span>
                                     </div>
                                 </div>
                                 <div className={cx('sub-comment')}>
                                     <div className={cx('view-all-comment')}>
                                         <a href="/" >
-                                            <span>View all 123 comments</span>
+                                            <span>View all {post.comments.length} comments</span>
                                         </a>
                                     </div>
                                     <ul>

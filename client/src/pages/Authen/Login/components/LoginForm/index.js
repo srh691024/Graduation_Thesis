@@ -16,6 +16,7 @@ import { login } from "~/store/user/userSlice"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useEffect } from "react";
+import { infoCouple } from "~/store/couple/coupleSlice";
 
 const cx = classNames.bind(styles);
 
@@ -45,7 +46,8 @@ function LoginForm() {
                     const currentUserCouple = await coupleServices.apiGetCoupleByCurrentUser();
                     if (currentUserCouple.success) {
                         const usernameCouple = currentUserCouple.result.userNameCouple
-                        navigate(`/${usernameCouple}`)
+                        dispatch(infoCouple({ couple: currentUserCouple.result }))
+                            navigate(`/diarypost/${usernameCouple}`)
                     }
                     else { Swal.fire('Oops!', currentUserCouple.result, 'error') }
                 }, 100)

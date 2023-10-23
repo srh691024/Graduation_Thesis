@@ -5,6 +5,7 @@ import {IntroCouple, Header, Themes} from "~/layouts/components";
 const cx = classNames.bind(styles);
 
 function DefaultLayout({ children }) {
+    
     return (
         <>
             <div className={cx('wrapper')}>

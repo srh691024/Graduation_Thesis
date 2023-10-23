@@ -9,6 +9,7 @@ import {
     REGISTER,
 } from "redux-persist";
 import userSlice from "~/store/user/userSlice";
+import coupleSlice from "~/store/couple/coupleSlice";
 
 const commonConfig = {
     key: 'web/user',
@@ -22,7 +23,7 @@ const userConfig = {
 
 export const store = configureStore({
     reducer: {
-        // couple: coupleSlice,
+        couple: coupleSlice,
         user: persistReducer(userConfig, userSlice),
     },
     middleware: (getDefaultMiddleware) =>

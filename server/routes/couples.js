@@ -6,6 +6,7 @@ const { verifyAccessToken } = require('../middlewares/verifyToken');
 router.get('/getCouple/:username', couplesController.getCouple);
 router.get('/getCoupleByCurrentUser', verifyAccessToken, couplesController.getCoupleByCurrentUser);
 router.get('/getCreatedUserByCouple/:createdUserId', couplesController.getCreateUserByCouple);
+router.get('/getLoverUserByCouple/:loverUserId', couplesController.getLoverUserByCouple);
 router.post('/sendInvitation/:email', verifyAccessToken, couplesController.sendInvitation);
 router.get('/getCurrentInvitation', verifyAccessToken, couplesController.getCurrentInvitation);
 router.put('/acceptInvitation/:token', verifyAccessToken, couplesController.acceptInvitation);

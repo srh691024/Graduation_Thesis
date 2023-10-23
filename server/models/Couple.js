@@ -18,8 +18,10 @@ const Couple = new Schema({
     totalLikes: { type: Number, default: 0 },
     biography: { type: String },
     tempNameLover: { type: String, default: 'Your Lover' },
-    tempDobLover: {type: Date, default: new Date},
+    tempDobLover: { type: Date, default: new Date() },
     tempHoroscope: { type: String, default: 'Aries' },
+    startConnectedDate: { type: Date },
+    disconnectedDate: { type: Date }
 }, {
     timestamps: true,
 }
