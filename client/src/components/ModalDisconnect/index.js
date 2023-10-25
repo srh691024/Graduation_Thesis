@@ -4,8 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import * as coupleServices from '~/services/coupleServices';
-import Swal from "sweetalert2";
 
 const cx = classNames.bind(styles)
 

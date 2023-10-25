@@ -10,6 +10,7 @@ import {
 } from "redux-persist";
 import userSlice from "~/store/user/userSlice";
 import coupleSlice from "~/store/couple/coupleSlice";
+import todoSlice from "~/store/todo/todoSlice";
 
 const commonConfig = {
     key: 'web/user',
@@ -21,9 +22,21 @@ const userConfig = {
     whitelist: ['isLoggedIn', 'token'],     // whitelist - những trường muốn localstorage lưu 
 }
 
+const coupleConfig = {
+    key: 'couple',
+    storage
+}
+
+const todoConfig = {
+    key: 'todo',
+    storage
+}
+
+
 export const store = configureStore({
     reducer: {
-        couple: coupleSlice,
+        todo: persistReducer(todoConfig, todoSlice),
+        couple: persistReducer(coupleConfig, coupleSlice),
         user: persistReducer(userConfig, userSlice),
     },
     middleware: (getDefaultMiddleware) =>

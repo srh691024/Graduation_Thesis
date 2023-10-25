@@ -4,6 +4,8 @@ import { publicRoutes, privateRoutes } from '~/routes';
 import DefaultLayout from "~/layouts";
 import PrivateRoutes from "./routes/PrivateRoutes";
 
+
+
 function App() {
   return (
     <Router>

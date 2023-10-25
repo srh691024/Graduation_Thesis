@@ -1,5 +1,4 @@
 import classNames from "classnames/bind";
-import images from "~/assets/images";
 import { ModalNewDiary, Post } from "~/components";
 import styles from "~/pages/PrivateCouple/DiaryPost/DiaryPost.module.scss"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,22 +8,24 @@ import { createPortal } from "react-dom";
 import { useParams } from "react-router-dom";
 import * as postServices from '~/services/postServices'
 import moment from "moment";
+import { useSelector } from "react-redux";
 
 const cx = classNames.bind(styles);
 
 function DiaryPost() {
     const { usernameCouple } = useParams()
     const [postsByCouple, setPostsByCouple] = useState([])
-
     const [showModalNewDiary, setShowModalNewDiary] = useState(false);
+    const {current} = useSelector(state=> state.user)
+
     useEffect(() => {
         async function fetchPostByCouple() {
             const response = await postServices.apiGetPostsByCouple(usernameCouple)
             if (response.success) setPostsByCouple(response.result)
-            console.log(response)
         }
         fetchPostByCouple()
     }, [usernameCouple])
+    
     return (
         <div className={cx('container')}>
             <div className={cx('new-diary')}>
@@ -32,7 +33,7 @@ function DiaryPost() {
                     <div className={cx('new-diary-flex')}>
                         <div className={cx('content')}>
                             <div className={cx('avatar-new-diary')}>
-                                <img src={images.login_image} alt="" />
+                                <img src={current.avatar} alt="" />
                             </div>
                             <div className={cx('content-new-diary')} onClick={() => setShowModalNewDiary(true)}>
                                 <div className={cx('title')}>
@@ -47,7 +48,7 @@ function DiaryPost() {
 
             {/* Modal new diary */}
             {showModalNewDiary && createPortal(
-                <ModalNewDiary onClose={() => setShowModalNewDiary(false)} />,
+                <ModalNewDiary current={current} onClose={() => setShowModalNewDiary(false)} />,
                 document.body
             )}
 
@@ -59,7 +60,7 @@ function DiaryPost() {
                             {postsByCouple.length > 0 ?
                                 postsByCouple.map((post, index) => (
                                     <div className={cx('diary')} key={index}>
-                                        <Post post={post} />
+                                        <Post current={current} post={post} />
                                         <div className={cx('date-diary-post')}>
                                             <div className={cx('date-nd-heart')}>
                                                 <div className={cx('date')}>

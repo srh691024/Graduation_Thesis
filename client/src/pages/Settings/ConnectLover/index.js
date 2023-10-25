@@ -11,6 +11,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useSelector } from "react-redux";
 import ModalDisconnect from "~/components/ModalDisconnect";
+import moment from "moment";
 
 const cx = classNames.bind(styles);
 
@@ -18,10 +19,10 @@ function ConnectLover() {
     const [infoInvitation, setInfoInvitation] = useState({})
     const [haveInvitation, setHaveInvitation] = useState(false)
     const [isConnected, setIsConnected] = useState(false)
-    // const [infoConnectedCouple, setInfoConnectedCouple] = useState({})
     const [infoCreatedUser, setInfoCreatedUser] = useState({})
     const [infoLoverUser, setInfoLoverUser] = useState({})
     const [openDisconnect, setOpenDisconnect] = useState(false);
+    const [infoCouple, setInfoCouple] = useState();
     const { current } = useSelector(state => state.user)
     useEffect(() => {
         async function fetchInfoInvitation() {
@@ -47,6 +48,7 @@ function ConnectLover() {
             const statusConnect = await coupleServices.apiGetCoupleByCurrentUser()
             if (statusConnect.success && statusConnect.result.isConnected) {
                 // setInfoConnectedCouple(statusConnect.result)
+                setInfoCouple(infoCouple)
                 setIsConnected(true)
             }
             const createdUser = await coupleServices.apiGetCreatedUserByCouple(statusConnect.result.createdUser)
@@ -55,7 +57,7 @@ function ConnectLover() {
             if (loverUser.success) setInfoLoverUser(loverUser.result)
         }
         fetchCheckStatusConnectCouple()
-    }, [])
+    }, [infoCouple])
 
     const [showModalNoteSendLink, setShowModalNoteSendLink] = useState(false);
     const [showModalDisconnect, setShowModalDisconnect] = useState(false);
@@ -68,10 +70,15 @@ function ConnectLover() {
                 .required('The connection code is required'),
         }),
         onSubmit: async (values) => {
-            const acceptInvitation = await coupleServices.apiAcceptInvitation(values.token);
+            await coupleServices.apiAcceptInvitation(values.token);
 
         }
     })
+
+    const handleStartConnectedTime = () => {
+        const getDateStartConnectedTime = (moment(infoInvitation?.createdTime)?.add(24, 'hours')).format("h:mm:ss a,dddd, MMMM Do YYYY")
+        return getDateStartConnectedTime
+    }
     return (
         <div className={cx('wrapper')}>
             <div className={cx('wrapper-one')}>
@@ -125,7 +132,7 @@ function ConnectLover() {
                                         </div>
                                         <div className={cx('letter')}>The invitation will expire at &nbsp;</div>
                                         <div className={cx('date')}>
-                                            {infoInvitation.createdTime}
+                                            {handleStartConnectedTime}
                                             {/* 12:00, October 15, 2023 */}
                                         </div>
                                     </div>
@@ -155,7 +162,7 @@ function ConnectLover() {
                         {isConnected ?
                             <div className={cx('have-connection-one')}>
                                 <div className={cx('from-date')}>
-                                    <div className={cx('date')}>From 10, October, 2023</div>
+                                    <div className={cx('date')}>From {moment(infoCouple?.startLoveDate)?.format("dddd, MMMM Do YYYY")} </div>
                                     <div className={cx('icon-option')} onClick={() => { setOpenDisconnect(!openDisconnect) }}>
                                         <FontAwesomeIcon icon={faEllipsisVertical} />
                                     </div>

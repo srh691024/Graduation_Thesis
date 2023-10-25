@@ -1,9 +1,8 @@
-// import { createAsyncThunk } from "@reduxjs/toolkit";
-// import * as coupleServices from '~/services/coupleServices'
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import * as coupleServices from '~/services/coupleServices'
 
-// export const getCouple = createAsyncThunk('couple/getCouple', async(data, {rejectWithValue})=>{
-//     const response = await coupleServices.getCouple()
-//     console.log(response)
-//     if(!response.success) return rejectWithValue(response)
-//     return response.result
-// })
+export const getCurrentCouple = createAsyncThunk('couple/getCurrentCouple', async(_, {rejectWithValue})=>{
+    const response = await coupleServices.apiGetCoupleByCurrentUser()
+    if(!response.success) return rejectWithValue(response)
+    return response.result
+})

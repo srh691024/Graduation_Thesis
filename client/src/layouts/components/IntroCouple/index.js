@@ -6,21 +6,26 @@ import { faHeart, faCakeCandles, faLocationDot } from "@fortawesome/free-solid-s
 import { faTiktok, faFacebookF, faInstagram } from "@fortawesome/free-brands-svg-icons";
 import { useState, useEffect } from "react";
 import * as coupleServices from '../../../services/coupleServices'
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getCurrentUser } from '~/store/user/asyncAction';
 import moment from "moment";
+import { createPortal } from "react-dom";
+import { ModalEditInfoCouple } from "~/components";
+import config from "~/config";
 
 const cx = classNames.bind(styles);
 
 function IntroCouple() {
     const dispatch = useDispatch();
+    const navigate = useNavigate()
 
     const { usernameCouple } = useParams()
     const { isLoggedIn, current } = useSelector(state => state.user);
     const [infoCreatedUser, setInfoCreatedUser] = useState({})
     const [infoCouple, setInfoCouple] = useState({});
     const [infoLoverUser, setInfoLoverUser] = useState({})
+    const [showModalEditInfoCouple, setShowModalEditInfoCouple] = useState(false);
 
     useEffect(() => {
         const setTimeoutId = setTimeout(() => {
@@ -44,7 +49,13 @@ function IntroCouple() {
         fetchCouple()
     }, [usernameCouple])
 
-
+    const handleClickEditLoverUser = () => {
+        if (isLoggedIn && current._id === infoLoverUser._id) {
+            navigate(config.routes.settingEditProfile)
+        } else if (isLoggedIn && infoCouple.isConnected === false) {
+            
+        }
+    }
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -80,7 +91,7 @@ function IntroCouple() {
                                     </div>
                                     <div className={cx('love-date')}>
                                         <span>from &nbsp;
-                                            {moment(infoCouple?.startLoveDate)?.format('DD-MM-YYYY')}
+                                            {moment(infoCouple?.startLoveDate)?.format('DD/MM/YYYY')}
                                         </span>
                                     </div>
                                 </div>
@@ -103,8 +114,13 @@ function IntroCouple() {
                             </div>
                             {isLoggedIn ?
                                 <><div className={cx('edit-info-couple')}>
-                                    <button><span>Edit our profile</span></button>
+                                    <button onClick={() => setShowModalEditInfoCouple(true)}><span>Edit our profile</span></button>
                                 </div>
+                                    {/* Modal new diary */}
+                                    {showModalEditInfoCouple && createPortal(
+                                        <ModalEditInfoCouple infoCouple={infoCouple} current={current} onClose={() => setShowModalEditInfoCouple(false)} />,
+                                        document.body
+                                    )}
                                 </>
                                 : null
                             }
@@ -124,7 +140,7 @@ function IntroCouple() {
                                 <div className={cx('dob-partner')}>
                                     <FontAwesomeIcon className={cx('sub-icon')} icon={faCakeCandles} />
                                     <div className={cx('dob')}>
-                                        <span>{infoCreatedUser.dob ? infoCreatedUser.dob : 'Null'}</span>
+                                        <span>{infoCreatedUser.dob ? moment(infoCreatedUser.dob).format('dddd, MMMM DD yyyy') : 'Null'}</span>
                                     </div>
                                 </div>
                                 <div className={cx('horoscope-partner')}>
@@ -172,7 +188,7 @@ function IntroCouple() {
                             <div className={cx('partner')}>
                                 <div className={cx('image-partner')}>
                                     <div className={cx('avatar-partner')}>
-                                        <img src={infoLoverUser.avatar} alt="" />
+                                        <img src={infoLoverUser.avatar ? infoLoverUser.avatar : infoCouple.tempAvatarLover} alt="" />
                                     </div>
                                     <div className={cx('name-partner')}>
                                         <h3>{infoLoverUser.name ? infoLoverUser.name : infoCouple.tempNameLover}</h3>
@@ -228,7 +244,7 @@ function IntroCouple() {
                                     && current._id === infoLoverUser._id
                                     ?
                                     <div className={cx('edit-info-partner')}>
-                                        <button>
+                                        <button onClick={handleClickEditLoverUser}>
                                             <span>Edit your information</span>
                                         </button>
                                     </div> : null
@@ -237,7 +253,7 @@ function IntroCouple() {
                                 {/* Button edit information of temp lover user when couple not connected */}
                                 {isLoggedIn && infoCouple.isConnected === 'false' ?
                                     <div className={cx('edit-info-partner')}>
-                                        <button>
+                                        <button onClick={handleClickEditLoverUser}>
                                             <span>Edit your lover information</span>
                                         </button>
                                     </div> : null

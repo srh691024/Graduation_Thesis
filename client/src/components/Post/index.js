@@ -1,17 +1,25 @@
 import classNames from "classnames/bind";
 import styles from "~/components/Post/Post.module.scss";
-import images from "~/assets/images";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsis, faHeart as faHearts, faComment as faComments } from "@fortawesome/free-solid-svg-icons";
-import { faHeart, faComment, faShareFromSquare } from "@fortawesome/free-regular-svg-icons";
+import { faEllipsis, faHeart as faHearts, faComment as faComments, faArrowRightToBracket, faLock, faDeleteLeft, faBan, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faComment, faShareFromSquare, faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import moment from "moment";
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { useEffect, useState } from "react";
+import ModalUpdatePost from "../ModalUpdatePost";
+import { createPortal } from "react-dom";
+import DropDownItem from "../DropDownItem";
+import ModalDeletePost from "../ModalDeletePost";
+import * as postServices from '~/services/postServices'
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import Swal from "sweetalert2";
 
 const cx = classNames.bind(styles);
 
-function Post({ post }) {
+function Post({ current, post }) {
     const settings = {
         dots: true,
         infinite: true,
@@ -19,6 +27,55 @@ function Post({ post }) {
         slidesToShow: 1,
         slidesToScroll: 1,
     };
+
+    const [isLike, setIsLike] = useState(false)
+    useEffect(() => {
+        if (post.likes.find(like => like === current._id)) {
+            setIsLike(true)
+        }
+    }, [post.likes, current._id])
+    const handleLike = async () => {
+        setIsLike(true)
+        const postLike = await postServices.apiLikePost(post._id)
+        console.log(postLike)
+    }
+    const handleUnlike = async () => {
+        setIsLike(false)
+        const postUnLike = await postServices.apiLikePost(post._id)
+        console.log(postUnLike)
+    }
+
+
+
+    const [showModalUpdatePost, setShowModalUpdatePost] = useState(false);
+    const [openOptionPost, setOpenOptionPost] = useState(false);
+    const [showModalDeletePost, setShowModalDeletePost] = useState(false);
+
+    //Add comment
+    const formik = useFormik({
+        initialValues: {
+            text: ''
+        },
+        validationSchema: Yup.object({
+            text: Yup.string().max(1000, 'Maximum text length is 1000 characters')
+        }),
+        onSubmit: async (values) => {
+            const comment = await postServices.apiAddComment(post._id, values)
+            if (comment.success) {
+                Swal.fire('Congratulations', 'Add comment successfully', 'success')
+            } else {
+                Swal.fire('Oops!', 'Add comment failed', 'error')
+            }
+            console.log(values)
+            console.log(comment.result)
+
+        }
+    })
+
+    // const handleDeleteComment = async(commentId)=>{
+    //     const deleteComment = await postServices.apiDeleteComment(post._id, commentId)
+    //     console.log(deleteComment.result)
+    // }
     return (
         <div className={cx('wrapper')}>
             <article>
@@ -54,7 +111,9 @@ function Post({ post }) {
                                     </div>
                                 </div>
                             </div>
-                            <div className={cx('action')}>
+                            <div className={cx('action')}
+                                onClick={() => { setOpenOptionPost(!openOptionPost) }}
+                            >
                                 <div className={cx('action-first')}>
                                     <div className={cx('action-second')}>
                                         <div className={cx('action-third')}>
@@ -64,7 +123,44 @@ function Post({ post }) {
                                         </div>
                                     </div>
                                 </div>
+
+                                {/* Dropdown menu */}
+                                <div className={cx('dropdown-menu', `${openOptionPost ? 'active' : 'inactive'}`)}>
+                                    <ul >
+                                        <DropDownItem icon={faBan} text={"Report"} />
+                                        <DropDownItem icon={faHeart} text={"Follow"} />
+                                        <DropDownItem icon={faArrowRightToBracket} text={"Go to post"} />
+                                        <DropDownItem icon={faLock} text={"Set mode"} />
+                                        <div
+                                            onClick={() => {
+                                                setShowModalUpdatePost(true)
+                                                setOpenOptionPost(false)
+                                            }}
+                                        >
+                                            <DropDownItem icon={faPenToSquare} text={"Update"} />
+                                        </div>
+                                        <div onClick={() => {
+                                            setShowModalDeletePost(true)
+                                            setOpenOptionPost(false)
+                                        }}>
+
+                                            <DropDownItem icon={faDeleteLeft} text={"Delete"} />
+
+                                        </div>
+                                        <DropDownItem icon={faXmark} text={"Cancel"} />
+                                    </ul>
+                                </div>
                             </div>
+                            {/* Modal update post */}
+                            {showModalUpdatePost && createPortal(
+                                <ModalUpdatePost current={current} data={post} onClose={() => setShowModalUpdatePost(false)} />,
+                                document.body
+                            )}
+                            {/* Modal Delete Post */}
+                            {showModalDeletePost && createPortal(
+                                <ModalDeletePost data={post} onClose={() => setShowModalDeletePost(false)} />,
+                                document.body
+                            )}
                         </div>
                     </div>
                     <Slider className={cx('carousel')} {...settings}>
@@ -95,7 +191,11 @@ function Post({ post }) {
                                             <div className={cx('like-one')}>
                                                 <div className={cx('like-two')}>
                                                     <span>
-                                                        <FontAwesomeIcon className={cx('icon')} icon={faHeart} />
+                                                        {isLike ?
+                                                            <FontAwesomeIcon onClick={handleUnlike} className={cx('icon')} icon={faHearts} />
+                                                            :
+                                                            <FontAwesomeIcon onClick={handleLike} className={cx('icon')} icon={faHeart} />
+                                                        }
                                                     </span>
                                                 </div>
                                             </div>
@@ -159,36 +259,49 @@ function Post({ post }) {
                                         </a>
                                     </div>
                                     <ul>
-                                        <div className={cx('comment')}>
-                                            <div className={cx('comment-one')}>
-                                                <div className={cx('comment-two')}>
-                                                    <div className={cx('comment-three')}>
-                                                        <div className={cx('name')}>
-                                                            <a href="/">
-                                                                <div className={cx('name-one')}>
-                                                                    <div className={cx('name-two')}>
-                                                                        <span>Sinh Nhat</span>
+                                        {post.comments.map((comment, index) => (
+
+                                            <div className={cx('comment')} key={index}>
+                                                <div className={cx('comment-one')}>
+                                                    <div className={cx('comment-two')}>
+                                                        <div className={cx('comment-three')}>
+                                                            <div className={cx('name')}>
+                                                                <a href="/">
+                                                                    <div className={cx('name-one')}>
+                                                                        <div className={cx('name-two')}>
+                                                                            <span>{comment.postedBy.name}</span>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            </a>
+                                                                </a>
+                                                            </div>
+                                                            <span className={cx('space')}> </span>
+                                                            <span className={cx('content-comment')}>
+                                                                <span>{comment.textComment}</span>
+                                                            </span>
+                                                            <div><FontAwesomeIcon
+                                                                //  onClick={handleDeleteComment(comment._id)} 
+                                                                icon={faEllipsis} /></div>
                                                         </div>
-                                                        <span className={cx('space')}> </span>
-                                                        <span className={cx('content-comment')}>
-                                                            <span>Nice</span>
-                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        ))}
+
                                     </ul>
                                 </div>
                                 <div className={cx('add-comment')}>
                                     <div className={cx('section')}>
                                         <div className={cx('section-one')}>
-                                            <form>
+                                            <form >
                                                 <div className={cx('section-two')}>
-                                                    <textarea placeholder="Add a comment..." autoComplete="off" autoCorrect="off" ></textarea>
+                                                    <textarea name='text' value={formik.values.text} onChange={formik.handleChange} placeholder="Add a comment..."></textarea>
                                                 </div>
+                                                <button type="submit" onClick={formik.handleSubmit}>Add</button>
+                                                {
+                                                    formik.errors.text && formik.touched.text && (
+                                                        <small className={cx('validate-login')}>{formik.errors.text}</small>
+                                                    )
+                                                }
                                             </form>
                                         </div>
                                     </div>

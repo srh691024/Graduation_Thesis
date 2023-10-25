@@ -341,7 +341,8 @@
                                                         list-style: none;
                                                         width: auto;
                                                         color: #FE6E91;
-                                                        button{
+
+                                                        button {
                                                             border: none;
                                                             color: white;
                                                             background-color: #FE6E91;
@@ -835,11 +836,13 @@
                                                                     position: relative;
                                                                     flex-grow: 1;
                                                                     align-items: flex-start;
-                                                                    select{
+
+                                                                    select {
                                                                         width: 100px;
-                                                                        border: 1px solid rgb(219,219,219);
+                                                                        border: 1px solid rgb(219, 219, 219);
                                                                         font-size: 13px;
                                                                     }
+
                                                                     // .mode-one {
                                                                     //     display: flex;
                                                                     //     position: relative;
@@ -959,18 +962,21 @@
                                                                     }
                                                                 }
                                                             }
-                                                            .pickDate{
+
+                                                            .pickDate {
                                                                 display: flex;
                                                                 flex-direction: column;
                                                                 padding: 0 16px;
-                                                                input{
-                                                                    border: 1px solid rgb(219,219,219);
+
+                                                                input {
+                                                                    border: 1px solid rgb(219, 219, 219);
                                                                     height: 25px;
                                                                     padding: 3px;
                                                                     border-radius: 4px;
                                                                     margin: 2px 0;
                                                                 }
-                                                                input:focus-visible{
+
+                                                                input:focus-visible {
                                                                     outline: 1px solid rgb(var(--lodi-color-pink-much));
                                                                 }
                                                             }
@@ -990,7 +996,7 @@
     }
 }
 
-.carousel{
+.carousel {
     width: 100%;
-    
+
 }

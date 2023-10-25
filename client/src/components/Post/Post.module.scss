@@ -306,6 +306,34 @@ article {
                         }
                     }
                 }
+
+                .dropdown-menu {
+                    position: absolute;
+                    top: 40px;
+                    right: 0px;
+                    background-color: white;
+                    border-radius: 8px;
+                    padding: 10px 0;
+                    width: 160px;
+                    z-index: 1;
+                    box-shadow: 1px 0 4px 0.5px rgba(0, 0, 0, 0.2);
+                }
+
+                .dropdown-menu.active {
+                    opacity: 1;
+                    visibility: visible;
+                    transform: translateY(0);
+                    transition: 200ms ease;
+
+                }
+
+                .dropdown-menu.inactive {
+                    opacity: 0;
+                    visibility: hidden;
+                    transform: translateY(-10px);
+                    transition: 200ms ease;
+
+                }
             }
         }
 

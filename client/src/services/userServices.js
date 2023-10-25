@@ -6,11 +6,8 @@ export const apiGetCurrent = () => axios({
     method: 'GET',
 });
 
-// export const getCurrent = async () => {
-//     try {
-//         const res = await httpRequest.get('auth/current');
-//         return res;
-//     } catch (error) {
-//         return error.response.data;
-//     }
-// };
+export const apiUpdateUser = (formData) => axios({
+    url: 'auth/updateUser',
+    method: 'PUT',
+    data: formData
+})

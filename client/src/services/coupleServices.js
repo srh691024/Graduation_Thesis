@@ -36,3 +36,9 @@ export const apiAcceptInvitation = (token) => axios({
     url: `couple/acceptInvitation/${token}`,
     method: 'PUT',
 });
+
+export const apiEditInfoCouple = (coupleId, formData) => axios({
+    url: `couple/editInfoCouple/${coupleId}`,
+    method: 'PUT',
+    data: formData
+});

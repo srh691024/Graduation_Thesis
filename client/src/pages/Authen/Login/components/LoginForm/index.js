@@ -11,16 +11,16 @@ import styles from "~/pages/Authen/Login/components/LoginForm/LoginForm.module.s
 
 import * as authServices from '~/services/authServices';
 import * as coupleServices from '~/services/coupleServices';
-import config from "~/config";
 import { login } from "~/store/user/userSlice"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useEffect } from "react";
-import { infoCouple } from "~/store/couple/coupleSlice";
+import { getCurrentCouple } from "~/store/couple/asyncAction";
 
 const cx = classNames.bind(styles);
 
 function LoginForm() {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -46,8 +46,8 @@ function LoginForm() {
                     const currentUserCouple = await coupleServices.apiGetCoupleByCurrentUser();
                     if (currentUserCouple.success) {
                         const usernameCouple = currentUserCouple.result.userNameCouple
-                        dispatch(infoCouple({ couple: currentUserCouple.result }))
-                            navigate(`/diarypost/${usernameCouple}`)
+                        dispatch(getCurrentCouple())
+                        navigate(`/diarypost/${usernameCouple}`)
                     }
                     else { Swal.fire('Oops!', currentUserCouple.result, 'error') }
                 }, 100)
@@ -55,23 +55,6 @@ function LoginForm() {
             } else Swal.fire('Oops!', response.message, 'error');
         }
     })
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    // const [payload, setPayload] = useState({
-    //     email: '',
-    //     password: ''
-    // })
-
-
-    // const handleSubmit = useCallback(async (e) => {
-    //     e.preventDefault();
-    //     const response = await authServices.login(payload);
-    //     if (response.success) {
-    //         dispatch(regiser({ isLoggedIn: true, token: response.accessToken, userData: response.userData }));
-    //         navigate(`${config.routes.diarypost}`)
-    //     } else Swal.fire('Oops!', response.message, 'error');
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [payload]);
     return (
         <div className={cx("wrapper")}>
             <form className={cx("login-form")}>

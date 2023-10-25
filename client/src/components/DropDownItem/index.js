@@ -9,8 +9,8 @@ const cx = classNames.bind(styles);
 function DropDownItem(props) {
     return (
         <li className={cx('dropdown-item')}>
-            <FontAwesomeIcon className={cx('icon')} icon={props.icon}/>
-            <Link to={'/'}>{props.text}</Link>
+            <FontAwesomeIcon className={cx('icon')} icon={props.icon} />
+            <Link>{props.text}</Link>
         </li>
     );
 }

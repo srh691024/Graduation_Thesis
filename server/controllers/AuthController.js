@@ -7,6 +7,7 @@ const crypto = require('crypto');
 const getStringUntilCharacter = require('../utils/getStringUntilCharacter');
 const Couple = require('../models/Couple');
 const { response } = require('express');
+const deleteImage = require('../utils/deleteImage');
 
 // Refresh token => Cấp mới access token
 // Access token => Xác thực user, phần quyền user
@@ -41,32 +42,6 @@ const login = asyncHandler(async (req, res) => {
         throw new Error(`Wrong email or password`)
     }
 })
-
-// const register = asyncHandler(async (req, res) => {
-//     let { email, password, name, username, gender, dob, phone } = req.body;
-//     if (!email || !password)
-//         return res.status(400).json({
-//             success: false,
-//             message: `Missing inputs`
-//         })
-
-//     const userByEmail = await User.findOne({ email })
-//     if (userByEmail) throw new Error(`Email has existed!`)
-//     const userByPhone = await User.findOne({ phone })
-//     if (userByPhone) throw new Error(`Phone has existed!`)
-//     const userByUsername = await User.findOne({ username })
-//     if (userByUsername) throw new Error(`Username ${userByUsername.username} has existed`)
-//     if(!username.trim()){
-//         username = getStringUntilCharacter(email, '@')
-//         name = getStringUntilCharacter(email, '@')
-//     }
-//     // const newUser = await User.create(req.body)
-//     const newUser = await User.create({email, password, name,username, gender, dob, phone})
-//     return res.status(200).json({
-//         success: newUser ? true : false,
-//         message: newUser ? 'Register is successfully.Please go login' : 'Something went wrong'
-//     })
-// })
 
 const register = asyncHandler(async (req, res) => {
     let { email, password, name, username
@@ -123,12 +98,6 @@ const finalRegister = asyncHandler(async (req, res) => {
     })
 
     const currentTime = new Date();
-    // const pastTime = new Date(currentTime);
-    // // Tính số mili giây giữa thời gian hiện tại và thời gian trước đó
-    // const timeDifference = currentTime.getTime() - pastTime.getTime();
-
-    // // Chuyển đổi thời gian chênh lệch thành số ngày
-    // const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
     if (newUser) {
         const newTmpCouple = await Couple.create({
             createdUser: newUser._id,
@@ -146,14 +115,6 @@ const finalRegister = asyncHandler(async (req, res) => {
     } else {
         return res.redirect(`${process.env.URL_CLIENT}/finalregister/failed`)
     }
-
-
-    // res.clearCookie('dataRegister')
-    // if (newTmpCouple) {
-    //     return res.redirect(`${process.env.URL_CLIENT}/finalregister/success`)
-    // } else if (!newUser || !newTmpCouple) {
-    //     return res.redirect(`${process.env.URL_CLIENT}/finalregister/failed`)
-    // }
 })
 
 const getCurrentUser = asyncHandler(async (req, res) => {
@@ -261,13 +222,31 @@ const deleteUser = asyncHandler(async (req, res) => {
 
 const updateUser = asyncHandler(async (req, res) => {
     const { _id } = req.user
-    if (!_id || Object.keys(req.body).length === 0) throw new Error(`Missing inputs`)
+    let { avatarUser, username, name, phone, gender, dob, horoscope, address, facebookLink, tiktokLink, instagramLink, avatarname } = req.body
+    const infoUser = await User.findById(_id)
+    if (infoUser) {
+        if (typeof avatarUser !== 'string') {
+            const array = []
+            array.push(avatarname)
+            deleteImage(array)
+            avatarUser = req.file.path
+            avatarname = req.file.filepath
+        }
 
-    const response = await User.findByIdAndUpdate(_id, req.body, { new: true }).select('-password -role')
-    return res.status(200).json({
-        success: response ? true : false,
-        updatedUser: response ? response : 'Update failed'
-    })
+        if (!name) name = username
+
+        const updateInfoUser = await User.findByIdAndUpdate(_id, { avatar: avatarUser, username, name, phone, gender, dob, horoscope, address, facebookLink, tiktokLink, instagramLink, avatarname }, { new: true }).select('-refreshToken -password -role')
+        return res.status(200).json({
+            success: updateInfoUser ? true : false,
+            updatedUser: updateInfoUser ? updateInfoUser : 'Update profile failed'
+        })
+    } else {
+        return res.status(400).json({
+            success: false,
+            result: 'Can not find user'
+        })
+    }
+
 })
 const banUserByAdmin = asyncHandler(async (req, res) => {
     const { uid } = req.params

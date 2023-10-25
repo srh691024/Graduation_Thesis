@@ -13,11 +13,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getCurrentUser } from '~/store/user/asyncAction';
 import { logout, clearMessage } from '~/store/user/userSlice';
 import Swal from "sweetalert2";
+import { getCurrentCouple } from '~/store/couple/asyncAction';
 
 const cx = classNames.bind(styles)
 
 function Header() {
-    const {couple} = useSelector(state => state.couple)
+    const { couple } = useSelector(state => state.couple)
     const navigate = useNavigate()
     const dispatch = useDispatch();
     const [openNotification, setOpenNotification] = useState(false);
@@ -27,7 +28,7 @@ function Header() {
     useEffect(() => {
         const setTimeoutId = setTimeout(() => {
             if (isLoggedIn) dispatch(getCurrentUser());
-
+            dispatch(getCurrentCouple())
         }, 300)
         return () => { clearTimeout(setTimeoutId); }
     }, [dispatch, isLoggedIn]);
@@ -133,7 +134,7 @@ function Header() {
                                     <div className={cx('sub-first')}>
                                         <span>
                                             <div className={cx('sub-second')}>
-                                                <Link to={config.routes.anniversary}>
+                                                <Link to={`/anniversary/${couple.userNameCouple}`}>
                                                     <div className={cx('sub-third')}>
                                                         <div className={cx('icon')}>
                                                             <div className={cx('icon-first')}>
@@ -152,7 +153,7 @@ function Header() {
                                     <div className={cx('sub-first')}>
                                         <span>
                                             <div className={cx('sub-second')}>
-                                                <Link to={config.routes.todolist}>
+                                                <Link to={`/todolist/${couple.userNameCouple}`}>
                                                     <div className={cx('sub-third')}>
                                                         <div className={cx('icon')}>
                                                             <div className={cx('icon-first')}>
@@ -171,7 +172,7 @@ function Header() {
                                     <div className={cx('sub-first')}>
                                         <span>
                                             <div className={cx('sub-second')}>
-                                                <Link to={config.routes.imagesDiary}>
+                                                <Link to={`/imagesdiary/${couple.userNameCouple}`}>
                                                     <div className={cx('sub-third')}>
                                                         <div className={cx('icon')}>
                                                             <div className={cx('icon-first')}>
@@ -211,7 +212,7 @@ function Header() {
                                             <div className={cx('sub-first')}>
                                                 <span>
                                                     <div className={cx('sub-second')}>
-                                                        <Link to={config.routes.diarypost} >
+                                                        <Link to={`/diarypost/${couple.userNameCouple}`} >
                                                             <div className={cx('sub-third')}>
                                                                 <div className={cx('icon')}>
                                                                     <div className={cx('icon-first')}>

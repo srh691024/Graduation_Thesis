@@ -3,10 +3,14 @@ import styles from "~/pages/PrivateCouple/Todolist/Todolist.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBellConcierge, faClock, faCommentDots, faGift, faHandHoldingHand, faHouse, faListCheck, faSmileBeam, faStar, faSun } from "@fortawesome/free-solid-svg-icons";
 import { SubTodo } from "~/components";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getTodosByCouple } from "~/store/todo/asyncAction";
 
 const cx = classNames.bind(styles);
 
 function Todolist() {
+    const {todo} = useSelector(state=> state.todo)
     return (
         <div className={cx('container')}>
             <div className={cx('diary-post')}>

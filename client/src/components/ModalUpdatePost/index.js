@@ -9,11 +9,13 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import * as postServices from '../../services/postServices'
+import moment from "moment";
+import { useState } from "react";
 
 
 const cx = classNames.bind(styles);
 
-function ModalNewDiary({current, onClose }) {
+function ModalUpdatePost({ data, onClose }) {
 
     const settings = {
         dots: true,
@@ -23,35 +25,58 @@ function ModalNewDiary({current, onClose }) {
         slidesToScroll: 1,
     };
 
+    const [deletedImages, setDeletedImages] = useState([])
+    // console.log(deletedImages)
+
     const formik = useFormik({
         initialValues: {
-            images: [],
-            content: '',
-            mode: '',
-            dateAnni: '',
+            images: data.images || [],
+            content: data.content || '',
+            mode: data.mode || '',
+            dateAnni: moment(data?.dateAnni).format('yyyy-MM-DD') || '',
+            imagenames: data.imagesname || [],
         },
         validationSchema: Yup.object({
             images: Yup.array()
                 .min(1, "Please select at least one image")
                 .max(5, "You can select up to 5 images")
-            // images: Yup.mixed().required('Please select images')
-            // .test("FILE_SIZE", 'Too large image', (value) => value && value.size < 1024 * 1024)
-            // .test("FILE_TYPE", 'Invalid', (value) => value && ['image/png', 'image/jpg', 'image/jpeg'].includes(value.type))
             ,
             dateAnni: Yup.date().max(new Date(), 'Date must not be later than the current date.').nullable(),
         }),
         onSubmit: async (values) => {
-
+            // values.dateAnni = moment(values.dateAnni).toISOString();
+            // add data to formData
             const formData = new FormData();
             formData.append('content', values.content);
             formData.append('dateAnni', values.dateAnni);
             formData.append('mode', values.mode);
-            for (let image of values.images) formData.append('images', image);
+            for (let imageName of values.imagenames) {
+                formData.append('imagenames', imageName)
+            }
 
-            const response = await postServices.apiCreatePost(formData);
+            for (let deleteName of deletedImages) {
+                formData.append('deletedImages', deleteName)
+            }
+            // formData.append('deletedImages', deletedImages);
+            for (let image of values.images) {
+                if (typeof image === 'string') {
+                    formData.append('imagesLink', image);
+                } else {
+                    formData.append('images', image)
+                }
+            }
+
+            formData.forEach(function (value, key) {
+                console.log(key, value);
+            });
+
+            // fetch API create post
+            const response = await postServices.apiUpdatePost(data._id, formData);
             console.log(response)
-            // console.log(values)
-            onClose()
+            // console.log(values.imagenames)
+            // console.log(deletedImages)
+            // onClose()
+            // console.log(values.images)
         }
     })
 
@@ -81,7 +106,7 @@ function ModalNewDiary({current, onClose }) {
                                                                 <div className={cx('create-two')}>
                                                                     <div className={cx('create-three')}>
                                                                         <h1>
-                                                                            <div className={cx('title')}>Create new diary</div>
+                                                                            <div className={cx('title')}>Update this diary</div>
                                                                         </h1>
                                                                     </div>
                                                                     <div className={cx('back')} onClick={onClose}>
@@ -111,12 +136,18 @@ function ModalNewDiary({current, onClose }) {
                                                                     <div className={cx('content-three')}>
                                                                         {formik.values.images &&
                                                                             <Slider className={cx('carousel')} {...settings}>
-                                                                                {Array.from(formik.values.images).map((file, i) => (
-                                                                                    <div key={i} onClick={() => {
+                                                                                {formik.values.images.map((file, i) => (
+                                                                                    <div key={file} onClick={() => {
                                                                                         // Remove the clicked image from the array
                                                                                         const newImages = [...formik.values.images];
                                                                                         newImages.splice(i, 1);
                                                                                         formik.setFieldValue("images", newImages);
+                                                                                        if (typeof file === "string") {
+                                                                                            const newImageName = [...formik.values.imagenames]
+                                                                                            const deletedImage = newImageName.splice(i, 1);
+                                                                                            setDeletedImages([...deletedImages, ...deletedImage]);
+                                                                                            formik.setFieldValue("imagenames", newImageName);
+                                                                                        }
                                                                                     }}>
                                                                                         <PreviewImage file={file} />
                                                                                     </div>
@@ -157,14 +188,14 @@ function ModalNewDiary({current, onClose }) {
                                                                                                         <div className={cx('avatar')}>
                                                                                                             <div className={cx('avatar-one')}>
                                                                                                                 <span>
-                                                                                                                    <img src={current.avatar} alt="" />
+                                                                                                                    <img src={data.author.avatar} alt="" />
                                                                                                                 </span>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                         <div className={cx('name')}>
                                                                                                             <div className={cx('name-one')}>
                                                                                                                 <div className={cx('name-two')}>
-                                                                                                                    <span>{current.name}</span>
+                                                                                                                    <span>{data.author.name}</span>
                                                                                                                 </div>
                                                                                                             </div>
                                                                                                         </div>
@@ -187,9 +218,6 @@ function ModalNewDiary({current, onClose }) {
                                                                                     <div className={cx('mode-char')}>
                                                                                         <div className={cx('mode')}>
                                                                                             <select name="mode" value={formik.values.mode} onChange={formik.handleChange}>
-                                                                                                {/* <option value="">
-                                                                                                    Select mode
-                                                                                                </option> */}
                                                                                                 <option value="Private">
                                                                                                     Private
                                                                                                 </option>
@@ -245,4 +273,4 @@ function ModalNewDiary({current, onClose }) {
     );
 }
 
-export default ModalNewDiary;
+export default ModalUpdatePost;

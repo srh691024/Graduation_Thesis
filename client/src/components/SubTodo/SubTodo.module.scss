@@ -186,6 +186,13 @@
                                     flex-wrap: nowrap;
                                     overflow-x: auto;
 
+                                    .checkStar {
+                                        margin-left: 10px;
+                                        font-size: 15px;
+                                        cursor: pointer;
+                                    }
+
+
                                     .dateButton-container {
 
                                         display: flex;
@@ -196,6 +203,20 @@
                                             color: #FE6E91;
                                             font-size: 18px;
 
+                                        }
+
+                                        input {
+                                            width: 32px;
+                                            height: 30px;
+                                            opacity: 0;
+                                            overflow: hidden;
+                                            position: absolute;
+                                            z-index: 5;
+                                            cursor: pointer;
+                                            bottom: 0px;
+                                            top: 8px;
+                                            padding: 0;
+                                            left: 10px;
                                         }
                                     }
                                 }
@@ -221,6 +242,10 @@
                         .addTask .baseTask:first-child {
                             border-bottom: 1px solid rgb(219, 219, 219);
                         }
+                    }
+
+                    small {
+                        margin: auto;
                     }
 
                     .tasks {
@@ -289,6 +314,14 @@
                                                 display: flex;
                                                 font-size: 10px;
                                             }
+                                            .checkDid{
+                                                color: #FE6E91;
+                                                position: absolute;
+                                                transition: opacity 100ms;
+                                                
+                                                display: flex;
+                                                font-size: 10px;
+                                            }
 
                                         }
 
@@ -345,7 +378,7 @@
                                             display: inline;
 
                                             span {
-                                                margin-left: 4px;
+                                                
                                                 padding: 0px;
                                                 cursor: pointer;
                                                 height: 24px;
@@ -441,5 +474,16 @@
                 }
             }
         }
+
     }
+}
+
+.importantStars {
+    color: white;
+    background-color: #FE6E91;
+    width: 25px;
+    height: 25px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
 }

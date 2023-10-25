@@ -4,7 +4,8 @@ const asyncHandler = require('express-async-handler')
 const uuid = require('uuid');
 const Invitation = require('../models/Invitation');
 const sendEmail = require('../utils/sendMail');
-const makeToken = require('uniqid')
+const makeToken = require('uniqid');
+const deleteImage = require('../utils/deleteImage');
 
 const getCouple = asyncHandler(async (req, res) => {
     const { username } = req.params
@@ -118,9 +119,6 @@ const acceptInvitation = asyncHandler(async (req, res) => {
         await coupleByInvitationId.save()
         await notAcceptedInvitation.deleteOne()
         const oldCouple = await Couple.findOneAndDelete({ createdUser: _id })
-
-        // await Couple.updateOne({ loverUserId: _id })
-        // await notAcceptedInvitation.deleteOne()
     }
     return res.status(200).json({
         success: coupleByInvitationId ? true : false,
@@ -139,7 +137,37 @@ const getCurrentInvitation = asyncHandler(async (req, res) => {
 })
 
 const disconnectConnection = asyncHandler(async (req, res) => {
-    
+
+})
+
+const editInfoCouple = asyncHandler(async (req, res) => {
+    let { biography, imageCouple, nameCouple, startLoveDate, usernameCouple, imagename } = req.body
+    const { coupleId } = req.params
+    const { _id } = req.user
+    const couple = await Couple.findById(coupleId)
+    if (!couple) return res.status(404).json({ success: false, result: "Can not find Couple" })
+    if (couple.loverUserId.toString() === _id || couple.createdUser.toString() === _id) {
+        if (!startLoveDate) startLoveDate = new Date()
+        if (!nameCouple) nameCouple = usernameCouple
+        if (typeof imageCouple !== 'string') {
+            const array = []
+            array.push(imagename)
+            deleteImage(array)
+            imageCouple = req.file.path
+            imagename = req.file.filename
+        }
+
+        const updateInfoCouple = await Couple.findByIdAndUpdate(coupleId, { biography, avatarCouple: imageCouple, nameCouple, startLoveDate, userNameCouple: usernameCouple, avatarCouplename: imagename }, { new: true })
+        return res.status(200).json({
+            success: updateInfoCouple ? true : false,
+            result: updateInfoCouple ? updateInfoCouple : "Can not update this Couple"
+        })
+    } else {
+        return res.status(400).json({
+            success: false,
+            result: "You are not allowed to update this Couple"
+        })
+    }
 })
 
 
@@ -152,4 +180,5 @@ module.exports = {
     acceptInvitation,
     getLoverUserByCouple,
     disconnectConnection,
+    editInfoCouple
 }
