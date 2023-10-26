@@ -2,13 +2,15 @@ import classNames from "classnames/bind";
 import styles from "~/components/SubTodo/SubTodo.module.scss"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboardList, faPlus, faSort, faCalendarDays, faChevronDown, faUserPen, faCheck, faStarAndCrescent } from "@fortawesome/free-solid-svg-icons";
-import { faCircle, faStar } from "@fortawesome/free-regular-svg-icons";
+import { faCircle, faPenToSquare, faStar, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useEffect, useState } from "react";
-import { getTodosByCouple, addTodo, checkDone } from "~/store/todo/asyncAction";
+import { addTodo, checkDone, checkImportant, deleteTask } from "~/store/todo/asyncAction";
 import moment from "moment";
+import { createPortal } from "react-dom";
+import ModalEditTodo from "../ModalEditTodo";
 
 const cx = classNames.bind(styles);
 
@@ -20,13 +22,13 @@ function SubTodo() {
     const coupleId = couple._id
     const [inCompleteTodos, setInCompleteTodos] = useState([])
     const [completedTodos, setCompletedTodos] = useState([])
+    const [showModalEditTodo, setShowModalEditTodo] = useState(false);
     useEffect(() => {
-        dispatch(getTodosByCouple(coupleId))
-        const incompleteTasks = todos.filter(task => !task.completed)
+        const incompleteTasks = todos.filter(task => task.completed === false)
         setInCompleteTodos(incompleteTasks)
-        const completedTasks = todos.filter(task => task.completed)
+        const completedTasks = todos.filter(task => task.completed === true)
         setCompletedTodos(completedTasks)
-    }, [coupleId, dispatch, todos])
+    }, [todos])
     const formik = useFormik({
         initialValues: {
             content: '',
@@ -41,13 +43,19 @@ function SubTodo() {
             isImportant: Yup.boolean(),
         }),
         onSubmit: async (values) => {
-            console.log(values.isImportant)
             dispatch(addTodo({ coupleId, values }))
         }
     })
-    const handleCheckDone = (todoId)=>{
+    const handleCheckDone = (todoId) => {
         dispatch(checkDone(todoId))
     }
+
+    const handleCheckImportant = (todoId) => {
+        dispatch(checkImportant(todoId))
+    }
+    const handleDeleteTodo = (todoId) => {
+        dispatch(deleteTask(todoId));
+    };
     return (
         <div className={cx('center-column')}>
             <div className={cx('main')}>
@@ -116,6 +124,7 @@ function SubTodo() {
                                                 <option value="Words of Affirmation">Words of Affirmation</option>
                                                 <option value="Receiving Gifts">Receiving Gifts</option>
                                             </select>
+
                                             <div name='isImportant' type='hidden' className={cx('star-important', 'checkStar', `${formik.values.isImportant ? 'importantStars' : null}`)} onClick={(e) => formik.setFieldValue('isImportant', !formik.values.isImportant)}>
                                                 <span>
                                                     <FontAwesomeIcon icon={faStar} />
@@ -142,7 +151,7 @@ function SubTodo() {
                                             {inCompleteTodos.map((td, index) => (
                                                 <div className={cx('task')} key={index}>
                                                     <div className={cx('taskItem-body')}>
-                                                        <span className={cx('check-done')} onClick={handleCheckDone(td._id)}>
+                                                        <span className={cx('check-done')} onClick={() => handleCheckDone(td._id)}>
                                                             <FontAwesomeIcon className={cx('circle')} icon={faCircle} />
                                                             <FontAwesomeIcon className={cx('check')} icon={faCheck} />
                                                         </span>
@@ -159,9 +168,20 @@ function SubTodo() {
                                                                 <span className={cx('sub-other')}>{td.type}</span>
                                                             </div>
                                                         </button>
+
+                                                        {/* Update todo  */}
+                                                        <FontAwesomeIcon className={cx('editTodo')} icon={faPenToSquare} onClick={() => setShowModalEditTodo(true)} />
+                                                        {/* Modal new diary */}
+                                                        {showModalEditTodo && createPortal(
+                                                            <ModalEditTodo todo={td} onClose={() => setShowModalEditTodo(false)} />,
+                                                            document.body
+                                                        )}
+
+                                                        {/* DELETE TODO  */}
+                                                        <FontAwesomeIcon className={cx('deleteTodo')} icon={faTrashCan} onClick={() => handleDeleteTodo(td._id)} />
                                                         <div className={cx('star-important', `${td.isImportant ? 'importantStars' : ''}`)}>
                                                             <span>
-                                                                <FontAwesomeIcon icon={faStar} />
+                                                                <FontAwesomeIcon icon={faStar} onClick={() => handleCheckImportant(td._id)} />
 
                                                             </span>
                                                         </div>
@@ -213,6 +233,7 @@ function SubTodo() {
                                                                 <FontAwesomeIcon icon={faStar} />
                                                             </span>
                                                         </div>
+                                                        <FontAwesomeIcon className={cx('deleteTodo', 'doneTodo')} icon={faTrashCan} onClick={() => handleDeleteTodo(td._id)} />
                                                     </div>
                                                 </div>
                                             ))}

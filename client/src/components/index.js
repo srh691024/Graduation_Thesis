@@ -15,3 +15,4 @@ export { default as ModalNoteSendLink} from '~/components/ModalNoteSendLink';
 export { default as PreviewImage} from '~/components/PreviewImage';
 export { default as ModalDeletePost} from '~/components/ModalDeletePost';
 export { default as ModalEditInfoCouple} from '~/components/ModalEditInfoCouple';
+export { default as ModalEditTodo} from '~/components/ModalEditTodo';
