@@ -3,10 +3,10 @@ const Schema = mongoose.Schema;
 
 const Couple = new Schema({
     avatarCouple: {
-        type: String, default: 'https://res.cloudinary.com/dkgcwdrkw/image/upload/v1697672730/sample.jpg'
+        type: String
     },
     avatarCouplename: { type: String },
-    themes: { type: String, default: 'https://res.cloudinary.com/dkgcwdrkw/image/upload/v1697672730/sample.jpg' },
+    themes: { type: String},
     createdUser: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     loverUserId: { type: Schema.Types.ObjectId, ref: 'User' },
     startLoveDate: { type: Date },
@@ -21,8 +21,8 @@ const Couple = new Schema({
     ],
     totalLikes: { type: Number, default: 0 },
     biography: { type: String },
-    tempAvatarLover: { type: String, default: 'https://res.cloudinary.com/dkgcwdrkw/image/upload/v1697672730/sample.jpg' },
-    tempAvatarLoverName: { type: String, default: 'sample' },
+    tempAvatarLover: { type: String},
+    tempAvatarLoverName: { type: String},
     tempNameLover: { type: String, default: 'Your Lover' },
     tempDobLover: { type: Date, default: new Date() },
     tempHoroscope: { type: String, default: 'Aries' },

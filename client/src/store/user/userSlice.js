@@ -43,11 +43,33 @@ export const userSlice = createSlice({
         builder.addCase(actions.getCurrentUser.rejected, (state, action) => {
             // Tắt trạng thái loading, lưu thông báo lỗi vào store
             state.isLoading = false;
-            state.current = {};
+            state.current = null;
             state.isLoggedIn = false;
             state.token = null;
-            state.mes = 'Your login session has expired. Please log in again!'
+            state.mes = 'Your login session has expired. Please log in again!'    
+        });
 
+
+        //UPDATE USER
+
+        builder.addCase(actions.updateUser.pending, (state) => {
+            // Bật trạng thái loading
+            state.isLoading = true;
+        });
+
+        // Khi thực hiện action login thành công (Promise fulfilled)
+        builder.addCase(actions.updateUser.fulfilled, (state, action) => {
+            // Tắt trạng thái loading, lưu thông tin user vào store
+            state.isLoading = false;
+            state.current = action.payload;
+            console.log(state.current);
+            console.log(action.payload);
+        });
+
+        // Khi thực hiện action login thất bại (Promise rejected)
+        builder.addCase(actions.updateUser.rejected, (state, action) => {
+            // Tắt trạng thái loading, lưu thông báo lỗi vào store
+            state.isLoading = false;
         });
     }
 })

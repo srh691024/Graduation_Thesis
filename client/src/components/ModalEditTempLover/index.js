@@ -1,63 +1,46 @@
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
-import styles from '~/components/ModalEditInfoCouple/ModalEditInfoCouple.module.scss'
+import styles from '~/components/ModalEditTempLover/ModalEditTempLover.module.scss'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import PreviewImage from "../PreviewImage";
 import moment from "moment";
 import * as coupleServices from '~/services/coupleServices'
-import { useDispatch } from "react-redux";
-import { logout } from "~/store/user/userSlice";
-import { useNavigate } from "react-router-dom";
-import config from "~/config";
-import Swal from "sweetalert2";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import PreviewImage from "../PreviewImage";
 
 const cx = classNames.bind(styles)
+const horoscope = ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo', 'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces']
 
-function ModalEditInfoCouple({ infoCouple, onClose }) {
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
+function ModalEditTempLover({ infoCouple, onClose }) {
     const formik = useFormik({
         initialValues: {
-            imageCouple: infoCouple.avatarCouple || '',
-            startLoveDate: moment(infoCouple?.startLoveDate).format('yyyy-MM-DD') || '',
-            nameCouple: infoCouple.nameCouple || '',
-            usernameCouple: infoCouple.userNameCouple || '',
-            biography: infoCouple.biography || '',
-            imagename: infoCouple.avatarCouplename || '',
+            tempAvatarLover: infoCouple.tempAvatarLover || '',
+            tempDobLover: moment(infoCouple?.tempDobLover).format('yyyy-MM-DD') || '',
+            tempNameLover: infoCouple.tempNameLover || '',
+            tempHoroscope: infoCouple.tempHoroscope || '',
+            tempAvatarLoverName: infoCouple.tempAvatarLoverName || '',
         },
         validationSchema: Yup.object({
-            imageCouple: Yup.mixed(),
-            startLoveDate: Yup.date().required('Please set the start love date').max(new Date(), 'Start love date must not be later than the current date'),
-            nameCouple: Yup.string().max(44, 'Your name is too long'),
-            usernameCouple: Yup.string().required('Username is required').max(30, 'Username is too long')
-                .matches(/^\S*$/, 'Username must not contain spaces'),
-            biography: Yup.string().max(200, 'Biography is too long')
+            tempAvatarLover: Yup.mixed(),
+            tempDobLover: Yup.date().max(new Date(), 'Date of birth must not be greater than the current date'),
+            tempNameLover: Yup.string().max(44, 'Your lover name is too long'),
+            tempHoroscope: Yup.string()
         }),
         onSubmit: async (values) => {
             const formData = new FormData();
-            formData.append('imageCouple', values.imageCouple);
-            formData.append('startLoveDate', values.startLoveDate);
-            formData.append('nameCouple', values.nameCouple);
-            formData.append('usernameCouple', values.usernameCouple);
-            formData.append('biography', values.biography);
-            formData.append('imagename', values.imagename);
+            formData.append('tempAvatarLover', values.tempAvatarLover);
+            formData.append('tempDobLover', values.tempDobLover);
+            formData.append('tempNameLover', values.tempNameLover);
+            formData.append('tempHoroscope', values.tempHoroscope);
+            formData.append('tempAvatarLoverName', values.tempAvatarLoverName);
             formData.forEach(function (value, key) {
                 console.log(key, value);
             });
-            const response = await coupleServices.apiEditInfoCouple(infoCouple._id, formData);
-            if (response.result.userNameCouple !== infoCouple.userNameCouple) {
-                Swal.fire('Notification', "You have changed your username of your couple so you need to login again.", 'info').then(() => {
-                    dispatch(logout());
-                    navigate(`${config.routes.login}`);
-                })
-            }
-            onClose()
 
+            await coupleServices.apiEditTempLoverUser(infoCouple._id, formData);
+            onClose()
         }
     })
-    // useEffect(() => dispatch(getCurrentCouple()),[dispatch])
     return (
         <div className={cx('wrapper')}>
             <div className={cx('wrapper-modal')}>
@@ -76,7 +59,7 @@ function ModalEditInfoCouple({ infoCouple, onClose }) {
                                                             <div className={cx('create-two')}>
                                                                 <div className={cx('create-three')}>
                                                                     <h1>
-                                                                        <div className={cx('title')}>Edit your couple information</div>
+                                                                        <div className={cx('title')}>Edit your lover information</div>
                                                                     </h1>
                                                                 </div>
                                                                 <div className={cx('back')} onClick={onClose}>
@@ -100,24 +83,24 @@ function ModalEditInfoCouple({ infoCouple, onClose }) {
                                                                 <div className={cx('avatar-one')}>
                                                                     <button>
 
-                                                                        <PreviewImage file={formik.values.imageCouple} />
+                                                                        <PreviewImage file={formik.values.tempAvatarLover} />
                                                                     </button>
 
                                                                 </div>
                                                             </div>
                                                             <div className={cx('name-change-avatar')}>
                                                                 <div className={cx('name-change-avatar-one')}>
-                                                                    <span>{infoCouple?.nameCouple}</span>
+                                                                    <span>{infoCouple?.tempNameLover}</span>
                                                                 </div>
                                                                 <div className={cx('name-change-avatar-two')}>Change profile photo</div>
                                                                 <div className={cx('form-avatar')}>
                                                                     <form encType="multipart/form-data">
-                                                                        <input name="imageCouple" onChange={(e) => (formik.setFieldValue('imageCouple', e.target.files[0]))} accept="image/jpeg, image/png, image/jpg" type="file" />
+                                                                        <input name="tempAvatarLover" onChange={(e) => (formik.setFieldValue('tempAvatarLover', e.target.files[0]))} accept="image/jpeg, image/png, image/jpg" type="file" />
                                                                     </form>
                                                                 </div>
                                                                 {
-                                                                    formik.errors.imageCouple && formik.touched.imageCouple && (
-                                                                        <small className={cx('validate-login')}>{formik.errors.imageCouple}</small>
+                                                                    formik.errors.tempAvatarLover && formik.touched.tempAvatarLover && (
+                                                                        <small className={cx('validate-login')}>{formik.errors.tempAvatarLover}</small>
                                                                     )
                                                                 }
                                                             </div>
@@ -125,26 +108,26 @@ function ModalEditInfoCouple({ infoCouple, onClose }) {
                                                         <form className={cx('information')} >
                                                             <div className={cx('sub-infor', 'startLoveDate')}>
                                                                 <aside>
-                                                                    <label>Start Love date</label>
+                                                                    <label>Date of birth</label>
                                                                 </aside>
                                                                 <div className={cx('input-infor')}>
                                                                     <div className={cx('input-infor-email')}>
-                                                                        <input name="startLoveDate" type="date" value={formik.values.startLoveDate} onChange={formik.handleChange} />
+                                                                        <input name="tempDobLover" type="date" value={formik.values.tempDobLover} onChange={formik.handleChange} />
                                                                     </div>
                                                                     {
-                                                                        formik.errors.startLoveDate && formik.touched.startLoveDate && (
-                                                                            <small className={cx('validate-login')}>{formik.errors.startLoveDate}</small>
+                                                                        formik.errors.tempDobLover && formik.touched.tempDobLover && (
+                                                                            <small className={cx('validate-login')}>{formik.errors.tempDobLover}</small>
                                                                         )
                                                                     }
                                                                 </div>
                                                             </div>
                                                             <div className={cx('sub-infor')}>
                                                                 <aside>
-                                                                    <label>Name couple</label>
+                                                                    <label>Lover name</label>
                                                                 </aside>
                                                                 <div className={cx('input-infor')}>
                                                                     <div className={cx('input-infor-email')}>
-                                                                        <input name="nameCouple" value={formik.values.nameCouple} onChange={formik.handleChange} type="text" />
+                                                                        <input name="tempNameLover" value={formik.values.tempNameLover} onChange={formik.handleChange} type="text" />
                                                                         <div className={cx('description')}>
                                                                             <div className={cx('description-one')}>
                                                                                 <span>If you don't set a couple's name, your username will be your couple's name.
@@ -152,8 +135,8 @@ function ModalEditInfoCouple({ infoCouple, onClose }) {
                                                                             </div>
                                                                         </div>
                                                                         {
-                                                                            formik.errors.nameCouple && formik.touched.nameCouple && (
-                                                                                <small className={cx('validate-login')}>{formik.errors.nameCouple}</small>
+                                                                            formik.errors.tempNameLover && formik.touched.tempNameLover && (
+                                                                                <small className={cx('validate-login')}>{formik.errors.tempNameLover}</small>
                                                                             )
                                                                         }
                                                                     </div>
@@ -161,41 +144,26 @@ function ModalEditInfoCouple({ infoCouple, onClose }) {
                                                             </div>
                                                             <div className={cx('sub-infor')}>
                                                                 <aside>
-                                                                    <label>Username couple</label>
+                                                                    <label>Horoscope</label>
                                                                 </aside>
                                                                 <div className={cx('input-infor')}>
                                                                     <div className={cx('input-infor-email')}>
-                                                                        <input name="usernameCouple" value={formik.values.usernameCouple} onChange={formik.handleChange} type="text" />
-                                                                        <div className={cx('description')}>
-                                                                            <div className={cx('description-one')}>
-                                                                                <span>Username can contain only letters, numbers, underscores,
-                                                                                    and periods. For example: https:lodi-lovediary.com/diarypost/usernamecouple
-                                                                                </span>
-                                                                            </div>
-                                                                        </div>
+                                                                        <select name="tempHoroscope" value={formik.values.tempHoroscope} onChange={formik.handleChange}>
+                                                                            {horoscope.map(el => (
+                                                                                <option key={el} value={el}>
+                                                                                    {el}
+                                                                                </option>
+                                                                            ))}
+                                                                        </select>
                                                                         {
-                                                                            formik.errors.usernameCouple && formik.touched.usernameCouple && (
-                                                                                <small className={cx('validate-login')}>{formik.errors.usernameCouple}</small>
+                                                                            formik.errors.tempHoroscope && formik.touched.tempHoroscope && (
+                                                                                <small className={cx('validate-login')}>{formik.errors.tempHoroscope}</small>
                                                                             )
                                                                         }
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div className={cx('sub-infor', 'biography')}>
-                                                                <aside>
-                                                                    <label>Biography</label>
-                                                                </aside>
-                                                                <div className={cx('input-infor')}>
-                                                                    <div className={cx('input-infor-email')}>
-                                                                        <textarea name='biography' value={formik.values.biography} onChange={formik.handleChange} placeholder="Add biography of your couple"></textarea>
-                                                                    </div>
-                                                                    {
-                                                                        formik.errors.biography && formik.touched.biography && (
-                                                                            <small className={cx('validate-login')}>{formik.errors.biography}</small>
-                                                                        )
-                                                                    }
-                                                                </div>
-                                                            </div>
+
                                                             {/* Submit button */}
                                                             <div className={cx('sub-infor')}>
                                                                 <aside>
@@ -225,4 +193,4 @@ function ModalEditInfoCouple({ infoCouple, onClose }) {
     );
 }
 
-export default ModalEditInfoCouple;
+export default ModalEditTempLover;

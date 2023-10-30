@@ -10,8 +10,11 @@ router.get('/getCreatedUserByCouple/:createdUserId', couplesController.getCreate
 router.get('/getLoverUserByCouple/:loverUserId', couplesController.getLoverUserByCouple);
 router.post('/sendInvitation/:email', verifyAccessToken, couplesController.sendInvitation);
 router.get('/getCurrentInvitation', verifyAccessToken, couplesController.getCurrentInvitation);
+router.delete('/cancelInvitation/:invitationId', verifyAccessToken, couplesController.cancelInvitation);
 router.put('/acceptInvitation/:token', verifyAccessToken, couplesController.acceptInvitation);
 router.put('/editInfoCouple/:coupleId', verifyAccessToken, uploadCloud.single('imageCouple'), couplesController.editInfoCouple);
+router.patch('/editTempLoverUser/:coupleId', verifyAccessToken, uploadCloud.single('tempAvatarLover'), couplesController.editTempLoverUser);
+router.patch('/followCouple/:coupleId', verifyAccessToken, couplesController.followCouple);
 
 
 module.exports = router;

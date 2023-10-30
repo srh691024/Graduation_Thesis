@@ -1,20 +1,23 @@
-import { faChevronLeft, faTrashCan, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { faChevronLeft, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
-import Swal from "sweetalert2";
-import styles from '~/components/ModalDeletePost/ModalDeletePost.module.scss'
-import * as postServices from '~/services/postServices'
+import { useDispatch } from "react-redux";
+import styles from '~/components/ModalDeleteAnni/ModalDeleteAnni.module.scss'
+import { deleteAnni } from "~/store/anniversary/asyncAction";
 
 const cx = classNames.bind(styles)
 
-function ModalDeletePost({data, onClose }) {
+function ModalDeleteAnni({idAnni, onClose}) {
+    const dispatch = useDispatch()
     const handleSubmit = async () =>{
-        const deletedPost = await postServices.apiDeletePost(data._id)
-        if(deletedPost.success) {
-            Swal.fire('Notification', deletedPost.result, 'success')
-        }else{
-            Swal.fire('Notification', deletedPost.result, 'error')
-        }
+        // const deletedPost = await postServices.apiDeletePost(data._id)
+        // if(deletedPost.success) {
+        //     Swal.fire('Notification', deletedPost.result, 'success')
+        // }else{
+        //     Swal.fire('Notification', deletedPost.result, 'error')
+        // }
+        dispatch(deleteAnni(idAnni))
         onClose()
     }
     return (
@@ -64,15 +67,15 @@ function ModalDeletePost({data, onClose }) {
                                                             <FontAwesomeIcon className={cx('icon')} icon={faTrashCan} />
                                                         </div>
                                                         <div className={cx('headerAccept')}>
-                                                            Are you sure you want to delete this diary entry?
+                                                            Are you sure you want to delete this anniversary entry?
                                                         </div>
                                                         <div className={cx('noteImportant')}>
-                                                            Once you accept deletion, the diary entry's data cannot be restored.
+                                                            Once you accept deletion, the anniversary entry's data cannot be restored.
                                                         </div>
                                                         <div className={cx('acceptance')}>
                                                             Are you still sure you want to delete?
                                                         </div>
-                                                        <button type="submit" onClick={handleSubmit}>Delete this diary</button>
+                                                        <button type="submit" onClick={handleSubmit}>Delete</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -85,7 +88,7 @@ function ModalDeletePost({data, onClose }) {
                 </div>
             </div>
         </div>
-        );
+    );
 }
 
-export default ModalDeletePost;
+export default ModalDeleteAnni;

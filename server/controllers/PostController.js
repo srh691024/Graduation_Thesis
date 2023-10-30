@@ -61,7 +61,6 @@ const updatePost = asyncHandler(async (req, res) => {
     })
 })
 
-
 const deletePost = asyncHandler(async (req, res) => {
     const { postId } = req.params
     const deletePost = await Post.findById(postId)

@@ -179,14 +179,13 @@
         overflow: auto;
         flex-direction: column;
         display: flex;
-
         .anniItem {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
             align-items: center;
             padding:10px 30px;
-            background-color: #FE6E91;
+            // background-color: #FE6E91;
             margin: 0 16px 16px 16px;
             border-radius: 8px;
             cursor: pointer;

@@ -224,29 +224,28 @@ const updateUser = asyncHandler(async (req, res) => {
     const { _id } = req.user
     let { avatarUser, username, name, phone, gender, dob, horoscope, address, facebookLink, tiktokLink, instagramLink, avatarname } = req.body
     const infoUser = await User.findById(_id)
-    if (infoUser) {
-        if (typeof avatarUser !== 'string') {
-            const array = []
-            array.push(avatarname)
-            deleteImage(array)
-            avatarUser = req.file.path
-            avatarname = req.file.filepath
-        }
-
-        if (!name) name = username
-
-        const updateInfoUser = await User.findByIdAndUpdate(_id, { avatar: avatarUser, username, name, phone, gender, dob, horoscope, address, facebookLink, tiktokLink, instagramLink, avatarname }, { new: true }).select('-refreshToken -password -role')
-        return res.status(200).json({
-            success: updateInfoUser ? true : false,
-            updatedUser: updateInfoUser ? updateInfoUser : 'Update profile failed'
-        })
-    } else {
-        return res.status(400).json({
-            success: false,
-            result: 'Can not find user'
-        })
+    // if (infoUser) {
+    if (typeof avatarUser !== 'String') {
+        const array = []
+        array.push(avatarname)
+        deleteImage(array)
+        avatarUser = req.file?.path
+        avatarname = req.file?.filename
     }
 
+    if (!name) name = username
+
+    const updateInfoUser = await User.findByIdAndUpdate(_id, { avatar: avatarUser, username, name, phone, gender, dob, horoscope, address, facebookLink, tiktokLink, instagramLink, avatarname }, { new: true }).select('-refreshToken -password -role')
+    return res.status(200).json({
+        success: updateInfoUser ? true : false,
+        updatedUser: updateInfoUser ? updateInfoUser : 'Update profile failed'
+    })
+    // } else {
+    //     return res.status(400).json({
+    //         success: false,
+    //         result: 'Can not find user'
+    //     })
+    // }
 })
 const banUserByAdmin = asyncHandler(async (req, res) => {
     const { uid } = req.params

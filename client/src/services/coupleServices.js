@@ -27,6 +27,11 @@ export const apiSendInvitation = (email) => axios({
     withCredentials: true
 });
 
+export const apiCancelInvitation = (invitationId)=> axios({
+    url: `couple/cancelInvitation/${invitationId}`,
+    method: 'DELETE',
+})
+
 export const apiGetCurrentInvitation = () => axios({
     url: 'couple/getCurrentInvitation',
     method: 'GET',
@@ -42,3 +47,15 @@ export const apiEditInfoCouple = (coupleId, formData) => axios({
     method: 'PUT',
     data: formData
 });
+
+export const apiEditTempLoverUser = (coupleId, formData) => axios({
+    url: `couple/editTempLoverUser/${coupleId}`,
+    method: 'PATCH',
+    data: formData
+});
+
+export const apiFollowCouple = (coupleId) => axios({
+    url: `couple/followCouple/${coupleId}`,
+    method: 'PATCH'
+});
+

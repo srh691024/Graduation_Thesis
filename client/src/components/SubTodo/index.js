@@ -1,7 +1,7 @@
 import classNames from "classnames/bind";
 import styles from "~/components/SubTodo/SubTodo.module.scss"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClipboardList, faPlus, faSort, faCalendarDays, faChevronDown, faUserPen, faCheck, faStarAndCrescent } from "@fortawesome/free-solid-svg-icons";
+import { faClipboardList, faPlus, faSort, faCalendarDays, faChevronDown, faUserPen, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { faCircle, faPenToSquare, faStar, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from 'formik';

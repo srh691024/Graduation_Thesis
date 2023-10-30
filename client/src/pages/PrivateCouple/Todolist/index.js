@@ -3,35 +3,23 @@ import styles from "~/pages/PrivateCouple/Todolist/Todolist.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBellConcierge, faClock, faCommentDots, faGift, faHandHoldingHand, faHouse, faListCheck, faSmileBeam, faStar, faSun } from "@fortawesome/free-solid-svg-icons";
 import { SubTodo } from "~/components";
-import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getTodosByCouple } from "~/store/todo/asyncAction";
+import moment from "moment";
 
 const cx = classNames.bind(styles);
 
 function Todolist() {
+    const dispatch = useDispatch()
     const { todos } = useSelector(state => state.todo)
+    const { couple } = useSelector(state => state.couple)
+    const coupleId = couple._id
     const { current } = useSelector(state => state.user)
-    const [todayTodos, setTodayTodos] = useState([])
-    const [importantTodos, setImportantTodos] = useState([])
-    const [bymeTodos, setBymeTodos] = useState([])
-    const [notdoneTodos, setNotDoneTodos] = useState([])
-    const [physicalTodos, setPhysicalTodos] = useState([])
-    const [actsTodos, setActsTodos] = useState([])
-    const [qualityTodos, setQualityTodos] = useState([])
-    const [wordTodos, setWordTodos] = useState([])
-    const [receivingTodos, setReceivingTodos] = useState([])
-    useEffect(() => {
-        setTodayTodos(todos.filter(task => task.dueDate === new Date()))
-        setImportantTodos(todos.filter(task => task.isImportant === true))
-        setBymeTodos(todos.filter(task => task.author === current._id && task.completed === false))
-        setNotDoneTodos(todos.filter(task => task.completed === false))
-        setPhysicalTodos(todos.filter(task => task.type === 'Physical Touch' && task.completed === false))
-        setActsTodos(todos.filter(task => task.type === 'Acts of Service' && task.completed === false))
-        setQualityTodos(todos.filter(task => task.type === 'Quality Time' && task.completed === false))
-        setWordTodos(todos.filter(task => task.type === 'Words of Affirmation' && task.completed === false))
-        setReceivingTodos(todos.filter(task => task.type === 'Receiving Gifts' && task.completed === false))
 
-    }, [todos])
+    useEffect(() => {
+        dispatch(getTodosByCouple(coupleId))
+    }, [dispatch, coupleId])
     return (
         <div className={cx('container')}>
             <div className={cx('diary-post')}>
@@ -58,7 +46,7 @@ function Todolist() {
                                                         <div className={cx('sub-title-item')}>
                                                             <span>Today </span>
                                                         </div>
-                                                        <div className={cx('sub-count')}>{todayTodos.length}</div>
+                                                        <div className={cx('sub-count')}>{(todos.filter(task => moment(task.dueDate).format('dd, MMMM, DD') === moment(new Date()).format('dd, MMMM, DD') && task.completed === false)).length}</div>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -69,7 +57,7 @@ function Todolist() {
                                                         <div className={cx('sub-title-item')}>
                                                             <span>Important</span>
                                                         </div>
-                                                        <div className={cx('sub-count')}>{importantTodos.length}</div>
+                                                        <div className={cx('sub-count')}>{(todos.filter(task => task.isImportant === true)).length}</div>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -80,7 +68,7 @@ function Todolist() {
                                                         <div className={cx('sub-title-item')}>
                                                             <span>By me</span>
                                                         </div>
-                                                        <div className={cx('sub-count')}>{bymeTodos.length}</div>
+                                                        <div className={cx('sub-count')}>{(todos.filter(task => task.author._id === current._id && task.completed === false)).length}</div>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -91,7 +79,7 @@ function Todolist() {
                                                         <div className={cx('sub-title-item')}>
                                                             <span>Tasks</span>
                                                         </div>
-                                                        <div className={cx('sub-count')}>{notdoneTodos.length}</div>
+                                                        <div className={cx('sub-count')}>{(todos.filter(task => task.completed === false)).length}</div>
                                                     </div>
                                                 </li>
                                                 <div className={cx('sidebar-lastStaticList')}></div>
@@ -103,7 +91,7 @@ function Todolist() {
                                                         <div className={cx('sub-title-item')}>
                                                             <span>Physical Touch</span>
                                                         </div>
-                                                        <div className={cx('sub-count')}>{physicalTodos.length}</div>
+                                                        <div className={cx('sub-count')}>{(todos.filter(task => task.type === 'Physical Touch' && task.completed === false)).length}</div>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -114,7 +102,7 @@ function Todolist() {
                                                         <div className={cx('sub-title-item')}>
                                                             <span>Acts of Service</span>
                                                         </div>
-                                                        <div className={cx('sub-count')}>{actsTodos.length}</div>
+                                                        <div className={cx('sub-count')}>{(todos.filter(task => task.type === 'Acts of Service' && task.completed === false)).length}</div>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -125,7 +113,7 @@ function Todolist() {
                                                         <div className={cx('sub-title-item')}>
                                                             <span>Quality Time</span>
                                                         </div>
-                                                        <div className={cx('sub-count')}>{qualityTodos.length}</div>
+                                                        <div className={cx('sub-count')}>{(todos.filter(task => task.type === 'Quality Time' && task.completed === false)).length}</div>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -136,7 +124,7 @@ function Todolist() {
                                                         <div className={cx('sub-title-item')}>
                                                             <span>Words of Affirmation</span>
                                                         </div>
-                                                        <div className={cx('sub-count')}>{wordTodos.length}</div>
+                                                        <div className={cx('sub-count')}>{(todos.filter(task => task.type === 'Words of Affirmation' && task.completed === false)).length}</div>
                                                     </div>
                                                 </li>
                                                 <li>
@@ -147,7 +135,7 @@ function Todolist() {
                                                         <div className={cx('sub-title-item')}>
                                                             <span>Receiving Gifts</span>
                                                         </div>
-                                                        <div className={cx('sub-count')}>{receivingTodos.length}</div>
+                                                        <div className={cx('sub-count')}>{(todos.filter(task => task.type === 'Receiving Gifts' && task.completed === false)).length}</div>
                                                     </div>
                                                 </li>
                                             </ul>

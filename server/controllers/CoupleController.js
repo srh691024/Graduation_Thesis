@@ -59,19 +59,37 @@ const sendInvitation = asyncHandler(async (req, res) => {
         message: 'Missing email address'
     })
 
-    const connectionCode = makeToken()
-    const invitationIdEdited = btoa(_id) + '@' + connectionCode;
+    //check if invitation have
+    const checkInvitation = await Invitation.findOne({ userSend: _id })
+    if (checkInvitation) return res.status(400).json({ success: false, result: "You have already send connection invitation today. Please cancel that connection invitation and try again." })
 
-    const newInvitation = await Invitation.create({
-        invitationId: invitationIdEdited,
-        createdTime: new Date(),
-        validHours: 24,
-        isCanceled: false,
-        userSend: _id
-    });
+    //check if user have couple
+    const couple = await Couple.findOne({ $or: [{ createdUser: _id }, { loverUserId: _id }] })
+    if (couple.isConnected) return res.status(400).json({ success: false, result: "You have already connected to lover. You can not send invitation for orther" })
 
-    if (newInvitation) {
-        const html = `<ul>
+    //check email user enter
+    const userEmail = await User.findOne({ email })
+    if (userEmail) {
+        if (userEmail._id.toString() === _id) return res.status(400).json({ success: false, result: "You can not send invitation for yourself" })
+        const checkCouple = await Couple.findOne({ $or: [{ createdUser: userEmail._id }, { loverUserId: userEmail._id }] })
+        if (checkCouple.isConnected) return res.status(400).json({ success: false, result: "This user is already connected" })
+        return res.status(200).json({ success: true, result: "Send invitation to your lover successfully" })
+    } else {
+
+        //check if the receiver is already connected
+        const connectionCode = makeToken()
+        const invitationIdEdited = btoa(_id) + '@' + connectionCode;
+
+        const newInvitation = await Invitation.create({
+            invitationId: invitationIdEdited,
+            createdTime: new Date(),
+            validHours: 24,
+            isCanceled: false,
+            userSend: _id
+        });
+
+        if (newInvitation) {
+            const html = `<ul>
         <li>You have received a connection invitation from your loved one on LoDi - Love Diary. Enter the connection code on LoDi to accept the connection invitation from your loved one. (Setting > Manage connection)</li>
         <li>The connection code will expire 24 hours from the time it was sent. After 24 hours, please ask the other person to send another invitation.</li>
         <li>If the other person cancels the invitation after sending the connection code, the connection cannot be established.</li>
@@ -84,30 +102,57 @@ const sendInvitation = asyncHandler(async (req, res) => {
         </a>
         </li>
         </ul>`;
-        await sendEmail({ email, html, subject: 'Connection invitation from your lover on LoDi - LoveDiary' })
+            await sendEmail({ email, html, subject: 'Connection invitation from your lover on LoDi - LoveDiary' })
+        }
+        setTimeout(async () => {
+            await Invitation.deleteOne({ invitationId: invitationIdEdited })
+        }, 10 * 60 * 1000);
+        return res.json({
+            success: true,
+            result: newInvitation ? 'Send connection invitation to email lover successfully' : 'Send connection invitation failed'
+        })
     }
-    setTimeout(async () => {
-        await Invitation.deleteOne({ invitationId: invitationIdEdited })
-    }, [520000]);
-    return res.json({
-        success: true,
-        result: newInvitation ? 'Send connection invitation successfully' : 'Send connection invitation failed'
+})
+
+const cancelInvitation = asyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    const checkInvitation = await Invitation.findOne({ userSend: _id });
+    if (!checkInvitation) return res.status(400).json({ success: false, result: "No invitation found" })
+    if (checkInvitation.userSend.toString() !== _id) return res.status(400).json({ success: false, result: "You dont have permission to delete this invitation" })
+
+    const { invitationId } = req.params;
+    const deleteInvi = await Invitation.findByIdAndDelete(invitationId);
+    return res.status(200).json({
+        success: deleteInvi ? true : false,
+        result: deleteInvi ? "Invitation deleted successfully" : 'Delete connection invitation failed'
     })
 })
 
 const acceptInvitation = asyncHandler(async (req, res) => {
     const { token } = req.params
     const { _id } = req.user
+
+    //check user
+    const couple = await Couple.findOne({ $or: [{ createdUser: _id }, { loverUserId: _id }] })
+    if (couple.isConnected) return res.status(400).json({ success: false, result: "You have already connected with your lover. Can not accept the other invitation" })
+
+
     const notAcceptedInvitation = await Invitation.findOne({ invitationId: new RegExp(`${token}$`) })
     if (notAcceptedInvitation) {
-        notAcceptedInvitation.invitationId = atob(notAcceptedInvitation.invitationId.split('@')[0])
-        await notAcceptedInvitation.save()
-    } else {
+        if (notAcceptedInvitation.userSend.toString() === _id) {
+            return res.status(400).json({ success: false, result: "You can not accept the invitation of yourself" })
+        } else {
+            notAcceptedInvitation.invitationId = atob(notAcceptedInvitation.invitationId.split('@')[0])
+            await notAcceptedInvitation.save()
+        }
+    }
+    else {
         return res.status(400).json({
             success: false,
             result: 'Can not find the connection invitation'
         })
     }
+
     const coupleByInvitationId = await Couple.findOne({ createdUser: notAcceptedInvitation.invitationId })
     if (coupleByInvitationId) {
         coupleByInvitationId.loverUserId = _id
@@ -115,6 +160,8 @@ const acceptInvitation = asyncHandler(async (req, res) => {
         coupleByInvitationId.tempNameLover = ''
         coupleByInvitationId.tempDobLover = null
         coupleByInvitationId.tempHoroscope = ''
+        coupleByInvitationId.tempAvatarLover = ''
+        coupleByInvitationId.tempAvatarLoverName = ''
         coupleByInvitationId.startConnectedDate = new Date()
         await coupleByInvitationId.save()
         await notAcceptedInvitation.deleteOne()
@@ -146,7 +193,7 @@ const editInfoCouple = asyncHandler(async (req, res) => {
     const { _id } = req.user
     const couple = await Couple.findById(coupleId)
     if (!couple) return res.status(404).json({ success: false, result: "Can not find Couple" })
-    if (couple.loverUserId.toString() === _id || couple.createdUser.toString() === _id) {
+    if (couple.createdUser.toString() === _id || couple.loverUserId?.toString() === _id) {
         if (!startLoveDate) startLoveDate = new Date()
         if (!nameCouple) nameCouple = usernameCouple
         if (typeof imageCouple !== 'string') {
@@ -170,6 +217,60 @@ const editInfoCouple = asyncHandler(async (req, res) => {
     }
 })
 
+const editTempLoverUser = asyncHandler(async (req, res) => {
+    let { tempAvatarLover, tempAvatarLoverName, tempNameLover, tempDobLover, tempHoroscope } = req.body
+    if (!tempNameLover) throw new Error('Missing input')
+    if (!tempHoroscope) tempHoroscope = 'Aries'
+    const { _id } = req.user
+    const { coupleId } = req.params
+    const couple = await Couple.findById(coupleId)
+    if (!couple) return res.status(404).json({ success: false, result: "Can not find Couple" })
+    if (couple.createdUser.toString() === _id) {
+        if (typeof tempAvatarLover !== 'String') {
+            const array = []
+            array.push(tempAvatarLoverName)
+            deleteImage(array)
+            tempAvatarLover = req.file?.path
+            tempAvatarLoverName = req.file?.filename
+        }
+
+        const updateInfoLover = await Couple.findByIdAndUpdate(coupleId, { tempAvatarLover, tempAvatarLoverName, tempNameLover, tempDobLover, tempHoroscope })
+        res.status(200).json({
+            success: updateInfoLover ? true : false,
+            result: updateInfoLover ? updateInfoLover : 'Can not update this info lover'
+        })
+    } else {
+        return res.status(400).json({
+            success: false,
+            result: "You are not allowed to update this Couple"
+        })
+    }
+})
+
+const followCouple = asyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    const { coupleId } = req.params;
+
+    const couple = await Couple.findById(coupleId);
+    if (!couple) throw new Error('Couple not found')
+    const alreadyFollowed = couple?.followers?.find(el => el.toString() === _id)
+    if (alreadyFollowed) {
+        const response = await Couple.findByIdAndUpdate(coupleId, { $pull: { followers: _id } }, { new: true })
+        await User.findByIdAndUpdate(_id, { $pull: { followings: coupleId } }, { new: true })
+        return res.status(200).json({
+            success: response ? true : false,
+            result: response ? response : 'Unfollow failed'
+        })
+    } else {
+        const response = await Couple.findByIdAndUpdate(coupleId, { $push: { followers: _id } }, { new: true })
+        await User.findByIdAndUpdate(_id, { $push: { followings: coupleId } }, { new: true })
+        return res.status(200).json({
+            success: response ? true : false,
+            result: response ? response : 'Follow failed'
+        })
+    }
+})
+
 
 module.exports = {
     getCouple,
@@ -180,5 +281,8 @@ module.exports = {
     acceptInvitation,
     getLoverUserByCouple,
     disconnectConnection,
-    editInfoCouple
+    editInfoCouple,
+    editTempLoverUser,
+    cancelInvitation,
+    followCouple
 }

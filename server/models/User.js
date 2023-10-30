@@ -14,8 +14,8 @@ const User = new Schema({
     tiktokLink: { type: String },
     facebookLink: { type: String },
     instagramLink: { type: String },
-    avatarname:{type: String, default:'cld-sample.jpg'},
-    avatar: { type: String, default: 'https://res.cloudinary.com/dkgcwdrkw/image/upload/v1697672774/cld-sample.jpg' },
+    avatarname:{type: String},
+    avatar: { type: String},
     phone: { type: String },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
@@ -29,7 +29,7 @@ const User = new Schema({
     followings: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'User',
+            ref: 'Couple',
         }
     ]
 }, {

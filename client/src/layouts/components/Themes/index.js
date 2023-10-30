@@ -20,8 +20,10 @@ function Themes() {
             if (couple.success) setInfoCouple(couple.result)
             const createdUser = await coupleServices.apiGetCreatedUserByCouple(couple.result.createdUser)
             if (createdUser.success) setInfoCreatedUser(createdUser.result)
+            if(couple.result.loverUserId){
             const loverUser = await coupleServices.apiGetLoverUserByCouple(couple.result.loverUserId)
             if (loverUser.success) setInfoLoverUser(loverUser.result)
+            }
         }
         fetchCouple()
     }, [usernameCouple])
@@ -69,7 +71,7 @@ function Themes() {
                     </div>
                 </div>
                 <div className={cx('avatar-partner')}>
-                    <img className={cx('circle-image')} src={infoLoverUser.avatar} alt='' />
+                    <img className={cx('circle-image')} src={infoLoverUser.avatar ? infoLoverUser.avatar : infoCouple.tempAvatarLover} alt='' />
                 </div>
                 <div className={cx('partner-name')}>
                     <p>{infoLoverUser.name ? infoLoverUser.name : infoCouple.tempNameLover}</p>

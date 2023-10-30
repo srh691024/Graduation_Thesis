@@ -4,29 +4,30 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useSelector } from "react-redux";
 import { PreviewImage } from "~/components";
-import * as userServices from '~/services/userServices';
 import { useDispatch } from "react-redux";
-import { getCurrentUser } from "~/store/user/asyncAction";
+import { updateUser } from "~/store/user/asyncAction";
+import moment from "moment";
 
 const cx = classNames.bind(styles)
 const horoscope = ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo', 'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces']
 
 function EditProfile() {
-    const { current } = useSelector(state => state.user)
     const dispatch = useDispatch()
+    const { current } = useSelector(state => state.user)
+
     const formik = useFormik({
         initialValues: {
-            avatarUser: current.avatar || '',
-            username: current.username || '',
-            name: current.name || '',
-            phone: current.phone || '',
-            gender: current.gender || '',
-            dob: current.dob || '',
-            horoscope: current.horoscope || '',
-            address: current.address || '',
-            facebookLink: current.facebookLink || '',
-            tiktokLink: current.tiktokLink || '',
-            instagramLink: current.instagramLink || '',
+            avatarUser: current?.avatar || '',
+            username: current?.username || '',
+            name: current?.name || '',
+            phone: current?.phone || '',
+            gender: current?.gender || '',
+            dob: moment(current?.dob).format('yyyy-MM-DD') || '',
+            horoscope: current?.horoscope || '',
+            address: current?.address || '',
+            facebookLink: current?.facebookLink || '',
+            tiktokLink: current?.tiktokLink || '',
+            instagramLink: current?.instagramLink || '',
         },
         validationSchema: Yup.object({
             avatarUser: Yup.mixed(),
@@ -57,14 +58,16 @@ function EditProfile() {
             formData.append('instagramLink', values.instagramLink);
             formData.append('avatarname', current.avatarname);
             formData.append('horoscope', values.horoscope);
-            formData.forEach(function (value, key) {
-                console.log(key, value);
-            });
+            // formData.forEach(function (value, key) {
+            //     console.log(key, value);
+            // });
 
-            const response = await userServices.apiUpdateUser(formData)
-            if (response.success) dispatch(getCurrentUser())
+            // const response = await userServices.apiUpdateUser(formData)
+            // if (response.success) dispatch(getCurrentUser())
+            dispatch(updateUser(formData));
         }
     })
+
 
     return (
         <div className={cx('wrapper')}>
@@ -154,7 +157,7 @@ function EditProfile() {
                         </aside>
                         <div className={cx('input-infor')}>
                             <div className={cx('input-infor-email')}>
-                                <input name="name" value={formik.values.name} onChange={formik.handleChange} type="text" />
+                                <input name="name" value={formik.values.name || ''} onChange={formik.handleChange} type="text" />
                                 <div className={cx('description')}>
                                     <div className={cx('description-one')}>
                                         <span>If you don't set a couple's name, your username will be your couple's name.

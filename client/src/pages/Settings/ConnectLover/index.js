@@ -9,13 +9,19 @@ import { createPortal } from "react-dom";
 import * as coupleServices from '../../../services/coupleServices'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ModalDisconnect from "~/components/ModalDisconnect";
 import moment from "moment";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import { logout } from "~/store/user/userSlice";
+import config from "~/config";
 
 const cx = classNames.bind(styles);
 
 function ConnectLover() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [infoInvitation, setInfoInvitation] = useState({})
     const [haveInvitation, setHaveInvitation] = useState(false)
     const [isConnected, setIsConnected] = useState(false)
@@ -50,11 +56,12 @@ function ConnectLover() {
                 // setInfoConnectedCouple(statusConnect.result)
                 setInfoCouple(infoCouple)
                 setIsConnected(true)
+
+                const createdUser = await coupleServices.apiGetCreatedUserByCouple(statusConnect.result.createdUser)
+                if (createdUser.success) setInfoCreatedUser(createdUser.result)
+                const loverUser = await coupleServices.apiGetLoverUserByCouple(statusConnect.result.loverUserId)
+                if (loverUser.success) setInfoLoverUser(loverUser.result)
             }
-            const createdUser = await coupleServices.apiGetCreatedUserByCouple(statusConnect.result.createdUser)
-            if (createdUser.success) setInfoCreatedUser(createdUser.result)
-            const loverUser = await coupleServices.apiGetLoverUserByCouple(statusConnect.result.loverUserId)
-            if (loverUser.success) setInfoLoverUser(loverUser.result)
         }
         fetchCheckStatusConnectCouple()
     }, [infoCouple])
@@ -70,15 +77,27 @@ function ConnectLover() {
                 .required('The connection code is required'),
         }),
         onSubmit: async (values) => {
-            await coupleServices.apiAcceptInvitation(values.token);
+            const response = await coupleServices.apiAcceptInvitation(values.token);
+            if (response.success) {
+                Swal.fire('Congratulations', 'Connected successfully. Please go login again and see your partner', 'success').then(() => {
+                    dispatch(logout());
+                    navigate(`${config.routes.login}`);
+                });
+            } else {
+                Swal.fire('Oops!', response.result, 'error');
+            }
 
         }
     })
-
-    const handleStartConnectedTime = () => {
-        const getDateStartConnectedTime = (moment(infoInvitation?.createdTime)?.add(24, 'hours')).format("h:mm:ss a,dddd, MMMM Do YYYY")
-        return getDateStartConnectedTime
+    const handleCancelInvitation = async() => { 
+        const response = await coupleServices.apiCancelInvitation(infoInvitation._id)
+        if(response.success) {
+            Swal.fire('Notifications', response.result, 'success');
+        }else{
+            Swal.fire('Oops!', response.result, 'error');
+        }
     }
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('wrapper-one')}>
@@ -102,7 +121,6 @@ function ConnectLover() {
                                 type="text"
                                 name="token"
                                 value={formik.values.token}
-                                // onKeyDown={formik.handleSubmit}
                                 onChange={formik.handleChange}
                                 placeholder="Enter the connection code" />
                             {
@@ -132,13 +150,13 @@ function ConnectLover() {
                                         </div>
                                         <div className={cx('letter')}>The invitation will expire at &nbsp;</div>
                                         <div className={cx('date')}>
-                                            {handleStartConnectedTime}
+                                            {(moment(infoInvitation?.createdTime)?.add(24, 'hours')).format("h:mm:ss a, MMMM Do YYYY")}
                                             {/* 12:00, October 15, 2023 */}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className={cx('button-cancel-link')}>Cancel the invitation</div>
+                            <div className={cx('button-cancel-link')} onClick={handleCancelInvitation}>Cancel the invitation</div>
                         </div>
                         : null
                     }

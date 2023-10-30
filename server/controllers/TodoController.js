@@ -30,9 +30,10 @@ const createTodo = asyncHandler(async (req, res) => {
     if (!content) throw new Error('Content is required')
     if (!dueDate) dueDate = new Date()
     const todo = await Todo.create({ content, type, isImportant, author: _id, dueDate, coupleId })
+    const newTodo = await Todo.findById(todo._id).populate('author', 'name')
     return res.status(200).json({
-        success: todo ? true : false,
-        result: todo ? todo : 'Can not create a new todo'
+        success: newTodo ? true : false,
+        result: newTodo ? newTodo : 'Can not create a new todo'
     })
 })
 const updateTodo = asyncHandler(async (req, res) => {
@@ -47,7 +48,7 @@ const updateTodo = asyncHandler(async (req, res) => {
     if (!content) throw new Error('Content is required')
     if (!dueDate) dueDate = new Date()
 
-    const todo = await Todo.findById(todoId)
+    const todo = await Todo.findById(todoId).populate('author', 'name')
     todo.content = content
     todo.type = type
     todo.dueDate = dueDate

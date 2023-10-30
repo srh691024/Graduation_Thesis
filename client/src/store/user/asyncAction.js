@@ -6,3 +6,10 @@ export const getCurrentUser = createAsyncThunk('user/getCurrentUser', async (_, 
     if (!response.success) return rejectWithValue(response);
     return response.result
 })
+
+export const updateUser = createAsyncThunk('user/updateUser', async (formData, { rejectWithValue }) => {
+    const response = await userServices.apiUpdateUser(formData)
+    console.log(response)
+    if (!response.success) return rejectWithValue(response);
+    return response.updatedUser
+})

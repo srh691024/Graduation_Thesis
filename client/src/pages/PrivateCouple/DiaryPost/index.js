@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useParams } from "react-router-dom";
 import * as postServices from '~/services/postServices'
+import * as coupleServices from '~/services/coupleServices'
 import moment from "moment";
 import { useSelector } from "react-redux";
 
@@ -16,7 +17,19 @@ function DiaryPost() {
     const { usernameCouple } = useParams()
     const [postsByCouple, setPostsByCouple] = useState([])
     const [showModalNewDiary, setShowModalNewDiary] = useState(false);
-    const {current} = useSelector(state=> state.user)
+    const { isLoggedIn, current } = useSelector(state => state.user)
+    const { couple } = useSelector(state => state.couple)
+    const [infoCouple, setInfoCouple] = useState({})
+
+    useEffect(() => {
+        async function fetchCouple() {
+            const response = await coupleServices.apiGetCouple(usernameCouple)
+            if (response.success) {
+                setInfoCouple(response.result)
+            }
+        }
+        fetchCouple()
+    }, [usernameCouple])
 
     useEffect(() => {
         async function fetchPostByCouple() {
@@ -25,26 +38,29 @@ function DiaryPost() {
         }
         fetchPostByCouple()
     }, [usernameCouple])
-    
+
     return (
         <div className={cx('container')}>
-            <div className={cx('new-diary')}>
-                <div className={cx('new-diary-sub')}>
-                    <div className={cx('new-diary-flex')}>
-                        <div className={cx('content')}>
-                            <div className={cx('avatar-new-diary')}>
-                                <img src={current.avatar} alt="" />
-                            </div>
-                            <div className={cx('content-new-diary')} onClick={() => setShowModalNewDiary(true)}>
-                                <div className={cx('title')}>
-                                    <span>Are there any memories today?</span>
+            {isLoggedIn && couple.userNameCouple === infoCouple.userNameCouple ?
+                <div className={cx('new-diary')}>
+                    <div className={cx('new-diary-sub')}>
+                        <div className={cx('new-diary-flex')}>
+                            <div className={cx('content')}>
+                                <div className={cx('avatar-new-diary')}>
+                                    <img src={current.avatar} alt="" />
                                 </div>
-                                <div className={cx('overlay')} ></div>
+                                <div className={cx('content-new-diary')} onClick={() => setShowModalNewDiary(true)}>
+                                    <div className={cx('title')}>
+                                        <span>Are there any memories today?</span>
+                                    </div>
+                                    <div className={cx('overlay')} ></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                : null
+            }
 
             {/* Modal new diary */}
             {showModalNewDiary && createPortal(

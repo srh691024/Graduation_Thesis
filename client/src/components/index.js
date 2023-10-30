@@ -16,3 +16,5 @@ export { default as PreviewImage} from '~/components/PreviewImage';
 export { default as ModalDeletePost} from '~/components/ModalDeletePost';
 export { default as ModalEditInfoCouple} from '~/components/ModalEditInfoCouple';
 export { default as ModalEditTodo} from '~/components/ModalEditTodo';
+export { default as ModalEditCalendar} from '~/components/ModalEditCalendar';
+export { default as ModalDeleteAnni} from '~/components/ModalDeleteAnni';

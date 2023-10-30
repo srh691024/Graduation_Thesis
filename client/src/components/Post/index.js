@@ -36,13 +36,11 @@ function Post({ current, post }) {
     }, [post.likes, current._id])
     const handleLike = async () => {
         setIsLike(true)
-        const postLike = await postServices.apiLikePost(post._id)
-        console.log(postLike)
+        await postServices.apiLikePost(post._id)
     }
     const handleUnlike = async () => {
         setIsLike(false)
-        const postUnLike = await postServices.apiLikePost(post._id)
-        console.log(postUnLike)
+        await postServices.apiLikePost(post._id)
     }
 
 
