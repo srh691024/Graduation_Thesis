@@ -13,6 +13,7 @@ const Couple = new Schema({
     isConnected: { type: Boolean },
     nameCouple: { type: String, default: 'Your coupler' },
     userNameCouple: { type: String, unique: true },
+    biography: { type: String },
     followers: [
         {
             type: Schema.Types.ObjectId,
@@ -20,14 +21,16 @@ const Couple = new Schema({
         }
     ],
     totalLikes: { type: Number, default: 0 },
-    biography: { type: String },
+
     tempAvatarLover: { type: String},
     tempAvatarLoverName: { type: String},
     tempNameLover: { type: String, default: 'Your Lover' },
     tempDobLover: { type: Date, default: new Date() },
     tempHoroscope: { type: String, default: 'Aries' },
+
     startConnectedDate: { type: Date },
-    disconnectedDate: { type: Date }
+    disconnectedDate: { type: Date },
+    isHidden: {type: Boolean, default: false}
 }, {
     timestamps: true,
 }

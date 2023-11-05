@@ -4,7 +4,6 @@ import * as todoServices from '~/services/todoServices';
 export const getTodosByCouple = createAsyncThunk('todo/getTodosByCouple', async (coupleId, { rejectWithValue }) => {
     const response = await todoServices.apiGetTodosByCouple(coupleId);
     if (!response.success) return rejectWithValue(response)
-    console.log(response)
     return response.result
 })
 

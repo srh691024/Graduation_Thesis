@@ -8,7 +8,7 @@ const Anniversary = new Schema({
     end: { type: Date, required: true },
     coupleId: { type: Schema.Types.ObjectId, ref: 'Couple', required: true },
     allDay: {type: Boolean, default: true},
-    isHidden: { type: Boolean, default: true },
+    isHidden: { type: Boolean, default: false },
     color: { type: String, default: '#fe6e91'}
 }, {
     timestamps: true,

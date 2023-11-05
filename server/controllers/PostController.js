@@ -111,13 +111,14 @@ const likePost = asyncHandler(async (req, res) => {
     const alreadyLiked = post?.likes?.find(el => el.toString() === _id)
     if (alreadyLiked) {
         const response = await Post.findByIdAndUpdate(postId, { $pull: { likes: _id } }, { new: true })
-        return res.json({
+        return res.status(200).json({
             success: response ? true : false,
             result: response
         })
     } else {
-        const response = await Post.findByIdAndUpdate(postId, { $push: { likes: _id } }, { new: true })
-        return res.json({
+        const ress = await Post.findByIdAndUpdate(postId, { $push: { likes: _id } }, { new: true })
+        const response = await Post.findById(postId).populate('couple', 'createdUser loverUserId')
+        return res.status(200).json({
             success: response ? true : false,
             result: response
         })
@@ -139,7 +140,8 @@ const addComment = asyncHandler(async (req, res) => {
     const { text } = req.body
     if (!postId) throw new Error('Can not find post')
     if (!text) throw new Error('Missing inputs')
-    const comment = await Post.findByIdAndUpdate(postId, { $push: { comments: { textComment: text, postedBy: _id } } }, { new: true })
+    const cmt = await Post.findByIdAndUpdate(postId, { $push: { comments: { textComment: text, postedBy: _id } } }, { new: true })
+    const comment = await Post.findById(postId).populate('couple', 'createdUser loverUserId')
     return res.json({
         success: comment ? true : false,
         result: comment ? comment : 'Add comment failed'

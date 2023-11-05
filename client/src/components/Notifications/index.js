@@ -1,10 +1,32 @@
 import classNames from "classnames/bind";
 import styles from "~/components/Notifications/Notifications.module.scss"
 import images from "~/assets/images";
+import { useEffect, useState } from "react";
+import * as notifiServices from '~/services/notifyServices'
+import { useSelector } from "react-redux";
+import moment from "moment";
 
 const cx = classNames.bind(styles);
 
 function Notifications(props) {
+    const { current } = useSelector(state => state.user)
+    const { couple } = useSelector(state => state.couple)
+    const [notiOfCouple, setNotiOfCouple] = useState([]);
+    const [generalNoti, setGeneralNoti] = useState([]);
+
+    useEffect(() => {
+        async function getNotifies() {
+            const noti = await notifiServices.apiGetNotify()
+            if (noti.success) {
+                if (couple.isConnected) {
+                    setNotiOfCouple(noti?.result?.filter(no => no.user._id.toString() === couple?.createdUser?.toString() || no.user._id.toString() === couple?.loverUserId?.toString()))
+                    setGeneralNoti(noti?.result?.filter(no => no.user._id.toString() !== couple?.createdUser?.toString() && no.user._id.toString() !== couple?.loverUserId?.toString()))
+                }
+            }
+        }
+        getNotifies()
+    }, [])
+
     return (
         <div className={cx('wrapper-noti', props.text)}>
             <div className={cx('noti')}>
@@ -27,63 +49,40 @@ function Notifications(props) {
                                         Couple
                                     </span>
                                 </div>
-                                <div className={cx('sub-noti')}>
-                                    <div className={cx('sub-noti-one')}>
-                                        <div className={cx('avatar')}>
-                                            <a href="/">
-                                                <img src={images.login_image} alt="" />
-                                            </a>
-                                        </div>
-                                        <div className={cx('name-content')}>
-                                            <span>
+                                {notiOfCouple?.map((nc, index) =>
+                                    <div className={cx('sub-noti')} key={index}>
+                                        <div className={cx('sub-noti-one')}>
+                                            <div className={cx('avatar')}>
                                                 <a href="/">
-                                                    <div className={cx('name')}>
-                                                        <div className={cx('name-one')}>
-                                                            <span>Thuy Duong</span>
-                                                        </div>
-                                                    </div>
+                                                    <img src={nc.user.avatar} alt="" />
                                                 </a>
-                                                &nbsp;- your lover liked our diary.&nbsp;
-                                                <span>4d</span>
-                                            </span>
-                                        </div>
-                                        <div className={cx('follow-or-img')}>
-                                            <a href="/">
-                                                <img src={images.login_image} alt=""/>
-                                            </a>
+                                            </div>
+                                            <div className={cx('name-content')}>
+                                                <span>
+                                                    <a href="/">
+                                                        <div className={cx('name')}>
+                                                            <div className={cx('name-one')}>
+                                                                <span>{nc.user.name}</span>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                    {nc.text}
+                                                    {/* &nbsp;- your lover liked our diary.&nbsp; */}
+                                                    <span>{moment(nc?.createdAt)?.fromNow()}</span>
+                                                </span>
+                                            </div>
+                                            <div className={cx('follow-or-img')}>
+                                                <a href="/">
+                                                    <img src={nc.image} alt="" />
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div className={cx('sub-noti')}>
-                                    <div className={cx('sub-noti-one')}>
-                                        <div className={cx('avatar')}>
-                                            <a href="/">
-                                                <img src={images.login_image} alt="" />
-                                            </a>
-                                        </div>
-                                        <div className={cx('name-content')}>
-                                            <span>
-                                                <a href="/">
-                                                    <div className={cx('name')}>
-                                                        <div className={cx('name-one')}>
-                                                            <span>Thuy Duong</span>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                                &nbsp;- your lover commented on our diary.&nbsp;
-                                                <span>15m</span>
-                                            </span>
-                                        </div>
-                                        <div className={cx('follow-or-img')}>
-                                            <a href="/">
-                                                <img src={images.login_image} alt=""/>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
+                                )}
+
                             </div>
                             <div className={cx('couple-noti')}>
-                            <div className={cx('line')}>
+                                <div className={cx('line')}>
                                     <hr />
                                 </div>
                                 <div className={cx('header-noti-couple')}>
@@ -91,235 +90,47 @@ function Notifications(props) {
                                         Public social
                                     </span>
                                 </div>
-                                <div className={cx('sub-noti')}>
-                                    <div className={cx('sub-noti-one')}>
-                                        <div className={cx('avatar')}>
-                                            <a href="/">
-                                                <img src={images.login_image} alt="" />
-                                            </a>
-                                        </div>
-                                        <div className={cx('name-content')}>
-                                            <span>
+                                {generalNoti?.map((gn, index) =>
+                                    <div className={cx('sub-noti')} key={index}>
+                                        <div className={cx('sub-noti-one')}>
+                                            <div className={cx('avatar')}>
                                                 <a href="/">
-                                                    <div className={cx('name')}>
-                                                        <div className={cx('name-one')}>
-                                                            <span>Thuy Duong</span>
-                                                        </div>
-                                                    </div>
+                                                    <img src={gn?.user?.avatar} alt="" />
                                                 </a>
-                                                &nbsp;liked your diary.&nbsp;
-                                                <span>4d</span>
-                                            </span>
-                                        </div>
-                                        <div className={cx('follow-or-img')}>
-                                            <a href="/">
-                                                <img src={images.login_image} alt=""/>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className={cx('sub-noti')}>
-                                    <div className={cx('sub-noti-one')}>
-                                        <div className={cx('avatar')}>
-                                            <a href="/">
-                                                <img src={images.login_image} alt="" />
-                                            </a>
-                                        </div>
-                                        <div className={cx('name-content')}>
-                                            <span>
-                                                <a href="/">
-                                                    <div className={cx('name')}>
-                                                        <div className={cx('name-one')}>
-                                                            <span>Thuy Ha</span>
+                                            </div>
+                                            <div className={cx('name-content')}>
+                                                <span>
+                                                    <a href="/">
+                                                        <div className={cx('name')}>
+                                                            <div className={cx('name-one')}>
+                                                                <span>{gn?.user?.name}</span>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </a>
-                                                &nbsp;from&nbsp;
-                                                <a href="/">
-                                                    <div className={cx('name')}>
-                                                        <div className={cx('name-one')}>
-                                                            <span>TD&SN</span>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                                &nbsp;couple has been following your couple.&nbsp;
-                                                <span>4d</span>
-                                            </span>
-                                        </div>
-                                        <div className={cx('follow-or-img')}>
-                                            <button type="button">
-                                                <div className={cx('letter-button')}>
-                                                    <div className={cx('letter-button-one')}>Follow</div>
+                                                    </a>
+                                                    &nbsp;{gn?.text}&nbsp;
+                                                    {/* &nbsp;liked your diary.&nbsp; */}
+                                                    <span>{moment(gn?.createdAt)?.fromNow()}</span>
+                                                </span>
+                                            </div>
+                                            {gn.type === 'image' &&
+                                                <div className={cx('follow-or-img')}>
+                                                    <a href="/">
+                                                        <img src={gn?.image} alt="" />
+                                                    </a>
                                                 </div>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className={cx('sub-noti')}>
-                                    <div className={cx('sub-noti-one')}>
-                                        <div className={cx('avatar')}>
-                                            <a href="/">
-                                                <img src={images.login_image} alt="" />
-                                            </a>
-                                        </div>
-                                        <div className={cx('name-content')}>
-                                            <span>
-                                                <a href="/">
-                                                    <div className={cx('name')}>
-                                                        <div className={cx('name-one')}>
-                                                            <span>Thuy Ha</span>
+                                            }
+                                            {/* {gn.type === 'follow' &&
+                                                <div className={cx('follow-or-img')}>
+                                                    <button type="button">
+                                                        <div className={cx('letter-button')}>
+                                                            <div className={cx('letter-button-one')}>Follow</div>
                                                         </div>
-                                                    </div>
-                                                </a>
-                                                &nbsp;from&nbsp;
-                                                <a href="/">
-                                                    <div className={cx('name')}>
-                                                        <div className={cx('name-one')}>
-                                                            <span>TD&SN</span>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                                &nbsp;couple has been following your couple.&nbsp;
-                                                <span>4d</span>
-                                            </span>
-                                        </div>
-                                        <div className={cx('follow-or-img')}>
-                                            <button type="button">
-                                                <div className={cx('letter-button')}>
-                                                    <div className={cx('letter-button-one')}>Follow</div>
+                                                    </button>
                                                 </div>
-                                            </button>
+                                            } */}
                                         </div>
                                     </div>
-                                </div>
-                                <div className={cx('sub-noti')}>
-                                    <div className={cx('sub-noti-one')}>
-                                        <div className={cx('avatar')}>
-                                            <a href="/">
-                                                <img src={images.login_image} alt="" />
-                                            </a>
-                                        </div>
-                                        <div className={cx('name-content')}>
-                                            <span>
-                                                <a href="/">
-                                                    <div className={cx('name')}>
-                                                        <div className={cx('name-one')}>
-                                                            <span>Thuy Ha</span>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                                &nbsp;from&nbsp;
-                                                <a href="/">
-                                                    <div className={cx('name')}>
-                                                        <div className={cx('name-one')}>
-                                                            <span>TD&SN</span>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                                &nbsp;couple has been following your couple.&nbsp;
-                                                <span>4d</span>
-                                            </span>
-                                        </div>
-                                        <div className={cx('follow-or-img')}>
-                                            <button type="button">
-                                                <div className={cx('letter-button')}>
-                                                    <div className={cx('letter-button-one')}>Follow</div>
-                                                </div>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className={cx('sub-noti')}>
-                                    <div className={cx('sub-noti-one')}>
-                                        <div className={cx('avatar')}>
-                                            <a href="/">
-                                                <img src={images.login_image} alt="" />
-                                            </a>
-                                        </div>
-                                        <div className={cx('name-content')}>
-                                            <span>
-                                                <a href="/">
-                                                    <div className={cx('name')}>
-                                                        <div className={cx('name-one')}>
-                                                            <span>Thuy Ha</span>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                                &nbsp;from&nbsp;
-                                                <a href="/">
-                                                    <div className={cx('name')}>
-                                                        <div className={cx('name-one')}>
-                                                            <span>TD&SN</span>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                                &nbsp;couple has been following your couple.&nbsp;
-                                                <span>4d</span>
-                                            </span>
-                                        </div>
-                                        <div className={cx('follow-or-img')}>
-                                            <button type="button">
-                                                <div className={cx('letter-button')}>
-                                                    <div className={cx('letter-button-one')}>Follow</div>
-                                                </div>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className={cx('sub-noti')}>
-                                    <div className={cx('sub-noti-one')}>
-                                        <div className={cx('avatar')}>
-                                            <a href="/">
-                                                <img src={images.login_image} alt="" />
-                                            </a>
-                                        </div>
-                                        <div className={cx('name-content')}>
-                                            <span>
-                                                <a href="/">
-                                                    <div className={cx('name')}>
-                                                        <div className={cx('name-one')}>
-                                                            <span>Thuy Duong</span>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                                &nbsp;liked your diary.&nbsp;
-                                                <span>4d</span>
-                                            </span>
-                                        </div>
-                                        <div className={cx('follow-or-img')}>
-                                            <a href="/">
-                                                <img src={images.login_image} alt=""/>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className={cx('sub-noti')}>
-                                    <div className={cx('sub-noti-one')}>
-                                        <div className={cx('avatar')}>
-                                            <a href="/">
-                                                <img src={images.login_image} alt="" />
-                                            </a>
-                                        </div>
-                                        <div className={cx('name-content')}>
-                                            <span>
-                                                <a href="/">
-                                                    <div className={cx('name')}>
-                                                        <div className={cx('name-one')}>
-                                                            <span>Thuy Duong</span>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                                &nbsp;liked your diary.&nbsp;
-                                                <span>4d</span>
-                                            </span>
-                                        </div>
-                                        <div className={cx('follow-or-img')}>
-                                            <a href="/">
-                                                <img src={images.login_image} alt=""/>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
+                                )}
                             </div>
                         </div>
                     </div>

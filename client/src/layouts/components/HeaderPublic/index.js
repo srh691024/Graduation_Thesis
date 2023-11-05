@@ -2,6 +2,7 @@ import { faBell } from "@fortawesome/free-regular-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import images from "~/assets/images";
 import config from "~/config";
@@ -9,7 +10,7 @@ import styles from '~/layouts/components/HeaderPublic/HeaderPublic.module.scss'
 
 const cx = classNames.bind(styles);
 
-function HeaderPublic() {
+function HeaderPublic({couple, current}) {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('main')}>
@@ -36,13 +37,13 @@ function HeaderPublic() {
                         <FontAwesomeIcon className={cx('styleNoti')} icon={faBell} />
                     </div>
                     <div className={cx('profile')}>
-                        <Link to={config.routes.diarypost}>
-                            <img src={images.login_image} alt="" />
+                        <Link to={`/diarypost/${couple.userNameCouple}`}>
+                            <img src={couple?.avatarCouple} alt="" />
                         </Link>
                     </div>
                     <div className={cx('profile')}>
-                        <Link>
-                            <img src={images.login_image} alt="" />
+                        <Link to={`/diarypost/${couple.userNameCouple}`}>
+                            <img src={current?.avatar} alt="" />
                         </Link>
                     </div>
                 </div>

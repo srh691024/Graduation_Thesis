@@ -23,9 +23,12 @@ function Homepage() {
         <div className={cx('wrapper')}>
             <div className={cx('oneColumnContainer')}>
                 {allPostPublic.length > 0 ?
-                    allPostPublic?.map(post => (
+                    allPostPublic?.map((post, index) => 
+                        <div key={index}>
+                        
                         <Post current={current} post={post} />
-                    )) :
+                        </div>
+                    ) :
                     <div>No post is shared public</div>}
                 {/* <Post />
                 <Post />

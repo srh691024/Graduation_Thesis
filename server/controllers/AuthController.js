@@ -104,6 +104,7 @@ const finalRegister = asyncHandler(async (req, res) => {
             startLoveDate: currentTime,
             isConnected: false,
             userNameCouple: getStringUntilCharacter(cookie?.dataRegister.email, '@'),
+            isHidden: false,
         })
         res.clearCookie('dataRegister')
         if (newTmpCouple) {
@@ -120,7 +121,7 @@ const finalRegister = asyncHandler(async (req, res) => {
 const getCurrentUser = asyncHandler(async (req, res) => {
     const { _id } = req.user
 
-    const user = await User.findById(_id).select('-refreshToken -password -role')
+    const user = await User.findById(_id).select('-refreshToken -password -role').populate('followings', 'avatarCouple userNameCouple nameCouple')
     return res.status(200).json({
         success: user ? true : false,
         result: user ? user : 'User not found'

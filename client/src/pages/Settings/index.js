@@ -5,3 +5,4 @@ export { default as CommentControl } from '~/pages/Settings/CommentControl';
 export { default as Help } from '~/pages/Settings/Help';
 export { default as ConnectLover } from '~/pages/Settings/ConnectLover';
 export { default as ViewHistory } from '~/pages/Settings/ViewHistory';
+export { default as RequestConnection } from '~/pages/Settings/RequestConnection';

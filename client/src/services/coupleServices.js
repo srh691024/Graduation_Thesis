@@ -59,3 +59,34 @@ export const apiFollowCouple = (coupleId) => axios({
     method: 'PATCH'
 });
 
+export const apiDisconnectConnection = (coupleId, agree)=> axios({
+    url: `couple/disconnectConnection/${coupleId}`,
+    method: 'POST',
+    data: agree
+})
+
+export const apigetHistoryCoupleByCurrentUser = ()=> axios({
+    url: 'couple/getHistoryCoupleByCurrentUser',
+    method: 'GET'
+})
+
+export const apiInviteRestoreCouple = (coupleId)=> axios({
+    url: `couple/inviteRestoreCouple/${coupleId}`,
+    method: 'POST'
+})
+
+export const apiAcceptRestoreCouple = (invitationId)=> axios({
+    url: `couple/acceptRestoreCouple/${invitationId}`,
+    method: 'POST'
+})
+
+export const apiGetListInvitation = ()=> axios({
+    url: 'couple/getListInvitation',
+    method: 'GET'
+})
+
+
+
+
+
+

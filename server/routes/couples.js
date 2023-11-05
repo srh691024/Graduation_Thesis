@@ -15,6 +15,12 @@ router.put('/acceptInvitation/:token', verifyAccessToken, couplesController.acce
 router.put('/editInfoCouple/:coupleId', verifyAccessToken, uploadCloud.single('imageCouple'), couplesController.editInfoCouple);
 router.patch('/editTempLoverUser/:coupleId', verifyAccessToken, uploadCloud.single('tempAvatarLover'), couplesController.editTempLoverUser);
 router.patch('/followCouple/:coupleId', verifyAccessToken, couplesController.followCouple);
+router.post('/disconnectConnection/:coupleId', verifyAccessToken, couplesController.disconnectConnection);
+router.get('/getHistoryCoupleByCurrentUser', verifyAccessToken, couplesController.getHistoryCoupleByCurrentUser);
+router.post('/inviteRestoreCouple/:coupleId', verifyAccessToken, couplesController.inviteRestoreCouple);
+router.post('/acceptRestoreCouple/:invitationId', verifyAccessToken, couplesController.acceptRestoreCouple);
+router.get('/getListInvitation', verifyAccessToken, couplesController.getListInvitation);
+
 
 
 module.exports = router;

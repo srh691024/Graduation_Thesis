@@ -13,13 +13,16 @@ import { createPortal } from "react-dom";
 import DropDownItem from "../DropDownItem";
 import ModalDeletePost from "../ModalDeletePost";
 import * as postServices from '~/services/postServices'
+import * as notifyServices from '~/services/notifyServices'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Swal from "sweetalert2";
+import { useSelector } from "react-redux";
 
 const cx = classNames.bind(styles);
 
 function Post({ current, post }) {
+    const { couple } = useSelector(state => state.couple)
     const settings = {
         dots: true,
         infinite: true,
@@ -33,10 +36,44 @@ function Post({ current, post }) {
         if (post.likes.find(like => like === current._id)) {
             setIsLike(true)
         }
+
     }, [post.likes, current._id])
     const handleLike = async () => {
         setIsLike(true)
-        await postServices.apiLikePost(post._id)
+        const response = await postServices.apiLikePost(post._id)
+        if (response.result.couple._id.toString() === couple._id.toString()) {
+            let notifyLover = {};
+            if (current._id.toString() === couple.loverUserId.toString()) {
+                notifyLover = {
+                    recipients: couple.createdUser,
+                    text: '- your lover liked your diary.',
+                    image: post.images[0],
+                    type: 'image'
+                }
+            } else if (current._id.toString() === couple.createdUser.toString()) {
+                notifyLover = {
+                    recipients: couple.loverUserId,
+                    text: '- your lover liked your diary.',
+                    image: post.images[0],
+                    type: 'image'
+                }
+            }
+            async function fetchLike() {
+                const notiLover = await notifyServices.apiCreateNotify(notifyLover);
+            }
+            fetchLike()
+        } else {
+            const notify = {
+                recipients: [response.result.couple.createdUser, response.result.couple.loverUserId],
+                text: `from ${couple.nameCouple} like your diary.`,
+                image: response.result.images[0],
+                type: 'image'
+            }
+            async function fetchLike() {
+                const noti = await notifyServices.apiCreateNotify(notify)
+            }
+            fetchLike()
+        }
     }
     const handleUnlike = async () => {
         setIsLike(false)
@@ -64,9 +101,37 @@ function Post({ current, post }) {
             } else {
                 Swal.fire('Oops!', 'Add comment failed', 'error')
             }
-            console.log(values)
-            console.log(comment.result)
 
+            if (comment.result.couple._id.toString() === couple._id.toString()) {
+                let notifyLover = {};
+                if (current._id.toString() === couple.loverUserId.toString()) {
+                    notifyLover = {
+                        recipients: couple.createdUser,
+                        text: '- your lover commented on our diary.',
+                        image: post.images[0],
+                        type: 'image'
+                    }
+                } else if (current._id.toString() === couple.createdUser.toString()) {
+                    notifyLover = {
+                        recipients: couple.loverUserId,
+                        text: '- your lover commented on our diary.',
+                        image: post.images[0],
+                        type: 'image'
+                    }
+                }
+                const notiLover = await notifyServices.apiCreateNotify(notifyLover);
+            } else {
+                const notify = {
+                    recipients: [comment.result.couple.createdUser, comment.result.couple.loverUserId],
+                    text: `from ${couple.nameCouple} commented on your diary.`,
+                    image: comment.result.images[0],
+                    type: 'image'
+                }
+                async function fetchLike() {
+                    const noti = await notifyServices.apiCreateNotify(notify)
+                }
+                fetchLike()
+            }
         }
     })
 

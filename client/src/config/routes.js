@@ -21,6 +21,7 @@ const routes = {
     settingHelp: '/setting/help',
     settingConnectLover: '/setting/connectlover',
     settingViewConnectionsHistory: '/setting/viewconnectionshistory',
+    settingRequestConnection: '/setting/requestconnection',
 
     //public couples routes
     homepage: '/homepage',

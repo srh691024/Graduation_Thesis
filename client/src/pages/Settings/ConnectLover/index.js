@@ -30,6 +30,7 @@ function ConnectLover() {
     const [openDisconnect, setOpenDisconnect] = useState(false);
     const [infoCouple, setInfoCouple] = useState();
     const { current } = useSelector(state => state.user)
+   
     useEffect(() => {
         async function fetchInfoInvitation() {
             setTimeout(async () => {
@@ -54,7 +55,7 @@ function ConnectLover() {
             const statusConnect = await coupleServices.apiGetCoupleByCurrentUser()
             if (statusConnect.success && statusConnect.result.isConnected) {
                 // setInfoConnectedCouple(statusConnect.result)
-                setInfoCouple(infoCouple)
+                setInfoCouple(statusConnect.result)
                 setIsConnected(true)
 
                 const createdUser = await coupleServices.apiGetCreatedUserByCouple(statusConnect.result.createdUser)
@@ -64,7 +65,7 @@ function ConnectLover() {
             }
         }
         fetchCheckStatusConnectCouple()
-    }, [infoCouple])
+    }, [])
 
     const [showModalNoteSendLink, setShowModalNoteSendLink] = useState(false);
     const [showModalDisconnect, setShowModalDisconnect] = useState(false);
@@ -89,11 +90,11 @@ function ConnectLover() {
 
         }
     })
-    const handleCancelInvitation = async() => { 
+    const handleCancelInvitation = async () => {
         const response = await coupleServices.apiCancelInvitation(infoInvitation._id)
-        if(response.success) {
+        if (response.success) {
             Swal.fire('Notifications', response.result, 'success');
-        }else{
+        } else {
             Swal.fire('Oops!', response.result, 'error');
         }
     }

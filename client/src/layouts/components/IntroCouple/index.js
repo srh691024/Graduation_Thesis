@@ -6,6 +6,7 @@ import { faHeart, faCakeCandles, faLocationDot } from "@fortawesome/free-solid-s
 import { faTiktok, faFacebookF, faInstagram } from "@fortawesome/free-brands-svg-icons";
 import { useState, useEffect } from "react";
 import * as coupleServices from '../../../services/coupleServices'
+import * as notifyServices from '~/services/notifyServices'
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getCurrentUser } from '~/store/user/asyncAction';
@@ -76,12 +77,18 @@ function IntroCouple() {
     const handleFollow = async () => {
         setFollowed(true)
         const coupleFollow = await coupleServices.apiFollowCouple(infoCouple._id)
-        console.log(coupleFollow)
+
+        const notify = {
+            recipients: [coupleFollow.result.createdUser, coupleFollow.result.loverUserId],
+            text: `from ${couple.nameCouple} couple has been following your couple.`,
+            image: '',
+            type: 'follow'
+        }
+        const noti = await notifyServices.apiCreateNotify(notify)
     }
     const handleUnfollow = async () => {
         setFollowed(false)
         const coupleUnfollow = await coupleServices.apiFollowCouple(infoCouple._id)
-        console.log(coupleUnfollow)
     }
     return (
         <div className={cx('wrapper')}>
@@ -129,19 +136,6 @@ function IntroCouple() {
                                 </div>
 
                                 <div className={cx('follow-couple')}>
-                                    {/* <div className={cx('following')}>
-                                        <span> 900 followings</span>
-                                    </div> */}
-                                    {/* <div className={cx('follower')}>
-                                        <span>
-                                            {infoCouple.followers.length}
-                                            &nbsp;follwers</span>
-                                    </div> */}
-                                    {/* <div className={cx('like')}>
-                                        <span>
-                                            {infoCouple.totalLikes}
-                                            likes</span>
-                                    </div> */}
                                 </div>
                             </div>
                             {isLoggedIn && couple.userNameCouple === infoCouple.userNameCouple ?
@@ -157,7 +151,7 @@ function IntroCouple() {
                                 </>
                                 :
                                 <>
-                                    {
+                                    {isLoggedIn ?
                                         followed ?
                                             <div className={cx('edit-info-couple')}>
                                                 <button onClick={handleUnfollow}><span>Unfollow</span></button>
@@ -166,6 +160,9 @@ function IntroCouple() {
                                             <div className={cx('edit-info-couple')}>
                                                 <button onClick={handleFollow}><span>Follow</span></button>
                                             </div>
+
+                                        :
+                                        null
                                     }
                                 </>
                             }

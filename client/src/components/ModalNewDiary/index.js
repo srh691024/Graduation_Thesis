@@ -9,11 +9,14 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import * as postServices from '../../services/postServices'
+import * as notifyServices from '../../services/notifyServices'
+import { useSelector } from "react-redux";
 
 
 const cx = classNames.bind(styles);
 
-function ModalNewDiary({current, onClose }) {
+function ModalNewDiary({ current, onClose }) {
+    const { couple } = useSelector(state => state.couple)
 
     const settings = {
         dots: true,
@@ -49,8 +52,35 @@ function ModalNewDiary({current, onClose }) {
             for (let image of values.images) formData.append('images', image);
 
             const response = await postServices.apiCreatePost(formData);
-            console.log(response)
-            // console.log(values)
+            if (couple.loverUserId) {
+                let notifyLover = {};
+                if(current._id === couple.loverUserId){
+                    notifyLover = {
+                        recipients: couple.createdUser,
+                        text: '- your lover add a new diary.',
+                        image: response.result.images[0],
+                        type: 'image'
+                    }
+                }else if(current._id === couple.createdUser){
+                    notifyLover = {
+                        recipients: couple.loverUserId,
+                        text: '- your lover add a new diary.',
+                        image: response.result.images[0],
+                        type: 'image'
+                    }
+                }
+                const notiLover = await notifyServices.apiCreateNotify(notifyLover);
+            }
+            
+            if (response.result.mode === 'Public') {
+                const notify = {
+                    recipients: couple.followers,
+                    text: `from ${couple.nameCouple} couple add a new diary.`,
+                    image: response.result.images[0],
+                    type: 'image'
+                }
+                const noti = await notifyServices.apiCreateNotify(notify)
+            }
             onClose()
         }
     })

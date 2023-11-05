@@ -5,15 +5,16 @@ import * as Yup from 'yup';
 import { useSelector } from "react-redux";
 import { PreviewImage } from "~/components";
 import { useDispatch } from "react-redux";
-import { updateUser } from "~/store/user/asyncAction";
+import { getCurrentUser, updateUser } from "~/store/user/asyncAction";
 import moment from "moment";
+import { useEffect } from "react";
 
 const cx = classNames.bind(styles)
 const horoscope = ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo', 'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces']
 
 function EditProfile() {
     const dispatch = useDispatch()
-    const { current } = useSelector(state => state.user)
+    const {current } = useSelector(state => state.user)
 
     const formik = useFormik({
         initialValues: {
@@ -58,12 +59,6 @@ function EditProfile() {
             formData.append('instagramLink', values.instagramLink);
             formData.append('avatarname', current.avatarname);
             formData.append('horoscope', values.horoscope);
-            // formData.forEach(function (value, key) {
-            //     console.log(key, value);
-            // });
-
-            // const response = await userServices.apiUpdateUser(formData)
-            // if (response.success) dispatch(getCurrentUser())
             dispatch(updateUser(formData));
         }
     })

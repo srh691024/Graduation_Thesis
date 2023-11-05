@@ -127,6 +127,24 @@ function SidebarSetting() {
                                 </Link>
                             </div>
                             <div className={cx('sub-edit')}>
+                                <Link to={config.routes.settingRequestConnection} >
+                                    <div className={cx('text-sub-edit')}>
+                                        <div className={cx('text-sub-edit-one')}>
+                                            <div className={cx('text-sub-edit-two')}>
+                                                <div className={cx('text-sub-edit-three')}>
+                                                    <div className={cx('text-sub-edit-four')}>
+                                                        <div className={cx('text-sub-edit-five')}>
+                                                            <span>Manage request connection</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className={cx('hover-sub-edit')}></div>
+                                </Link>
+                            </div>
+                            <div className={cx('sub-edit')}>
                                 <Link to={config.routes.settingViewConnectionsHistory} >
                                     <div className={cx('text-sub-edit')}>
                                         <div className={cx('text-sub-edit-one')}>
@@ -144,24 +162,6 @@ function SidebarSetting() {
                                     <div className={cx('hover-sub-edit')}></div>
                                 </Link>
                             </div>
-                            {/* <div className={cx('sub-edit')}>
-                                <Link to={config.routes.settingEditProfile} >
-                                    <div className={cx('text-sub-edit')}>
-                                        <div className={cx('text-sub-edit-one')}>
-                                            <div className={cx('text-sub-edit-two')}>
-                                                <div className={cx('text-sub-edit-three')}>
-                                                    <div className={cx('text-sub-edit-four')}>
-                                                        <div className={cx('text-sub-edit-five')}>
-                                                            <span>Disconnect with lover</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className={cx('hover-sub-edit')}></div>
-                                </Link>
-                            </div> */}
                         </div>
                     </div>
                 </div>
