@@ -5,6 +5,8 @@ const images = {
     logo_no_text: require('~/assets/images/logoNoText.png'),
     heart1: require('~/assets/images/heart1.png'),
     heart2: require('~/assets/images/heart2.png'),
+    avatarCouple: require('~/assets/images/avatarCouple.jpg'),
+    noUser: require('~/assets/images/noUser.png'),
 
     //horoscopes
     aries: require('~/assets/images/horoscopes/aries.png'),

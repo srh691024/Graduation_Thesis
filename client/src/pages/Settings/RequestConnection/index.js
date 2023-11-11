@@ -1,10 +1,7 @@
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
-import images from "~/assets/images";
 import styles from '~/pages/Settings/RequestConnection/RequestConnection.module.scss'
 import * as coupleServices from '~/services/coupleServices'
 import { logout } from "~/store/user/userSlice";
@@ -23,12 +20,21 @@ function RequestConnection() {
     }, [])
     const handleAcceptRestore = async (invitationId) => {
         const response = await coupleServices.apiAcceptRestoreCouple(invitationId)
-        if(response.success) 
-        {
+        if (response.success) {
             Swal.fire('Congratulations', 'You restored couple with your lover successfully.Please login again to go your couple home!', 'success').then(() => {
                 dispatch(logout())
             })
-        }else{
+        } else {
+            Swal.fire('Oops!', response.result, 'error')
+        }
+    }
+    const handleAcceptInvitation = async (invitationId) => {
+        const response = await coupleServices.apiAcceptInvitationTwo(invitationId)
+        if (response.success) {
+            Swal.fire('Congratulations', 'You restored couple with your lover successfully.Please login again to go your couple home!', 'success').then(() => {
+                dispatch(logout())
+            })
+        } else {
             Swal.fire('Oops!', response.result, 'error')
         }
     }
@@ -82,7 +88,7 @@ function RequestConnection() {
                                         <button onClick={() => handleAcceptRestore(el._id)}>Restore</button>
                                     }
                                     {el.type === 'new' &&
-                                        <button>Accept&nbsp;</button>
+                                        <button onClick={() => handleAcceptInvitation(el._id)}>Accept&nbsp;</button>
                                     }
                                 </div>
                             </div>

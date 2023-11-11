@@ -3,10 +3,20 @@ import images from "~/assets/images";
 import styles from '~/pages/Admin/Dashboard/Dashboard.module.scss'
 import { CombinationChart, TotalAccountvsCouple, DoughnutChart, LineChart, ActiveUserChart } from "~/components";
 import { Link } from "react-router-dom";
+import * as adminServices from '~/services/adminServices';
+import { useEffect, useState } from "react";
 
 const cx = classNames.bind(styles);
 
 function Dashboard() {
+    const [totalStatistic, setTotalStatistic] = useState([])
+    useEffect(() => {
+        async function fetchTotalStatistic() {
+            const response = await adminServices.apiGetTotalStatistic();
+            setTotalStatistic(response.result);
+        }
+        fetchTotalStatistic()
+    }, [])
     return (
         <div className={cx('wrapper')}>
             <div className={cx('dashboard')}>
@@ -25,11 +35,13 @@ function Dashboard() {
                                 <span>Accounts</span>
                             </div>
                             <div className={cx('number')}>
-                                <span>4.022</span>
+                                <span>
+                                    {totalStatistic[0]?.totalAccounts}
+                                    </span>
                             </div>
                             <div className={cx('rate')}>
                                 <span>
-                                    <span className={cx('bold')}>+1.2%</span> last month</span>
+                                    <span className={cx('bold')}>{totalStatistic[0]?.rate}%</span> last month</span>
                             </div>
                         </div>
                     </li>
@@ -42,10 +54,12 @@ function Dashboard() {
                                 <span>Couples</span>
                             </div>
                             <div className={cx('number')}>
-                                <span>1.203</span>
+                                <span>{totalStatistic[1]?.totalCouples}</span>
                             </div>
                             <div className={cx('rate')}>
-                                <span><span className={cx('bold')}>+1.2%</span> last month</span>
+                                <span><span className={cx('bold')}>
+                                    {/* {totalStatistic[1]?.rate} */}
+                                    %</span> last month</span>
                             </div>
                         </div>
                     </li>
@@ -58,10 +72,10 @@ function Dashboard() {
                                 <span>Interaction</span>
                             </div>
                             <div className={cx('number')}>
-                                <span>10.123</span>
+                                <span>{totalStatistic[2]?.totalInteractions}</span>
                             </div>
                             <div className={cx('rate')}>
-                                <span><span className={cx('bold')}>+1.2%</span> last month</span>
+                                <span><span className={cx('bold')}>{totalStatistic[2]?.rate}%</span> last month</span>
                             </div>
                         </div>
                     </li>
@@ -74,10 +88,10 @@ function Dashboard() {
                                 <span>Posts</span>
                             </div>
                             <div className={cx('number')}>
-                                <span>14.664</span>
+                                <span>{totalStatistic[3]?.totalPosts}</span>
                             </div>
                             <div className={cx('rate')}>
-                                <span><span className={cx('bold')}>+1.2%</span> last month</span>
+                                <span><span className={cx('bold')}>{totalStatistic[3]?.rate}%</span> last month</span>
                             </div>
                         </div>
                     </li>
@@ -153,7 +167,7 @@ function Dashboard() {
                         </div>
                         <div className={cx('line')}></div>
                         <div className={cx('addChart')}>
-                            <ActiveUserChart/>
+                            <ActiveUserChart />
                         </div>
                     </div>
                 </div>

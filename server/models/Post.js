@@ -20,6 +20,7 @@ const Post = new Schema({
     dateAnni: { type: Date, default: Date.now() },
     mode: { type: String, default: 'Private' },
     isHidden: { type: Boolean, default: false },
+    isBanned: { type: Boolean, default: false},
 }, {
     timestamps: true,
 }

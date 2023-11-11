@@ -5,10 +5,19 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import * as coupleServices from '~/services/coupleServices';
+import * as authServices from '~/services/authServices'
 import Swal from "sweetalert2";
+import HeadlessTippy from '@tippyjs/react/headless';
+import 'tippy.js/dist/tippy.css'; // optional
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 function ModalNoteSendLink({ onClose }) {
+    const [searchUserReceive, setSearchUserReceive] = useState([])
+    const [showResult, setShowResult] = useState(false);
+
+
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -29,6 +38,23 @@ function ModalNoteSendLink({ onClose }) {
             onClose()
         }
     })
+    useEffect(() => {
+        async function searchUser() {
+            if (formik.values.email) {
+                const response = await authServices.apiSearchUser(formik.values.email)
+                if (response.success) setSearchUserReceive(response.result)
+            } else {
+                setSearchUserReceive([])
+            }
+        }
+        searchUser()
+    }, [formik.values.email])
+    const handleHideResult = () => {
+        setShowResult(false);
+    };
+    const handleClickUser = (email) => {
+        formik.setFieldValue('email', email);
+    }
     return (
         <div className={cx('wrapper')}>
             <div className={cx('wrapper-modal')}>
@@ -71,14 +97,47 @@ function ModalNoteSendLink({ onClose }) {
                                                             <li>After the connection is established, the shared data between the two individuals will be retrieved from the data of the person who sent the connection invitation.</li>
                                                             <li>Note: The data of the invitation recipient will be permanently deleted as soon as they press 'accept invitation' and cannot be recovered.</li>
                                                             <li>We recommend discussing, prior to the connection, whose data will be used as shared data.</li>
+
                                                             <li className={cx('special')}>
                                                                 <div className={cx('enter-link')}>
-                                                                    <input
-                                                                        type="text"
-                                                                        name="email"
-                                                                        placeholder="Enter your lover email"
-                                                                        value={formik.values.email}
-                                                                        onChange={formik.handleChange} />
+                                                                    <HeadlessTippy
+                                                                        interactive
+                                                                        visible={showResult && searchUserReceive.length > 0}
+                                                                        render={(attrs) => (
+                                                                            <div className={cx('searchResult')} tabIndex='-1' {...attrs}>
+                                                                                <div className={cx('searchWrapper')}>
+                                                                                    <h4 className={cx('searchTitle')}>Accounts</h4>
+                                                                                    {searchUserReceive.map((result) => (
+                                                                                        <Link key={result._id} onClick={() => handleClickUser(result.email)}>
+                                                                                            <div className={cx('styleUserAvatar')}>
+                                                                                                <span className={cx('styleAvatar')}>
+                                                                                                    <img src={result.avatar} alt="" />
+                                                                                                </span>
+                                                                                            </div>
+                                                                                            <div className={cx('info')}>
+                                                                                                <h4 className={cx('name')}>
+                                                                                                    <span>{result.name}</span>
+                                                                                                </h4>
+                                                                                                <span className={cx('username')}>{result.username}</span>
+                                                                                            </div>
+                                                                                        </Link>
+                                                                                    ))}
+                                                                                </div>
+                                                                            </div>
+                                                                        )}
+                                                                        onClickOutside={handleHideResult}
+                                                                    >
+
+                                                                        <input
+                                                                            type="text"
+                                                                            name="email"
+                                                                            placeholder="Enter your lover email"
+                                                                            value={formik.values.email}
+                                                                            onChange={formik.handleChange}
+                                                                            onFocus={() => setShowResult(true)}
+                                                                        />
+                                                                    </HeadlessTippy>
+
                                                                 </div>
                                                                 {
                                                                     formik.errors.email && formik.touched.email && (
@@ -86,6 +145,7 @@ function ModalNoteSendLink({ onClose }) {
                                                                     )
                                                                 }
                                                             </li>
+
                                                             <li className={cx('special')}>
                                                                 <button type="button" className={cx('buttonSendLink')} onClick={formik.handleSubmit}>
                                                                     Send connection invitation
@@ -104,7 +164,7 @@ function ModalNoteSendLink({ onClose }) {
                 </div>
             </div>
         </div>
-        );
+    );
 }
 
 export default ModalNoteSendLink;

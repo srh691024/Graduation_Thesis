@@ -1,7 +1,7 @@
 // import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import classNames from "classnames/bind";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
@@ -15,12 +15,15 @@ import { login } from "~/store/user/userSlice"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { getCurrentCouple } from "~/store/couple/asyncAction";
+import { getCurrentUser } from "~/store/user/asyncAction";
+import config from "~/config";
 
 const cx = classNames.bind(styles);
 
 function LoginForm() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const { current } = useSelector(state => state.user)
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -28,7 +31,7 @@ function LoginForm() {
         },
         validationSchema: Yup.object({
             email: Yup.string()
-                .email('Invalid email format')
+                // .email('Invalid email format')
                 .matches(/^[\w\-.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Please enter a valid email')
                 .required('Email is required'),
             password: Yup.string()
@@ -40,16 +43,21 @@ function LoginForm() {
             const response = await authServices.apiLogin(values);
             if (response.success) {
                 dispatch(login({
-                    isLoggedIn: true, token: response.accessToken, userData: response.userData
+                    isLoggedIn: true, token: response.accessToken, userData: response.findUser
                 }));
                 setTimeout(async () => {
-                    const currentUserCouple = await coupleServices.apiGetCoupleByCurrentUser();
-                    if (currentUserCouple.success) {
-                        const usernameCouple = currentUserCouple.result.userNameCouple
-                        dispatch(getCurrentCouple())
-                        navigate(`/diarypost/${usernameCouple}`)
+                    if (response.findUser.role === '16') {
+
+                        const currentUserCouple = await coupleServices.apiGetCoupleByCurrentUser();
+                        if (currentUserCouple.success) {
+                            const usernameCouple = currentUserCouple.result.userNameCouple
+                            dispatch(getCurrentCouple())
+                            navigate(`/diarypost/${usernameCouple}`)
+                        }
+                        else { Swal.fire('Oops!', currentUserCouple.result, 'error') }
+                    } else if (response.findUser.role === '22') {
+                        navigate(`${config.routes.dashboard}`)
                     }
-                    else { Swal.fire('Oops!', currentUserCouple.result, 'error') }
                 }, 100)
 
             } else Swal.fire('Oops!', response.message, 'error');
@@ -65,7 +73,6 @@ function LoginForm() {
                             type="text"
                             placeholder="Email"
                             value={formik.values.email}
-                            // onChange={e => setPayload(prev => ({ ...prev, email: e.target.value }))}
                             onChange={formik.handleChange}
                             required />
                         <FontAwesomeIcon className={cx('icon-login')} icon={faUser} />
@@ -85,7 +92,6 @@ function LoginForm() {
                             placeholder="Password"
                             value={formik.values.password}
                             onChange={formik.handleChange}
-                            // onChange={e => setPayload(prev => ({ ...prev, password: e.target.value }))}
                             required />
                         <FontAwesomeIcon className={cx('icon-login')} icon={faKey} />
                     </div>
@@ -96,7 +102,6 @@ function LoginForm() {
                     }
                 </div>
                 <button type="submit" className={cx('btn-login')}
-                    // onClick={e => { handleSubmit(e) }}
                     onClick={formik.handleSubmit}
                 >Login</button>
             </form>

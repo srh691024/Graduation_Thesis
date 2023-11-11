@@ -5,8 +5,8 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 
 const User = new Schema({
-    name: { type: String },
-    username: { type: String, unique: true },
+    name: { type: String, maxLength: 30 },
+    username: { type: String, unique: true, maxLength: 24 },
     gender: { type: String },
     dob: { type: Date },
     horoscope: { type: String, default: 'Aries' },
@@ -14,12 +14,34 @@ const User = new Schema({
     tiktokLink: { type: String },
     facebookLink: { type: String },
     instagramLink: { type: String },
-    avatarname:{type: String},
-    avatar: { type: String},
+    avatarname: { type: String },
+    avatar: { type: String },
     phone: { type: String },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    role: { type: String, default: 'user', },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        validate: {
+            validator: (value) =>
+                /^[\w\-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value),
+            message: 'Please enter a valid email address',
+        },
+    },
+    password: {
+        type: String,
+        required: true,
+        validate: {
+            validator: (value) =>
+                /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/.test(value),
+            message:
+                'Password must contain at least 1 digit, 1 lowercase letter, 1 uppercase letter, and be at least 6 characters long',
+        },
+    },
+    role: {
+        type: String,
+        enum: [22, 16], //22 - admin, 16 - user
+        default: 16,
+    },
     isBlocked: { type: Boolean, default: false },
     refreshToken: { type: String },
     passwordChangedAt: { type: String, },

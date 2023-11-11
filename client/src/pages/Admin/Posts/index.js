@@ -1,138 +1,188 @@
 import classNames from "classnames/bind";
 import styles from '~/pages/Admin/Posts/Posts.module.scss';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import IconButton from '@mui/material/IconButton';
-import SaveIcon from '@mui/icons-material/Save';
+import {
+    DataGrid,
+    gridClasses,
+    GridToolbar,
+    gridPageCountSelector,
+    gridPageSelector,
+    useGridApiContext,
+    useGridSelector
+} from '@mui/x-data-grid';
+import { Avatar } from '@mui/material';
+import moment from "moment";
+import { useEffect, useState } from "react";
+import * as postServices from '~/services/postServices'
+import * as adminServices from '~/services/adminServices'
+import Pagination from '@mui/material/Pagination';
+import PaginationItem from '@mui/material/PaginationItem';
+import Button from '@mui/material/Button';
+import { alpha, styled } from '@mui/material/styles';
 
 const cx = classNames.bind(styles);
-function Posts() {
-    const columns = [
-        { field: 'id', headerName: 'No', width: 20 },
-        {
-            field: 'avatar',
-            headerName: '',
-            width: 150,
-            editable: false,
-        },
-        {
-            field: 'author',
-            headerName: 'AUTHOR',
-            width: 150,
-            editable: false,
-        },
-        {
-            field: 'couple',
-            headerName: 'COUPLE',
-            width: 150,
-            editable: false,
-        },
-        {
-            field: 'content',
-            headerName: 'CONTENT',
-            width: 150,
-            editable: false,
-        },
-        {
-            field: 'image',
-            headerName: 'IMAGE',
-            width: 150,
-            editable: false,
-        },
-    ];
-    const columnsBan = [
-        { field: 'id', headerName: 'No', width: 20 },
-        {
-            field: 'reported',
-            headerName: 'REPORTED (times)',
-            with: 50,
-            editable: false,
-        },
-        {
-            field: 'publicStatus',
-            headerName: 'PUBLIC STATUS',
-            width: 100,
-            editable: true,
-            type: 'boolean',
-        },
-        {
-            field: 'avatar',
-            headerName: '',
-            width: 150,
-            editable: false,
-        },
-        {
-            field: 'author',
-            headerName: 'AUTHOR',
-            width: 150,
-            editable: false,
-        },
-        {
-            field: 'couple',
-            headerName: 'COUPLE',
-            width: 150,
-            editable: false,
-        },
-        {
-            field: 'content',
-            headerName: 'CONTENT',
-            width: 150,
-            editable: false,
-        },
-        {
-            field: 'image',
-            headerName: 'IMAGE',
-            width: 150,
-            editable: false,
-        },
 
-        {
-            field: 'action',
-            headerName: 'Action',
-            width: 120,
-            renderCell: (params) => (
-                <IconButton
-                    color="secondary"
-                    aria-label="Save"
-                    onClick={() => handleSave(params.row.id)}
-                >
-                    <SaveIcon
-                        sx={{
-                            fontSize: 20,
-                            color: 'rgb(254, 110, 145)'
-                        }}
-                    />
-                </IconButton>
+function CustomPagination() {
+    const apiRef = useGridApiContext();
+    const page = useGridSelector(apiRef, gridPageSelector);
+    const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+
+    return (
+        <Pagination
+            color="primary"
+            variant="outlined"
+            shape="rounded"
+            page={page + 1}
+            count={pageCount}
+            // @ts-expect-error
+            renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
+            onChange={(event, value) => apiRef.current.setPage(value - 1)}
+        />
+    );
+}
+const PAGE_SIZE = 10;
+
+const ODD_OPACITY = 0.2;
+
+const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
+    [`& .${gridClasses.row}.even`]: {
+        backgroundColor: theme.palette.grey[200],
+        '&:hover, &.Mui-hovered': {
+            backgroundColor: alpha(theme.palette.primary.main, ODD_OPACITY),
+            '@media (hover: none)': {
+                backgroundColor: 'transparent',
+            },
+        },
+        '&.Mui-selected': {
+            backgroundColor: alpha(
+                theme.palette.primary.main,
+                ODD_OPACITY + theme.palette.action.selectedOpacity,
             ),
+            '&:hover, &.Mui-hovered': {
+                backgroundColor: alpha(
+                    theme.palette.primary.main,
+                    ODD_OPACITY +
+                    theme.palette.action.selectedOpacity +
+                    theme.palette.action.hoverOpacity,
+                ),
+                // Reset on touch devices, it doesn't add specificity
+                '@media (hover: none)': {
+                    backgroundColor: alpha(
+                        theme.palette.primary.main,
+                        ODD_OPACITY + theme.palette.action.selectedOpacity,
+                    ),
+                },
+            },
+        },
+    },
+}));
+
+function Posts() {
+    const [paginationModel, setPaginationModel] = useState({
+        pageSize: PAGE_SIZE,
+        page: 0,
+    });
+
+    const [dataPost, setDataPost] = useState([])
+
+
+    useEffect(() => {
+        async function fetchPosts() {
+            const response = await postServices.apiGetAllPosts()
+            setDataPost(response.result)
+        }
+        fetchPosts();
+    }, [])
+
+    const customSortComparator = (v1, v2, column) => {
+        // Sắp xếp dựa trên độ dài của mảng
+        return v1.length - v2.length;
+    };
+
+    const BanButton = ({ params }) => {
+        const [banButton, setBanButton] = useState(false)
+
+        useEffect(() => {
+            if (params.row.isBanned === true) {
+                setBanButton(true)
+            }
+        }, [params.row.isBanned])
+
+        const handleBan = async () => {
+            setBanButton(true)
+            const response = await adminServices.apiBanReport(params.row._id)
+            console.log(response)
+        }
+        const handleUnBan = async () => {
+            setBanButton(false)
+            const response = await adminServices.apiUnBanReport(params.row._id)
+            console.log(response)
+        }
+        return banButton ?
+            <strong onClick={handleUnBan}>
+                <Button
+                    variant="outlined"
+                    size="medium"
+                    style={{ marginLeft: 16 }}
+                    tabIndex={params.hasFocus ? 0 : -1}
+                    color="warning"
+                >
+                    Unban
+                </Button>
+            </strong>
+            :
+            <strong onClick={handleBan}>
+                <Button
+                    variant="contained"
+                    size="medium"
+                    style={{ marginLeft: 16 }}
+                    tabIndex={params.hasFocus ? 0 : -1}
+                    color="error"
+                >
+                    Ban
+                </Button>
+            </strong>
+    }
+
+    const columnsBan = [
+        {
+            field: 'isBanned', headerName: '', width: 150,
+            renderCell: (params) => <BanButton params={params} />,
+        },
+        {
+            field: 'reports', headerName: 'Reports', width: 90,
+            sortable: true,
+            renderCell: params => params.row.reports.length,
+            sortComparator: customSortComparator,
+        },
+        { field: 'mode', headerName: 'Privacy Settings', width: 120 },
+        {
+            field: 'avatar', headerName: '', width: 60,
+            renderCell: params => <Avatar src={params.row.author.avatar} />,
+            sortable: false, editable: false
+        },
+        {
+            field: 'author', headerName: 'Author', width: 150,
+            renderCell: params => params.row.author.name
+        },
+        { field: 'content', headerName: 'Content', width: 150 },
+        {
+            field: 'createdAt', headerName: 'Created At', width: 150,
+            renderCell: params => moment(params.row.createdAt).format('HH:MM A DD/MM/YYYY ')
+        },
+        {
+            field: 'likes', headerName: 'Likes', width: 90,
+            sortable: true,
+            renderCell: params => params.row.likes.length,
+            sortComparator: customSortComparator,
+        },
+        {
+            field: 'comments', headerName: 'Comments', width: 90,
+            sortable: true,
+            renderCell: params => params.row.comments.length,
+            sortComparator: customSortComparator,
         },
     ];
 
-    const rowsBan = [
-        { id: 1, reported: '1', publicStatus: 'false', avatar: 'Knsa', author: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 2, reported: '122', publicStatus: 'true', avatar: 'Knsa', author: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 3, reported: '2', publicStatus: 'true', avatar: 'Knsa', author: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 4, reported: '1', publicStatus: 'false', avatar: 'Knsa', author: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 5, reported: '65', publicStatus: 'true', avatar: 'Knsa', author: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 6, reported: '7', publicStatus: 'true', avatar: 'Knsa', author: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 7, reported: '3', publicStatus: 'false', avatar: 'Knsa', author: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 8, reported: '2', publicStatus: 'true', avatar: 'Knsa', author: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 9, reported: '1', publicStatus: 'false', avatar: 'Knsa', author: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 10, reported: '77', publicStatus: 'true', avatar: 'Knsa', author: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 11, reported: '90', publicStatus: 'false', avatar: 'Knsa', author: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-
-    ];
-    const rows = [
-        { id: 1, avatar: 'Knsa', author: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 2, avatar: 'Knsa', author: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 3, avatar: 'Knsa', author: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 4, avatar: 'Knsa', author: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 5, avatar: 'Knsa', author: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 6, avatar: 'Knsa', author: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 7, avatar: 'Knsa', author: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 8, avatar: 'Knsa', author: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 9, avatar: 'Knsa', author: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 10, avatar: 'Knsa', author: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 11, avatar: 'Knsa', author: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-    ];
 
     const handleSave = (id) => {
         // Handle delete action here
@@ -147,23 +197,18 @@ function Posts() {
             </div>
             <div className={cx('banUsers')}>
                 <div className={cx('title')}>Manage reported posts</div>
-                <DataGrid
-                    rows={rowsBan}
+                <StripedDataGrid
+                    rows={dataPost}
                     columns={columnsBan}
-                    initialState={{
-                        pagination: {
-                            paginationModel: {
-                                pageSize: 5,
-                            },
-                        },
+                    loading={!dataPost}
+                    getRowId={(row) => row._id}
+                    paginationModel={paginationModel}
+                    onPaginationModelChange={setPaginationModel}
+                    pageSizeOptions={[PAGE_SIZE]}
+                    slots={{
+                        pagination: CustomPagination,
+                        toolbar: GridToolbar
                     }}
-                    // disableRowSelectionOnClick
-                    pageSizeOptions={[5, 10, 25]}
-
-                    disableColumnFilter
-                    disableColumnSelector
-                    disableDensitySelector
-                    slots={{ toolbar: GridToolbar }}
                     slotProps={{
                         toolbar: {
                             showQuickFilter: true,
@@ -180,43 +225,9 @@ function Posts() {
                         bgcolor: 'white',
                         color: 'rgb(62,51,65)',
                     }}
-                />
-            </div>
-            <div className={cx('allUsers')}>
-                <div className={cx('title')}>All public posts</div>
-                <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    initialState={{
-                        pagination: {
-                            paginationModel: {
-                                pageSize: 5,
-                            },
-                        },
-                    }}
-                    disableRowSelectionOnClick
-                    pageSizeOptions={[5, 10, 25]}
-
-                    disableColumnFilter
-                    disableColumnSelector
-                    disableDensitySelector
-                    slots={{ toolbar: GridToolbar }}
-                    slotProps={{
-                        toolbar: {
-                            showQuickFilter: true,
-                        },
-                    }}
-                    sx={{
-                        boxShadow: 5,
-                        border: 0,
-                        borderColor: 'primary.light',
-                        borderRadius: 3,
-                        fontSize: 13,
-                        p: 2,
-                        mt: 1,
-                        bgcolor: 'white',
-                        color: 'rgb(62,51,65)',
-                    }}
+                    getRowClassName={(params) =>
+                        params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                    }
                 />
             </div>
         </div>

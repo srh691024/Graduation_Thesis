@@ -20,6 +20,7 @@ router.get('/getHistoryCoupleByCurrentUser', verifyAccessToken, couplesControlle
 router.post('/inviteRestoreCouple/:coupleId', verifyAccessToken, couplesController.inviteRestoreCouple);
 router.post('/acceptRestoreCouple/:invitationId', verifyAccessToken, couplesController.acceptRestoreCouple);
 router.get('/getListInvitation', verifyAccessToken, couplesController.getListInvitation);
+router.post('/acceptInvitationTwo/:invitationId', verifyAccessToken, couplesController.acceptInvitationTwo);
 
 
 

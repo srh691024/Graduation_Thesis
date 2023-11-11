@@ -41,7 +41,7 @@ function ActiveUserChart() {
     const updateChartData = () => {
         setChartData(prevData => {
             const newLabels = [...prevData.labels.slice(1), new Date().toLocaleTimeString()];
-            const newData = [...prevData.datasets[0].data.slice(1), faker.datatype.number({ min: 0, max: 1000 })];
+            const newData = [...prevData.datasets[0].data.slice(1), faker.number.int({ min: 0, max: 1000 })];
             return {
                 labels: newLabels,
                 datasets: [{ ...prevData.datasets[0], data: newData }],
@@ -49,7 +49,7 @@ function ActiveUserChart() {
         });
     };
     useEffect(() => {
-        const interval = setInterval(updateChartData, 3000); // Update every 2 seconds
+        const interval = setInterval(updateChartData, 5000); // Update every 2 seconds
 
         return () => clearInterval(interval); // Clear interval on component unmount
     }, []);

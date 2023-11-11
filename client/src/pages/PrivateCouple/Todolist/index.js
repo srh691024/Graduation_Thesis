@@ -7,11 +7,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getTodosByCouple } from "~/store/todo/asyncAction";
 import moment from "moment";
+import Swal from "sweetalert2";
+import { Navigate, useParams } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
 function Todolist() {
     const dispatch = useDispatch()
+    const { usernameCouple } = useParams()
     const { todos } = useSelector(state => state.todo)
     const { couple } = useSelector(state => state.couple)
     const coupleId = couple._id
@@ -20,6 +23,15 @@ function Todolist() {
     useEffect(() => {
         dispatch(getTodosByCouple(coupleId))
     }, [dispatch, coupleId])
+
+    if (!couple.isConnected) {
+        Swal.fire('Notify', 'You are not connected so cannot go to public social', 'info')
+        return <Navigate to={`/diarypost/${couple.userNameCouple}`} />
+    }
+    if (couple.userNameCouple !== usernameCouple) {
+        Swal.fire('Warning!', 'Can not see this page of other couple', 'warning')
+        return <Navigate to={`/diarypost/${couple.userNameCouple}`} />
+    }
     return (
         <div className={cx('container')}>
             <div className={cx('diary-post')}>

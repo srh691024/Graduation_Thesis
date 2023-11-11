@@ -18,3 +18,5 @@ export { default as ModalEditInfoCouple} from '~/components/ModalEditInfoCouple'
 export { default as ModalEditTodo} from '~/components/ModalEditTodo';
 export { default as ModalEditCalendar} from '~/components/ModalEditCalendar';
 export { default as ModalDeleteAnni} from '~/components/ModalDeleteAnni';
+export { default as ModalForgotPassword} from '~/components/ModalForgotPassword';
+export { default as ModalDetailPost} from '~/components/ModalDetailPost';

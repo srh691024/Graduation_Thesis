@@ -20,7 +20,7 @@ const commonConfig = {
 
 const userConfig = {
     ...commonConfig,
-    whitelist: ['isLoggedIn', 'token'],     // whitelist - những trường muốn localstorage lưu 
+    whitelist: ['isLoggedIn', 'token', 'current'],     // whitelist - những trường muốn localstorage lưu 
 }
 
 const coupleConfig = {

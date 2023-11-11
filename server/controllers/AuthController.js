@@ -1,3 +1,4 @@
+const Couple = require('../models/Couple');
 const User = require('../models/User');
 const asyncHandler = require('express-async-handler')
 const { generateAccessToken, generateRefreshToken } = require('../middlewares/jwt')
@@ -5,8 +6,6 @@ const jwt = require('jsonwebtoken');
 const sendEmail = require('../utils/sendMail');
 const crypto = require('crypto');
 const getStringUntilCharacter = require('../utils/getStringUntilCharacter');
-const Couple = require('../models/Couple');
-const { response } = require('express');
 const deleteImage = require('../utils/deleteImage');
 
 // Refresh token => Cấp mới access token
@@ -19,7 +18,7 @@ const login = asyncHandler(async (req, res) => {
             message: `Missing inputs`
         })
     const findUser = await User.findOne({ email: email })
-    if (!findUser) throw new Error('User not found')
+    if (!findUser) throw new Error('Account not found. Please try again')
 
     const response = await User.findOne({ email })
     if (response && await response.isCorrectPassword(password)) {
@@ -36,7 +35,7 @@ const login = asyncHandler(async (req, res) => {
         return res.status(200).json({
             success: true,
             accessToken,
-            userData
+            findUser
         })
     } else {
         throw new Error(`Wrong email or password`)
@@ -63,7 +62,7 @@ const register = asyncHandler(async (req, res) => {
         name = getStringUntilCharacter(email, '@')
     }
     if (!username.trim()) {
-        username = name.trim()
+        username = getStringUntilCharacter(email, '@')
     }
     const newUser = {
         email, password, name, username
@@ -103,7 +102,7 @@ const finalRegister = asyncHandler(async (req, res) => {
             createdUser: newUser._id,
             startLoveDate: currentTime,
             isConnected: false,
-            userNameCouple: getStringUntilCharacter(cookie?.dataRegister.email, '@'),
+            userNameCouple: cookie?.dataRegister?.username,
             isHidden: false,
         })
         res.clearCookie('dataRegister')
@@ -121,7 +120,7 @@ const finalRegister = asyncHandler(async (req, res) => {
 const getCurrentUser = asyncHandler(async (req, res) => {
     const { _id } = req.user
 
-    const user = await User.findById(_id).select('-refreshToken -password -role').populate('followings', 'avatarCouple userNameCouple nameCouple')
+    const user = await User.findById(_id).select('-refreshToken -password').populate('followings', 'avatarCouple userNameCouple nameCouple')
     return res.status(200).json({
         success: user ? true : false,
         result: user ? user : 'User not found'
@@ -258,6 +257,16 @@ const banUserByAdmin = asyncHandler(async (req, res) => {
         updatedUser: response ? response : 'Update failed'
     })
 })
+
+const searchUser = asyncHandler(async (req, res) => {
+    const { email } = req.query
+    const users = await User.find({ $or: [{ email: { $regex: email } }, { username: { $regex: email } }] }).limit(5)
+    return res.status(200).json({
+        success: users ? true : false,
+        result: users
+    })
+
+})
 module.exports = {
     login,
     register,
@@ -271,4 +280,5 @@ module.exports = {
     deleteUser,
     updateUser,
     banUserByAdmin,
+    searchUser,
 };

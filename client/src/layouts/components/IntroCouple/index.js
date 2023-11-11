@@ -42,7 +42,6 @@ function IntroCouple() {
 
     useEffect(() => {
         async function fetchCouple() {
-            // setTimeout(async () => {
             const couple = await coupleServices.apiGetCouple(usernameCouple)
             if (couple.success) setInfoCouple(couple.result)
             const createdUser = await coupleServices.apiGetCreatedUserByCouple(couple.result.createdUser)
@@ -50,8 +49,9 @@ function IntroCouple() {
             if (couple.result.loverUserId) {
                 const loverUser = await coupleServices.apiGetLoverUserByCouple(couple.result.loverUserId)
                 if (loverUser.success) setInfoLoverUser(loverUser.result)
+            } else {
+                setInfoLoverUser({})
             }
-            // }, 100)
         }
         fetchCouple()
     }, [usernameCouple])
@@ -84,11 +84,11 @@ function IntroCouple() {
             image: '',
             type: 'follow'
         }
-        const noti = await notifyServices.apiCreateNotify(notify)
+        await notifyServices.apiCreateNotify(notify)
     }
     const handleUnfollow = async () => {
         setFollowed(false)
-        const coupleUnfollow = await coupleServices.apiFollowCouple(infoCouple._id)
+        await coupleServices.apiFollowCouple(infoCouple._id)
     }
     return (
         <div className={cx('wrapper')}>
@@ -101,18 +101,26 @@ function IntroCouple() {
                             </div>
                             <div className={cx('info-intro-couple')}>
                                 <div className={cx('image-couple')}>
-                                    <div className={cx('avatar-couple')}>
-                                        <img src={infoCouple.avatarCouple} alt='' />
-                                    </div>
+                                    {infoCouple.avatarCouple ?
+                                        <div className={cx('avatar-couple')}>
+                                            <img src={infoCouple.avatarCouple} alt='' />
+                                        </div>
+                                        :
+                                        <div className={cx('avatar-couple')}>
+                                            <img src={images.avatarCouple} alt='' />
+                                        </div>
+                                    }
                                     <div className={cx('name-couple')}>
                                         <h3>
                                             {infoCouple.nameCouple}
                                         </h3>
-                                        <div className={cx('follower')}>
-                                            <span>
-                                                {infoCouple?.followers?.length}
-                                                &nbsp;follwers</span>
-                                        </div>
+                                        {infoCouple.isConnected &&
+                                            <div className={cx('follower')}>
+                                                <span>
+                                                    {infoCouple?.followers?.length}
+                                                    &nbsp;follwers</span>
+                                            </div>
+                                        }
                                     </div>
                                 </div>
                                 <div className={cx('biography-couple')}>
@@ -177,6 +185,7 @@ function IntroCouple() {
                                     </div>
                                     <div className={cx('name-partner')}>
                                         <h3>{infoCreatedUser.name}</h3>
+
                                         <div className={cx('following')}>
                                             <span>{infoCreatedUser?.followings?.length} followings</span>
                                         </div>
@@ -233,15 +242,23 @@ function IntroCouple() {
                             <div className={cx('partner')}>
                                 <div className={cx('image-partner')}>
                                     <div className={cx('avatar-partner')}>
-                                        <img src={infoLoverUser.avatar ? infoLoverUser.avatar : infoCouple.tempAvatarLover} alt="" />
+                                        {infoLoverUser.avatar ?
+                                            <img src={infoLoverUser.avatar} alt="" />
+                                            :
+                                            infoCouple.tempAvatarLover ?
+                                                <img src={infoCouple.tempAvatarLover} alt="" />
+                                                :
+                                                <img src={images.noUser} alt="" />
+                                        }
                                     </div>
                                     <div className={cx('name-partner')}>
                                         <h3>{infoLoverUser.name ? infoLoverUser.name : infoCouple.tempNameLover}</h3>
-                                        {infoLoverUser ?
+                                        {infoLoverUser?.followings?.length > 0 ?
                                             <div className={cx('following')}>
                                                 <span>{infoLoverUser?.followings?.length} followings</span>
                                             </div>
-                                            : null}
+                                            : null
+                                        }
                                     </div>
                                 </div>
                                 <div className={cx('dob-partner')}>
@@ -259,7 +276,7 @@ function IntroCouple() {
                                     </div>
                                 </div>
                                 {
-                                    infoLoverUser ?
+                                    infoCouple.isConnected ?
                                         <>
                                             <div className={cx('address')}>
                                                 <FontAwesomeIcon className={cx('sub-icon')} icon={faLocationDot} />

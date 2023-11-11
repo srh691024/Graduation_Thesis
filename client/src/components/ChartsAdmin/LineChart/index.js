@@ -12,6 +12,8 @@ import { Line } from 'react-chartjs-2';
 import { faker } from '@faker-js/faker';
 import classNames from 'classnames/bind';
 import styles from '~/components/ChartsAdmin/LineChart/LineChart.module.scss'
+import { useEffect, useState } from 'react';
+import * as adminServices from '~/services/adminServices'
 
 const cx = classNames.bind(styles);
 ChartJS.register(
@@ -25,6 +27,16 @@ ChartJS.register(
 );
 
 function LineChart() {
+
+    const [dataAccount, setDataAccount] = useState([])
+
+    useEffect(() => {
+        async function fetchAccount() {
+            const response = await adminServices.apiGetAccounts12Months()
+            setDataAccount(response.result)
+        }
+        fetchAccount()
+    }, [])
     const options = {
         responsive: true,
         // plugins: {
@@ -43,8 +55,8 @@ function LineChart() {
         labels,
         datasets: [
             {
-                label: 'New account register',
-                data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+                label: 'Accounts',
+                data: dataAccount,
                 borderColor: 'rgb(53, 162, 235)',
                 backgroundColor: 'rgba(53, 162, 235, 0.5)',
             },
@@ -52,7 +64,7 @@ function LineChart() {
     };
     return (
         <div className={cx('wrapper')}>
-            <div className={cx('nameChart')}>Total users with total couples</div>
+            <div className={cx('nameChart')}>Total accounts monthly</div>
             <Line className={cx('lineChart')} options={options} data={data} />
         </div>
     );

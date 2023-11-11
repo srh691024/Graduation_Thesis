@@ -25,3 +25,8 @@ export const apiResetPassword = (payload) => axios({
     method: 'PUT',
     data: payload
 });
+
+export const apiSearchUser = (searchQuery) => axios({
+    url: `auth/searchUser?email=${searchQuery}`,
+    method: 'GET',
+})

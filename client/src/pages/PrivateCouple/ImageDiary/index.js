@@ -1,18 +1,45 @@
 import classNames from "classnames/bind";
-import images from "~/assets/images";
 import styles from "~/pages/PrivateCouple/ImageDiary/ImageDiary.module.scss"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment, faHeart, faFilter, faChevronDown } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
-import config from "~/config";
-import { DropDownItem } from "~/components";
 import { faCalendar, faCommentDots } from "@fortawesome/free-regular-svg-icons";
-import { useState } from "react";
+
+import { Link, Navigate, useParams } from "react-router-dom";
+import { DropDownItem, ModalDetailPost } from "~/components";
+import { useEffect, useState } from "react";
+import * as postServices from '~/services/postServices'
+import { createPortal } from "react-dom";
+import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
 
 const cx = classNames.bind(styles);
 
 function ImageDiary() {
+    const { usernameCouple } = useParams()
     const [open, setOpen] = useState(false);
+    const [postsByCouple, setPostsByCouple] = useState([])
+    const [showModalDetailPost, setShowModalDetailPost] = useState(false)
+    const { current } = useSelector(state => state.user)
+    const { couple } = useSelector(state => state.couple)
+    const [selectedPost, setSelectedPost] = useState({});
+
+    useEffect(() => {
+        async function fetchPostByCouple() {
+            const response = await postServices.apiGetPostsByCouple(usernameCouple)
+            if (response.success) setPostsByCouple(response.result)
+        }
+        fetchPostByCouple()
+    }, [usernameCouple])
+    const handleClickPost = (post) => {
+        setSelectedPost(post);
+        setShowModalDetailPost(true)
+    }
+
+    if(couple.userNameCouple !== usernameCouple){
+        Swal.fire('Warning!', 'Can not see this page of other couple', 'warning')
+        return <Navigate to={`/diarypost/${couple.userNameCouple}`} />
+    }
+
     return (
         <div className={cx('container')}>
             <div className={cx('diary-post')}>
@@ -51,87 +78,68 @@ function ImageDiary() {
                                 </div>
                             </div>
                             <div className={cx('grid-image')}>
-                                <div className={cx('grid-three-images')}>
-                                    <div className={cx('one-image-in-grid')}>
-                                        <Link to={config.routes.imagesDiary} >
-                                            <div className={cx('image')}>
-                                                <div className={cx('image-one')}>
-                                                    <img src={images.login_image} alt="" />
-                                                </div>
-                                                <div className={cx('image-two')}></div>
-                                            </div>
-                                            <div className={cx('overlay-with-like-comment')}>
-                                                <ul>
-                                                    <li>
-                                                        <span className={cx('count')}>7</span>
-                                                        <span className={cx('icon')}>
-                                                            <FontAwesomeIcon icon={faHeart} />
-                                                        </span>
-                                                    </li>
-                                                    <li>
-                                                        <span className={cx('count')}>0</span>
-                                                        <span className={cx('icon')}>
-                                                            <FontAwesomeIcon icon={faComment} />
-                                                        </span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </Link>
+                                {postsByCouple.length > 0 ? (
+                                    <div>
+                                        {
+                                            postsByCouple.map((post, index) => {
+                                                if (index % 3 === 0) {
+                                                    return (
+                                                        <div className={cx('grid-three-images')} key={post._id}>
+                                                            {postsByCouple.map((p, i) => {
+                                                                if (i >= index && i < index + 3) {
+                                                                    return (
+                                                                        <div key={p._id}>
+                                                                            <div className={cx('one-image-in-grid')} >
+                                                                                <Link onClick={() => handleClickPost(p)}>
+                                                                                    <div className={cx('image')}>
+                                                                                        <div className={cx('image-one')}>
+                                                                                            <img src={p.images[0]} alt="" />
+                                                                                        </div>
+                                                                                        <div className={cx('image-two')}></div>
+                                                                                    </div>
+                                                                                    <div className={cx('overlay-with-like-comment')}>
+                                                                                        <ul>
+                                                                                            <li>
+                                                                                                <span className={cx('count')}>{p?.likes?.length}</span>
+                                                                                                <span className={cx('icon')}>
+                                                                                                    <FontAwesomeIcon icon={faHeart} />
+                                                                                                </span>
+                                                                                            </li>
+                                                                                            <li>
+                                                                                                <span className={cx('count')}>{p?.comments?.length}</span>
+                                                                                                <span className={cx('icon')}>
+                                                                                                    <FontAwesomeIcon icon={faComment} />
+                                                                                                </span>
+                                                                                            </li>
+                                                                                        </ul>
+                                                                                    </div>
+                                                                                </Link>
+                                                                            </div>
+
+
+                                                                        </div>
+                                                                    );
+                                                                } else {
+                                                                    return null;
+                                                                }
+                                                            })}
+                                                        </div>
+                                                    );
+                                                } else {
+                                                    return null;
+                                                }
+                                            })
+                                        }
                                     </div>
-                                    <div className={cx('one-image-in-grid')}>
-                                        <Link to={config.routes.imagesDiary} >
-                                            <div className={cx('image')}>
-                                                <div className={cx('image-one')}>
-                                                    <img src={images.login_image} alt="" />
-                                                </div>
-                                                <div className={cx('image-two')}></div>
-                                            </div>
-                                            <div className={cx('overlay-with-like-comment')}>
-                                                <ul>
-                                                    <li>
-                                                        <span className={cx('count')}>7</span>
-                                                        <span className={cx('icon')}>
-                                                            <FontAwesomeIcon icon={faHeart} />
-                                                        </span>
-                                                    </li>
-                                                    <li>
-                                                        <span className={cx('count')}>0</span>
-                                                        <span className={cx('icon')}>
-                                                            <FontAwesomeIcon icon={faComment} />
-                                                        </span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </Link>
-                                    </div>
-                                    <div className={cx('one-image-in-grid')}>
-                                        <Link to={config.routes.imagesDiary} >
-                                            <div className={cx('image')}>
-                                                <div className={cx('image-one')}>
-                                                    <img src={images.login_image} alt="" />
-                                                </div>
-                                                <div className={cx('image-two')}></div>
-                                            </div>
-                                            <div className={cx('overlay-with-like-comment')}>
-                                                <ul>
-                                                    <li>
-                                                        <span className={cx('count')}>7</span>
-                                                        <span className={cx('icon')}>
-                                                            <FontAwesomeIcon icon={faHeart} />
-                                                        </span>
-                                                    </li>
-                                                    <li>
-                                                        <span className={cx('count')}>0</span>
-                                                        <span className={cx('icon')}>
-                                                            <FontAwesomeIcon icon={faComment} />
-                                                        </span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </Link>
-                                    </div>
-                                </div>
+                                )
+                                    : (<div>No post found</div>)
+                                }
                             </div>
+                            {/* Modal new diary */}
+                            {showModalDetailPost && createPortal(
+                                <ModalDetailPost current={current} post={selectedPost} onClose={() => setShowModalDetailPost(false)} />,
+                                document.body
+                            )}
                         </div>
                     </div>
                 </div>

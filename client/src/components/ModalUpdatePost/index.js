@@ -11,6 +11,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import * as postServices from '../../services/postServices'
 import moment from "moment";
 import { useState } from "react";
+import Swal from "sweetalert2";
 
 
 const cx = classNames.bind(styles);
@@ -72,7 +73,9 @@ function ModalUpdatePost({ data, onClose }) {
 
             // fetch API create post
             const response = await postServices.apiUpdatePost(data._id, formData);
-            console.log(response)
+            if (!response.success) {
+                Swal.fire('Oops!', response.result, 'error');
+            }
             // console.log(values.imagenames)
             // console.log(deletedImages)
             // onClose()

@@ -63,6 +63,8 @@ const sendInvitation = asyncHandler(async (req, res) => {
         message: 'Missing email address'
     })
 
+    const connectionCode = makeToken()
+    const invitationIdEdited = btoa(email) + '@' + connectionCode;
     //check if invitation have
     const checkInvitation = await Invitation.findOne({ userSend: _id })
     if (checkInvitation) return res.status(400).json({ success: false, result: "You have already send connection invitation today. Please cancel that connection invitation and try again." })
@@ -77,13 +79,21 @@ const sendInvitation = asyncHandler(async (req, res) => {
         if (userEmail._id.toString() === _id) return res.status(400).json({ success: false, result: "You can not send invitation for yourself" })
         const checkCouple = await Couple.findOne({ $and: [{ $or: [{ createdUser: userEmail._id }, { loverUserId: userEmail._id }] }, { isHidden: false }] })
         if (checkCouple.isConnected) return res.status(400).json({ success: false, result: "This user is already connected" })
-        return res.status(200).json({ success: true, result: "Send invitation to your lover successfully" })
+
+        const newInvitation = await Invitation.create({
+            invitationId: invitationIdEdited,
+            createdTime: new Date(),
+            validHours: 24,
+            userSend: _id,
+            type: 'new',
+            emailReceiveUser: email
+        })
+        return res.status(200).json({
+            success: newInvitation ? true : false,
+            result: newInvitation ? "Send invitation to your lover successfully" : 'Can not send invitation to your lover'
+        })
+
     } else {
-
-        //check if the receiver is already connected
-        const connectionCode = makeToken()
-        const invitationIdEdited = btoa(email) + '@' + connectionCode;
-
         const newInvitation = await Invitation.create({
             invitationId: invitationIdEdited,
             createdTime: new Date(),
@@ -121,11 +131,12 @@ const sendInvitation = asyncHandler(async (req, res) => {
 
 const cancelInvitation = asyncHandler(async (req, res) => {
     const { _id } = req.user;
+    const { invitationId } = req.params;
+
     const checkInvitation = await Invitation.findOne({ userSend: _id });
     if (!checkInvitation) return res.status(400).json({ success: false, result: "No invitation found" })
     if (checkInvitation.userSend.toString() !== _id) return res.status(400).json({ success: false, result: "You dont have permission to delete this invitation" })
 
-    const { invitationId } = req.params;
     const deleteInvi = await Invitation.findByIdAndDelete(invitationId);
     return res.status(200).json({
         success: deleteInvi ? true : false,
@@ -391,8 +402,16 @@ const acceptRestoreCouple = asyncHandler(async (req, res) => {
     const hiddenPost = await Post.updateMany({ couple: invitation.coupleId }, { $set: { isHidden: false } })
     const hiddenTodo = await Todo.updateMany({ coupleId: invitation.coupleId }, { $set: { isHidden: false } })
 
-    const deleteLoverUserCouple = await Couple.findOneAndDelete({ $and: [{ createdUser: _id }, { isConnected: false }, { isHidden: false }] })
-    const deletePartnerCouple = await Couple.findOneAndDelete({ $and: [{ createdUser: invitation.userSend }, { isConnected: false }, { isHidden: false }] })
+
+    const deleteLoverUserCouple = await Couple.findOne({ $and: [{ createdUser: _id }, { isConnected: false }, { isHidden: false }] })
+    const delPostUserOne = await Post.deleteMany({ couple: deleteLoverUserCouple._id })
+    const delAnniUserOne = await Anniversary.deleteMany({ coupleId: deleteLoverUserCouple._id })
+    await deleteLoverUserCouple.deleteOne()
+
+    const deletePartnerCouple = await Couple.findOne({ $and: [{ createdUser: invitation.userSend }, { isConnected: false }, { isHidden: false }] })
+    const delPostUserTwo = await Post.deleteMany({ couple: deletePartnerCouple._id })
+    const delAnniUserTwo = await Anniversary.deleteMany({ coupleId: deletePartnerCouple._id })
+    await deletePartnerCouple.deleteOne()
 
 
     restoreCouple.isConnected = true
@@ -416,6 +435,37 @@ const getListInvitation = asyncHandler(async (req, res) => {
     })
 })
 
+const acceptInvitationTwo = asyncHandler(async (req, res) => {
+    const { _id } = req.user
+    const { invitationId } = req.params
+
+    const checkCoupleUser = await Couple.findOne({ $and: [{ $or: [{ createdUser: _id }, { loverUserId: _id }] }, { isHidden: false }] })
+    if (checkCoupleUser.isConnected) return res.status(400).json({ success: false, result: 'You already has a couple. Cannot connect other user' })
+
+    const invitation = await Invitation.findById(invitationId)
+    if (!invitation) return res.status(400).json({ success: false, result: 'No invitation found' })
+
+    const checkUserSend = await Couple.findOne({ $and: [{ $or: [{ createdUser: invitation.userSend }, { loverUserId: invitation.userSend }] }, { isHidden: false }] })
+    if (checkUserSend.isConnected) return res.status(400).json({ success: false, result: 'Something went wrong. Cannot accept this invitation.' })
+
+    checkUserSend.loverUserId = _id
+    checkUserSend.isConnected = true
+    checkUserSend.tempNameLover = ''
+    checkUserSend.tempDobLover = null
+    checkUserSend.tempHoroscope = ''
+    checkUserSend.tempAvatarLover = ''
+    checkUserSend.tempAvatarLoverName = ''
+    checkUserSend.startConnectedDate = new Date()
+    await checkUserSend.save()
+    await invitation.deleteOne()
+    const oldCouple = await Couple.findOneAndDelete({ $and: [{ createdUser: _id }, { isHidden: false }] })
+
+    return res.status(200).json({
+        success: checkUserSend ? true : false,
+        result: checkUserSend ? checkUserSend : 'Can not accept this invitation'
+    })
+})
+
 module.exports = {
     getCouple,
     getCoupleByCurrentUser,
@@ -433,4 +483,5 @@ module.exports = {
     inviteRestoreCouple,
     acceptRestoreCouple,
     getListInvitation,
+    acceptInvitationTwo,
 }

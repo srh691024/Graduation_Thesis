@@ -30,7 +30,9 @@ function ConnectLover() {
     const [openDisconnect, setOpenDisconnect] = useState(false);
     const [infoCouple, setInfoCouple] = useState();
     const { current } = useSelector(state => state.user)
-   
+    const [showModalNoteSendLink, setShowModalNoteSendLink] = useState(false);
+    const [showModalDisconnect, setShowModalDisconnect] = useState(false);
+    
     useEffect(() => {
         async function fetchInfoInvitation() {
             setTimeout(async () => {
@@ -67,8 +69,6 @@ function ConnectLover() {
         fetchCheckStatusConnectCouple()
     }, [])
 
-    const [showModalNoteSendLink, setShowModalNoteSendLink] = useState(false);
-    const [showModalDisconnect, setShowModalDisconnect] = useState(false);
     const formik = useFormik({
         initialValues: {
             token: '',
@@ -181,7 +181,7 @@ function ConnectLover() {
                         {isConnected ?
                             <div className={cx('have-connection-one')}>
                                 <div className={cx('from-date')}>
-                                    <div className={cx('date')}>From {moment(infoCouple?.startLoveDate)?.format("dddd, MMMM Do YYYY")} </div>
+                                    <div className={cx('date')}>From {moment(infoCouple?.startConnectedDate)?.format("dddd, MMMM Do YYYY")} </div>
                                     <div className={cx('icon-option')} onClick={() => { setOpenDisconnect(!openDisconnect) }}>
                                         <FontAwesomeIcon icon={faEllipsisVertical} />
                                     </div>
@@ -194,7 +194,7 @@ function ConnectLover() {
                                         document.body
                                     )}
                                 </div>
-                                <div className={cx('connected-with')}>Connected with
+                                <div className={cx('connected-with')}>Connected with&nbsp;
                                     {getNameOfLover()}
                                 </div>
                                 <div className={cx('avatar-partner')}>

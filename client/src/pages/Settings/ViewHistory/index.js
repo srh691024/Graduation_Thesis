@@ -60,10 +60,11 @@ function ViewHistory() {
         }
     }
     const handleClickRestore = async (coupleId) => {
-        setHaveInvitation(true)
+
         const response = await coupleServices.apiInviteRestoreCouple(coupleId)
         if (response.success) {
             Swal.fire('Notifications', response.result, 'success');
+            setHaveInvitation(true)
         } else {
             Swal.fire('Oops!', response.result, 'error');
         }

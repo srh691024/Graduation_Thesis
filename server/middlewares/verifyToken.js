@@ -25,7 +25,7 @@ const verifyAccessToken = asyncHandler(async (req, res, next) => {
 //phân quyền admin
 const isAdmin = asyncHandler((req, res, next) => {
     const { role } = req.user
-    if (role !== 'admin')
+    if (role !== '22')
         return res.status(401).json({
             success: false,
             message: 'Your account is not an admin account!'

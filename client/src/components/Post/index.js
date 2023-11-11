@@ -2,7 +2,7 @@ import classNames from "classnames/bind";
 import styles from "~/components/Post/Post.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis, faHeart as faHearts, faComment as faComments, faArrowRightToBracket, faLock, faDeleteLeft, faBan, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { faHeart, faComment, faShareFromSquare, faPenToSquare } from "@fortawesome/free-regular-svg-icons";
+import { faHeart, faComment, faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import moment from "moment";
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -18,11 +18,20 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import ModalDetailPost from "../ModalDetailPost";
 
 const cx = classNames.bind(styles);
 
 function Post({ current, post }) {
     const { couple } = useSelector(state => state.couple)
+    const [showModalDetailPost, setShowModalDetailPost] = useState(false)
+    const [isLike, setIsLike] = useState(false)
+    const [showModalUpdatePost, setShowModalUpdatePost] = useState(false);
+    const [openOptionPost, setOpenOptionPost] = useState(false);
+    const [showModalDeletePost, setShowModalDeletePost] = useState(false);
+    const [selectedPost, setSelectedPost] = useState({});
+
     const settings = {
         dots: true,
         infinite: true,
@@ -31,13 +40,23 @@ function Post({ current, post }) {
         slidesToScroll: 1,
     };
 
-    const [isLike, setIsLike] = useState(false)
     useEffect(() => {
         if (post.likes.find(like => like === current._id)) {
             setIsLike(true)
         }
 
     }, [post.likes, current._id])
+
+    const handleReport = async () => {
+        const response = await postServices.apiReportPost(post._id)
+        console.log(response)
+        if (!response.success) {
+            Swal.fire('Oops!', response.result, 'error')
+        } else {
+            Swal.fire('Notify', 'You have reported this diary', 'warning')
+        }
+    }
+
     const handleLike = async () => {
         setIsLike(true)
         const response = await postServices.apiLikePost(post._id)
@@ -59,7 +78,7 @@ function Post({ current, post }) {
                 }
             }
             async function fetchLike() {
-                const notiLover = await notifyServices.apiCreateNotify(notifyLover);
+                await notifyServices.apiCreateNotify(notifyLover);
             }
             fetchLike()
         } else {
@@ -70,7 +89,7 @@ function Post({ current, post }) {
                 type: 'image'
             }
             async function fetchLike() {
-                const noti = await notifyServices.apiCreateNotify(notify)
+                await notifyServices.apiCreateNotify(notify)
             }
             fetchLike()
         }
@@ -79,12 +98,6 @@ function Post({ current, post }) {
         setIsLike(false)
         await postServices.apiLikePost(post._id)
     }
-
-
-
-    const [showModalUpdatePost, setShowModalUpdatePost] = useState(false);
-    const [openOptionPost, setOpenOptionPost] = useState(false);
-    const [showModalDeletePost, setShowModalDeletePost] = useState(false);
 
     //Add comment
     const formik = useFormik({
@@ -119,7 +132,7 @@ function Post({ current, post }) {
                         type: 'image'
                     }
                 }
-                const notiLover = await notifyServices.apiCreateNotify(notifyLover);
+                await notifyServices.apiCreateNotify(notifyLover);
             } else {
                 const notify = {
                     recipients: [comment.result.couple.createdUser, comment.result.couple.loverUserId],
@@ -128,7 +141,7 @@ function Post({ current, post }) {
                     type: 'image'
                 }
                 async function fetchLike() {
-                    const noti = await notifyServices.apiCreateNotify(notify)
+                    await notifyServices.apiCreateNotify(notify)
                 }
                 fetchLike()
             }
@@ -139,6 +152,12 @@ function Post({ current, post }) {
     //     const deleteComment = await postServices.apiDeleteComment(post._id, commentId)
     //     console.log(deleteComment.result)
     // }
+
+    const handleClickPost = (post) => {
+        setSelectedPost(post);
+        setShowModalDetailPost(true)
+    }
+
     return (
         <div className={cx('wrapper')}>
             <article>
@@ -190,9 +209,20 @@ function Post({ current, post }) {
                                 {/* Dropdown menu */}
                                 <div className={cx('dropdown-menu', `${openOptionPost ? 'active' : 'inactive'}`)}>
                                     <ul >
-                                        <DropDownItem icon={faBan} text={"Report"} />
+                                        {current?._id === post?.couple?.createdUser || current?._id === post?.couple?.loverUserId ?
+                                            null
+                                            :
+                                            <div onClick={() => handleReport()}>
+                                                <DropDownItem icon={faBan} text={"Report"} />
+                                            </div>
+                                        }
+
                                         <DropDownItem icon={faHeart} text={"Follow"} />
-                                        <DropDownItem icon={faArrowRightToBracket} text={"Go to post"} />
+
+                                        <div onClick={() => handleClickPost(post)}>
+                                            <DropDownItem icon={faArrowRightToBracket} text={"Go to post"} />
+                                        </div>
+
                                         <DropDownItem icon={faLock} text={"Set mode"} />
                                         <div
                                             onClick={() => {
@@ -264,17 +294,17 @@ function Post({ current, post }) {
                                             </div>
                                         </span>
                                         <span>
-                                            <div className={cx('comment')}>
+                                            <div className={cx('comment')} onClick={() => handleClickPost(post)}>
                                                 <div className={cx('comment-one')}>
                                                     <FontAwesomeIcon className={cx('icon')} icon={faComment} />
                                                 </div>
                                             </div>
                                         </span>
-                                        <button >
+                                        {/* <button >
                                             <div className={cx('share')}>
                                                 <FontAwesomeIcon className={cx('icon')} icon={faShareFromSquare} />
                                             </div>
-                                        </button>
+                                        </button> */}
                                     </div>
                                     <div className={cx('like-comment-count')}>
                                         <span>
@@ -307,7 +337,7 @@ function Post({ current, post }) {
                                     <div className={cx('author-content')}>
                                         <div className={cx('author')}>
                                             <div className={cx('author-one')}>
-                                                <a href="/" alt="">{post.author.name}</a>
+                                                <Link>{post.author.name}</Link>
                                             </div>
                                         </div>
                                         <span>
@@ -315,16 +345,17 @@ function Post({ current, post }) {
                                         </span>
                                     </div>
                                 </div>
-                                <div className={cx('sub-comment')}>
-                                    <div className={cx('view-all-comment')}>
-                                        <a href="/" >
-                                            <span>View all {post.comments.length} comments</span>
-                                        </a>
-                                    </div>
-                                    <ul>
-                                        {post.comments.map((comment, index) => (
-
-                                            <div className={cx('comment')} key={index}>
+                                {post?.comments.length > 0 &&
+                                    <div className={cx('sub-comment')}>
+                                        <div className={cx('view-all-comment')}>
+                                            {post?.comments?.length > 1 &&
+                                                <Link onClick={() => handleClickPost(post)} >
+                                                    <span>View all {post?.comments?.length} comments</span>
+                                                </Link>
+                                            }
+                                        </div>
+                                        <ul>
+                                            <div className={cx('comment')}>
                                                 <div className={cx('comment-one')}>
                                                     <div className={cx('comment-two')}>
                                                         <div className={cx('comment-three')}>
@@ -332,14 +363,14 @@ function Post({ current, post }) {
                                                                 <a href="/">
                                                                     <div className={cx('name-one')}>
                                                                         <div className={cx('name-two')}>
-                                                                            <span>{comment.postedBy.name}</span>
+                                                                            <span>{post?.comments[0]?.postedBy.name}</span>
                                                                         </div>
                                                                     </div>
                                                                 </a>
                                                             </div>
                                                             <span className={cx('space')}> </span>
                                                             <span className={cx('content-comment')}>
-                                                                <span>{comment.textComment}</span>
+                                                                <span>{post?.comments[0]?.textComment}</span>
                                                             </span>
                                                             <div><FontAwesomeIcon
                                                                 //  onClick={handleDeleteComment(comment._id)} 
@@ -348,10 +379,10 @@ function Post({ current, post }) {
                                                     </div>
                                                 </div>
                                             </div>
-                                        ))}
+                                        </ul>
+                                    </div>
+                                }
 
-                                    </ul>
-                                </div>
                                 <div className={cx('add-comment')}>
                                     <div className={cx('section')}>
                                         <div className={cx('section-one')}>
@@ -373,7 +404,11 @@ function Post({ current, post }) {
                         </div>
                     </div>
                 </div>
-
+                {/* Modal new diary */}
+                {showModalDetailPost && createPortal(
+                    <ModalDetailPost current={current} post={selectedPost} onClose={() => setShowModalDetailPost(false)} />,
+                    document.body
+                )}
             </article>
 
         </div>

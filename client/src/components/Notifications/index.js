@@ -1,6 +1,5 @@
 import classNames from "classnames/bind";
 import styles from "~/components/Notifications/Notifications.module.scss"
-import images from "~/assets/images";
 import { useEffect, useState } from "react";
 import * as notifiServices from '~/services/notifyServices'
 import { useSelector } from "react-redux";
@@ -9,7 +8,6 @@ import moment from "moment";
 const cx = classNames.bind(styles);
 
 function Notifications(props) {
-    const { current } = useSelector(state => state.user)
     const { couple } = useSelector(state => state.couple)
     const [notiOfCouple, setNotiOfCouple] = useState([]);
     const [generalNoti, setGeneralNoti] = useState([]);
@@ -25,7 +23,7 @@ function Notifications(props) {
             }
         }
         getNotifies()
-    }, [])
+    }, [couple?.createdUser, couple.isConnected, couple?.loverUserId])
 
     return (
         <div className={cx('wrapper-noti', props.text)}>

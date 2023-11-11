@@ -85,6 +85,11 @@ export const apiGetListInvitation = ()=> axios({
     method: 'GET'
 })
 
+export const apiAcceptInvitationTwo = (invitationId)=> axios({
+    url: `couple/acceptInvitationTwo/${invitationId}`,
+    method: 'POST'
+})
+
 
 
 

@@ -1,19 +1,20 @@
 import classNames from 'classnames/bind';
 import styles from './Header.module.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFaceSmile, faSquareCheck, faImages, faBell, faCalendarDays } from '@fortawesome/free-regular-svg-icons';
+import { faSquareCheck, faImages, faBell, faCalendarDays } from '@fortawesome/free-regular-svg-icons';
 import { faPeopleLine, faBars, faHouse, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
-import { Notifications, ModalFeeling } from '~/components';
+import { Notifications } from '~/components';
 import { Link, useNavigate } from 'react-router-dom';
 import config from '~/config';
 import { useState, useEffect } from 'react';
 import images from "~/assets/images";
-import { createPortal } from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCurrentUser } from '~/store/user/asyncAction';
 import { logout, clearMessage } from '~/store/user/userSlice';
 import Swal from "sweetalert2";
 import { getCurrentCouple } from '~/store/couple/asyncAction';
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css'; // optional
 
 const cx = classNames.bind(styles)
 
@@ -22,7 +23,7 @@ function Header() {
     const navigate = useNavigate()
     const dispatch = useDispatch();
     const [openNotification, setOpenNotification] = useState(false);
-    const [showModalFeeling, setShowModalFeeling] = useState(false);
+    // const [showModalFeeling, setShowModalFeeling] = useState(false);
 
     const { isLoggedIn, current, mes } = useSelector(state => state.user);
     useEffect(() => {
@@ -35,12 +36,10 @@ function Header() {
 
     useEffect(() => {
         if (mes) Swal.fire('Oops!', mes, 'info').then(() => {
-
             dispatch(clearMessage());
             navigate(`${config.routes.login}`);
         })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [mes])
+    }, [dispatch, mes, navigate])
     return (
         <div className={cx('wrapper-header')}>
             <div className={cx('inner')}>
@@ -52,6 +51,7 @@ function Header() {
                                     <div className={cx('logo-second')}>
                                         <span>
                                             <div className={cx('logo-third')}>
+
                                                 <Link to={`/diarypost/${couple.userNameCouple}`}>
                                                     <div className={cx('logo-fourth')}>
                                                         <div className={cx('logo-image')}>
@@ -63,6 +63,7 @@ function Header() {
                                                         </div>
                                                     </div>
                                                 </Link>
+
                                             </div>
                                         </span>
                                     </div>
@@ -73,22 +74,24 @@ function Header() {
                                     <div className={cx('sub-first')}>
                                         <span>
                                             <div className={cx('sub-second')}>
-                                                <Link to={`/diarypost/${couple.userNameCouple}`}>
-                                                    <div className={cx('sub-third')}>
-                                                        <div className={cx('icon')}>
-                                                            <div className={cx('icon-first')}>
-                                                                <div className={cx('icon-second')}>
-                                                                    <FontAwesomeIcon className={cx('icon-third')} icon={faHouse} />
+                                                <Tippy content='Diary' placement='right'>
+                                                    <Link to={`/diarypost/${couple.userNameCouple}`}>
+                                                        <div className={cx('sub-third')}>
+                                                            <div className={cx('icon')}>
+                                                                <div className={cx('icon-first')}>
+                                                                    <div className={cx('icon-second')}>
+                                                                        <FontAwesomeIcon className={cx('icon-third')} icon={faHouse} />
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </Link>
+                                                    </Link>
+                                                </Tippy>
                                             </div>
                                         </span>
                                     </div>
                                 </div>
-                                <div className={cx('sub-action')}>
+                                {/* <div className={cx('sub-action')}>
                                     <div className={cx('sub-first')}>
                                         <span>
                                             <div className={cx('sub-second')}>
@@ -110,22 +113,47 @@ function Header() {
                                             </div>
                                         </span>
                                     </div>
-                                </div>
+                                </div> */}
                                 <div className={cx('sub-action')}>
                                     <div className={cx('sub-first')}>
                                         <span>
                                             <div className={cx('sub-second')}>
-                                                <Link to={config.routes.homepage}>
-                                                    <div className={cx('sub-third')}>
-                                                        <div className={cx('icon')}>
-                                                            <div className={cx('icon-first')}>
-                                                                <div className={cx('icon-second')}>
-                                                                    <FontAwesomeIcon className={cx('icon-third')} icon={faPeopleLine} />
+                                                <Tippy content='Puclic social' placement='right'>
+                                                    <Link to={config.routes.homepage}>
+                                                        <div className={cx('sub-third')}>
+                                                            <div className={cx('icon')}>
+                                                                <div className={cx('icon-first')}>
+                                                                    <div className={cx('icon-second')}>
+                                                                        <FontAwesomeIcon className={cx('icon-third')} icon={faPeopleLine} />
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </Link>
+                                                    </Link>
+                                                </Tippy>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className={cx('sub-action')}>
+                                    <div className={cx('sub-first')}>
+                                        <span>
+
+                                            <div className={cx('sub-second')}>
+                                                <Tippy content='Anniversary' placement='right'>
+
+                                                    <Link to={`/anniversary/${couple.userNameCouple}`}>
+                                                        <div className={cx('sub-third')}>
+                                                            <div className={cx('icon')}>
+                                                                <div className={cx('icon-first')}>
+                                                                    <div className={cx('icon-second')}>
+                                                                        <FontAwesomeIcon className={cx('icon-third')} icon={faCalendarDays} />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </Link>
+                                                </Tippy>
                                             </div>
                                         </span>
                                     </div>
@@ -134,17 +162,20 @@ function Header() {
                                     <div className={cx('sub-first')}>
                                         <span>
                                             <div className={cx('sub-second')}>
-                                                <Link to={`/anniversary/${couple.userNameCouple}`}>
-                                                    <div className={cx('sub-third')}>
-                                                        <div className={cx('icon')}>
-                                                            <div className={cx('icon-first')}>
-                                                                <div className={cx('icon-second')}>
-                                                                    <FontAwesomeIcon className={cx('icon-third')} icon={faCalendarDays} />
+                                                <Tippy content='Todo' placement='right'>
+
+                                                    <Link to={`/todolist/${couple.userNameCouple}`}>
+                                                        <div className={cx('sub-third')}>
+                                                            <div className={cx('icon')}>
+                                                                <div className={cx('icon-first')}>
+                                                                    <div className={cx('icon-second')}>
+                                                                        <FontAwesomeIcon className={cx('icon-third')} icon={faSquareCheck} />
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </Link>
+                                                    </Link>
+                                                </Tippy>
                                             </div>
                                         </span>
                                     </div>
@@ -153,17 +184,20 @@ function Header() {
                                     <div className={cx('sub-first')}>
                                         <span>
                                             <div className={cx('sub-second')}>
-                                                <Link to={`/todolist/${couple.userNameCouple}`}>
-                                                    <div className={cx('sub-third')}>
-                                                        <div className={cx('icon')}>
-                                                            <div className={cx('icon-first')}>
-                                                                <div className={cx('icon-second')}>
-                                                                    <FontAwesomeIcon className={cx('icon-third')} icon={faSquareCheck} />
+                                                <Tippy content='Images' placement='right'>
+
+                                                    <Link to={`/imagesdiary/${couple.userNameCouple}`}>
+                                                        <div className={cx('sub-third')}>
+                                                            <div className={cx('icon')}>
+                                                                <div className={cx('icon-first')}>
+                                                                    <div className={cx('icon-second')}>
+                                                                        <FontAwesomeIcon className={cx('icon-third')} icon={faImages} />
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </Link>
+                                                    </Link>
+                                                </Tippy>
                                             </div>
                                         </span>
                                     </div>
@@ -172,36 +206,20 @@ function Header() {
                                     <div className={cx('sub-first')}>
                                         <span>
                                             <div className={cx('sub-second')}>
-                                                <Link to={`/imagesdiary/${couple.userNameCouple}`}>
-                                                    <div className={cx('sub-third')}>
-                                                        <div className={cx('icon')}>
-                                                            <div className={cx('icon-first')}>
-                                                                <div className={cx('icon-second')}>
-                                                                    <FontAwesomeIcon className={cx('icon-third')} icon={faImages} />
+                                                <Tippy content='Notifications' placement='right'>
+
+                                                    <Link onClick={() => { setOpenNotification(!openNotification) }}>
+                                                        <div className={cx('sub-third')}>
+                                                            <div className={cx('icon')}>
+                                                                <div className={cx('icon-first')}>
+                                                                    <div className={cx('icon-second')}>
+                                                                        <FontAwesomeIcon className={cx('icon-third')} icon={faBell} />
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </Link>
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className={cx('sub-action')}>
-                                    <div className={cx('sub-first')}>
-                                        <span>
-                                            <div className={cx('sub-second')}>
-                                                <Link onClick={() => { setOpenNotification(!openNotification) }}>
-                                                    <div className={cx('sub-third')}>
-                                                        <div className={cx('icon')}>
-                                                            <div className={cx('icon-first')}>
-                                                                <div className={cx('icon-second')}>
-                                                                    <FontAwesomeIcon className={cx('icon-third')} icon={faBell} />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </Link>
+                                                    </Link>
+                                                </Tippy>
                                             </div>
                                         </span>
                                     </div>
@@ -235,17 +253,20 @@ function Header() {
                                             <div className={cx('sub-first')}>
                                                 <span>
                                                     <div className={cx('sub-second')}>
-                                                        <Link onClick={() => dispatch(logout())} >
-                                                            <div className={cx('sub-third')}>
-                                                                <div className={cx('icon')}>
-                                                                    <div className={cx('icon-first')}>
-                                                                        <div className={cx('icon-second')}>
-                                                                            <FontAwesomeIcon className={cx('icon-third')} icon={faArrowRightFromBracket} />
+                                                        <Tippy content='Logout' placement='right'>
+
+                                                            <Link onClick={() => dispatch(logout())} >
+                                                                <div className={cx('sub-third')}>
+                                                                    <div className={cx('icon')}>
+                                                                        <div className={cx('icon-first')}>
+                                                                            <div className={cx('icon-second')}>
+                                                                                <FontAwesomeIcon className={cx('icon-third')} icon={faArrowRightFromBracket} />
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        </Link>
+                                                            </Link>
+                                                        </Tippy>
                                                     </div>
                                                 </span>
                                             </div>
@@ -259,17 +280,19 @@ function Header() {
                                     <div className={cx('sub-first')}>
                                         <span>
                                             <div className={cx('sub-second')}>
-                                                <Link to={config.routes.settingEditProfile}>
-                                                    <div className={cx('sub-third')}>
-                                                        <div className={cx('icon')}>
-                                                            <div className={cx('icon-first')}>
-                                                                <div className={cx('icon-second')}>
-                                                                    <FontAwesomeIcon className={cx('icon-third')} icon={faBars} />
+                                                <Tippy content='Settings' placement='right'>
+                                                    <Link to={config.routes.settingEditProfile}>
+                                                        <div className={cx('sub-third')}>
+                                                            <div className={cx('icon')}>
+                                                                <div className={cx('icon-first')}>
+                                                                    <div className={cx('icon-second')}>
+                                                                        <FontAwesomeIcon className={cx('icon-third')} icon={faBars} />
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </Link>
+                                                    </Link>
+                                                </Tippy>
                                             </div>
                                         </span>
                                     </div>

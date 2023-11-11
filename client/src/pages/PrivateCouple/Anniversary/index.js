@@ -4,16 +4,26 @@ import styles from "~/pages/PrivateCouple/Anniversary/Anniversary.module.scss"
 import images from "~/assets/images";
 import { useState } from "react";
 import moment from "moment";
+import { useSelector } from "react-redux";
+import { Navigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const cx = classNames.bind(styles);
 
 function Anniversary() {
+    const { usernameCouple } = useParams()
     const [dataFromCalendar, setDataFromCalendar] = useState([]);
+    const {couple} = useSelector(state=> state.couple)
+    
 
     const handleDataFromCalendar = (data) => {
         setDataFromCalendar(data);
     }
-    console.log(dataFromCalendar)
+    if(couple.userNameCouple !== usernameCouple){
+        Swal.fire('Warning!', 'Can not see this page of other couple', 'warning')
+        return <Navigate to={`/diarypost/${couple.userNameCouple}`} />
+    }
+    
     return (
         <div className={cx('divide-column')}>
             <div className={cx('wrapper-newAnni')}>
@@ -93,7 +103,6 @@ function Anniversary() {
                     </div>
                 </div>
             </div>
-
         </div>
     );
 }

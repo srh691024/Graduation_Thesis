@@ -19,6 +19,9 @@ export const userSlice = createSlice({
         logout: (state, action) => {
             state.isLoggedIn = false
             state.token = null
+            state.current = {}
+            state.mes = ''
+            state.isLoading = false
         },
         clearMessage: (state) => {
             state.mes = ''
@@ -62,8 +65,6 @@ export const userSlice = createSlice({
             // Tắt trạng thái loading, lưu thông tin user vào store
             state.isLoading = false;
             state.current = action.payload;
-            console.log(state.current);
-            console.log(action.payload);
         });
 
         // Khi thực hiện action login thất bại (Promise rejected)

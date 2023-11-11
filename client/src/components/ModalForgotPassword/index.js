@@ -1,26 +1,21 @@
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
-import styles from '~/components/ResetPassword/ResetPassword.module.scss'
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import * as authServices from '~/services/authServices';
 import Swal from "sweetalert2";
-import config from '~/config';
+import styles from '~/components/ModalForgotPassword/ModalForgotPassword.module.scss'
+import * as authServices from '~/services/authServices'
 
+const cx = classNames.bind(styles)
 
-const cx = classNames.bind(styles);
-
-function ResetPassword() {
-    const navigate = useNavigate();
-    const [password, setPassword] = useState('');
-    const { token } = useParams()
-    const handleResetPassword = async () => {
-        const response = await authServices.apiResetPassword({ password, token })
+function ModalForgotPassword({ onClose }) {
+    const [email, setEmail] = useState('');
+    const handleForgotPassword = async () => {
+        const response = await authServices.apiForgotPassword({ email });
         if (response.success) {
-            await Swal.fire('Success', response.message, 'success')
-            navigate(`${config.routes.login}`)
+            Swal.fire('Success', response.message, 'success');
         } else Swal.fire('Oops!', response.message, 'error');
     }
-
     return (
         <div className={cx('wrapper')}>
             <div className={cx('wrapper-modal')}>
@@ -39,17 +34,27 @@ function ResetPassword() {
                                                             <div className={cx('create-two')}>
                                                                 <div className={cx('create-three')}>
                                                                     <h1>
-                                                                        <div className={cx('title')}>Create new password</div>
+                                                                        <div className={cx('title')}>Forgot password?</div>
                                                                     </h1>
+                                                                </div>
+                                                                <div className={cx('back')} onClick={onClose}>
+                                                                    <div className={cx('exit-one')}>
+                                                                        <div className={cx('exit-two')}>
+                                                                            <div className={cx('exit-three')}>
+                                                                                <span>
+                                                                                    <FontAwesomeIcon className={cx('icon')} icon={faChevronLeft} />
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div className={cx('content')}>
-                                                        <p>Please enter new password:</p>
-                                                        <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="New password" />
-                                                        <button type="submit" onClick={handleResetPassword}>Next</button>
-
+                                                        <p>We will send you a link to help you retrieve your password via email. Please fill in your email:</p>
+                                                        <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Enter your email" />
+                                                        <button type="submit" onClick={handleForgotPassword}>Send</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -65,4 +70,4 @@ function ResetPassword() {
     );
 }
 
-export default ResetPassword;
+export default ModalForgotPassword;

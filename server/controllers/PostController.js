@@ -34,12 +34,15 @@ const updatePost = asyncHandler(async (req, res) => {
     if (!dateAnni) dateAnni = new Date();
     if (!mode) mode = 'Private'
 
-    if (typeof deletedImages === 'string') {
-        const array = []
-        array.push(deletedImages)
-        deleteImage(array)
-    } else {
-        deleteImage(deletedImages)
+    if (deletedImages) {
+
+        if (typeof deletedImages === 'string') {
+            const array = []
+            array.push(deletedImages)
+            deleteImage(array)
+        } else {
+            deleteImage(deletedImages)
+        }
     }
 
     // lọc file ra khỏi array 
@@ -48,10 +51,8 @@ const updatePost = asyncHandler(async (req, res) => {
     const imagesFileName = (req.files || []).map(el => el.filename)
 
     const allImageNames = (imagenames || []).concat(imagesFileName)
-    console.log(allImageNames)
     // Gộp các đường dẫn URL hiện có và đường dẫn mới sau khi tải lên
     const allImageLinks = (imagesLink || []).concat(imagesFileLink);
-    console.log(allImageLinks)
 
     const updatePost = await Post.findByIdAndUpdate(postId, { content, dateAnni, mode, images: allImageLinks, imagesname: allImageNames }, { new: true })
 
@@ -88,7 +89,7 @@ const getPostsByCouple = asyncHandler(async (req, res) => {
     const { usernameCouple } = req.params
     const couple = await Couple.findOne({ userNameCouple: usernameCouple })
 
-    const posts = await Post.find({ couple: couple._id }).populate('couple', 'avatarCouple isConnected nameCouple createdUser loverUserId').populate('author', 'name avatar').populate('comments.postedBy', 'name textComment')
+    const posts = await Post.find({ couple: couple._id }).populate('couple', 'avatarCouple isConnected nameCouple createdUser loverUserId').populate('author', 'name avatar').populate('comments.postedBy', 'name avatar')
     return res.status(200).json({
         success: posts ? true : false,
         result: posts ? posts : 'No posts found'
@@ -96,7 +97,7 @@ const getPostsByCouple = asyncHandler(async (req, res) => {
 })
 
 const getAllPostsPublic = asyncHandler(async (req, res) => {
-    const postsPublic = await Post.find({ mode: 'Public' }).populate('couple', 'avatarCouple isConnected nameCouple createdUser loverUserId').populate('author', 'name avatar').populate('comments.postedBy', 'name textComment')
+    const postsPublic = await Post.find({ mode: 'Public' }).populate('couple', 'avatarCouple isConnected nameCouple createdUser loverUserId').populate('author', 'name avatar').populate('comments.postedBy', 'name avatar')
     return res.status(200).json({
         success: postsPublic ? true : false,
         result: postsPublic ? postsPublic : 'No posts is shared public'
@@ -171,6 +172,30 @@ const deleteComment = asyncHandler(async (req, res) => {
     return res.status(200).json({ success: true, result: 'Comment deleted successfully' });
 })
 
+const reportPost = asyncHandler(async (req, res) => {
+    const { _id } = req.user
+    const { postId } = req.params
+    const post = await Post.findById(postId)
+    if (!post) throw new Error('This diary is not available')
+    const alreadyReported = post?.reports?.find(report => report.toString() === _id)
+    if (alreadyReported) return res.status(400).json({ success: false, result: 'You are already reported this diary' })
+    const addReport = await Post.findByIdAndUpdate(postId, { $push: { reports: _id } }, { new: true })
+    return res.status(200).json({
+        success: addReport ? true : false,
+        result: addReport ? addReport : 'Can not report this diary'
+    })
+})
+
+const getAllPosts = asyncHandler(async (req, res) => {
+    const allPosts = await Post.find()
+        .select('content likes comments author reports mode isBanned createdAt')
+        .populate('author', 'avatar name')
+    return res.status(200).json({
+        success: true,
+        result: allPosts
+    })
+})
+
 
 
 module.exports = {
@@ -183,5 +208,7 @@ module.exports = {
     uploadImagesPost,
     getPostsByCouple,
     addComment,
-    deleteComment
+    deleteComment,
+    reportPost,
+    getAllPosts
 }

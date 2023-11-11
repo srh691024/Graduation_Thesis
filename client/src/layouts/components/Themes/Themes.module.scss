@@ -1,4 +1,4 @@
-.wrapper{
+.wrapper {
     justify-content: center;
     display: flex;
     flex-direction: column;
@@ -138,6 +138,7 @@
         overflow: hidden;
         border-radius: 50%;
         border: 5px solid white;
+        background-color: rgb(var(--lodi-second-background));
 
         .circle-image {
             width: 100%;

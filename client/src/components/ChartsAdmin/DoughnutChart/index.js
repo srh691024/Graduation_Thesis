@@ -2,6 +2,8 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import classNames from 'classnames/bind';
 import styles from '~/components/ChartsAdmin/DoughnutChart/DoughnutChart.module.scss'
+import { useEffect, useState } from 'react';
+import * as adminServices from '~/services/adminServices'
 
 const cx = classNames.bind(styles);
 
@@ -9,12 +11,21 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 
 function DoughnutChart() {
+    const [dataDoughnut, setDataDoughnut] = useState([])
+
+    useEffect(() => {
+        async function fetchDoughnut() {
+            const response = await adminServices.apiGetDataDoughnut()
+            setDataDoughnut(response.result)
+        }
+        fetchDoughnut()
+    }, [])
     const data = {
         labels: ['Connected couple', 'Disconnected couple'],
         datasets: [
             {
-                label: '# of Votes',
-                data: [1230, 200],
+                label: 'This month',
+                data: [dataDoughnut[0]?.connectThismonth, dataDoughnut[0]?.disconnectThismonth],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
@@ -26,8 +37,8 @@ function DoughnutChart() {
                 borderWidth: 1,
             },
             {
-                label: '# of Votes',
-                data: [1402, 600],
+                label: 'Last month',
+                data: [dataDoughnut[1]?.connectLastmonth, dataDoughnut[1]?.disconnectLastmonth],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',

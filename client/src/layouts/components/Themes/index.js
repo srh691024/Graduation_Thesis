@@ -14,15 +14,20 @@ function Themes() {
     const [infoCreatedUser, setInfoCreatedUser] = useState({})
     const [infoCouple, setInfoCouple] = useState({});
     const [infoLoverUser, setInfoLoverUser] = useState({})
+
     useEffect(() => {
         async function fetchCouple() {
             const couple = await coupleServices.apiGetCouple(usernameCouple)
-            if (couple.success) setInfoCouple(couple.result)
-            const createdUser = await coupleServices.apiGetCreatedUserByCouple(couple.result.createdUser)
-            if (createdUser.success) setInfoCreatedUser(createdUser.result)
-            if(couple.result.loverUserId){
-            const loverUser = await coupleServices.apiGetLoverUserByCouple(couple.result.loverUserId)
-            if (loverUser.success) setInfoLoverUser(loverUser.result)
+            if (couple.success) {
+                setInfoCouple(couple.result)
+                const createdUser = await coupleServices.apiGetCreatedUserByCouple(couple.result.createdUser)
+                if (createdUser.success) setInfoCreatedUser(createdUser.result)
+                if (couple.result.loverUserId) {
+                    const loverUser = await coupleServices.apiGetLoverUserByCouple(couple.result.loverUserId)
+                    if (loverUser.success) setInfoLoverUser(loverUser.result)
+                } else {
+                    setInfoLoverUser({})
+                }
             }
         }
         fetchCouple()
@@ -60,18 +65,24 @@ function Themes() {
                 </div>
                 <div className={cx('heart')}>
                     <img src={images.heart1} alt='' />
-                    <div className={cx('rate')}>
+                    {/* <div className={cx('rate')}>
                         <span>50%</span>
-                    </div>
+                    </div> */}
                 </div>
                 <div className={cx('heart')}>
                     <img src={images.heart2} alt='' />
-                    <div className={cx('rate')}>
+                    {/* <div className={cx('rate')}>
                         <span>50%</span>
-                    </div>
+                    </div> */}
                 </div>
                 <div className={cx('avatar-partner')}>
-                    <img className={cx('circle-image')} src={infoLoverUser.avatar ? infoLoverUser.avatar : infoCouple.tempAvatarLover} alt='' />
+                    {infoLoverUser.avatar ?
+                        <img className={cx('circle-image')} src={infoLoverUser.avatar} alt='' />
+                        :
+                        infoCouple.tempAvatarLover ?
+                            <img src={infoCouple.tempAvatarLover} alt='' />
+                            : <img src={images.noUser} alt='' />
+                    }
                 </div>
                 <div className={cx('partner-name')}>
                     <p>{infoLoverUser.name ? infoLoverUser.name : infoCouple.tempNameLover}</p>

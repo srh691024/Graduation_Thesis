@@ -40,3 +40,13 @@ export const apiDeleteComment = (postId, commentId) => axios({
     url: `post/${postId}/comment/${commentId}`,
     method: 'DELETE'
 });
+
+export const apiReportPost = (postId) => axios({
+    url: `post/reportPost/${postId}`,
+    method: 'PATCH'
+});
+
+export const apiGetAllPosts = () => axios({
+    url: 'post/getAllPosts',
+    method: 'GET',
+})

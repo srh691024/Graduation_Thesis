@@ -4,6 +4,7 @@ const postsRouter = require('./posts');
 const todosRouter = require('./todos');
 const notifiesRouter = require('./notifies');
 const anniversariesRouter = require('./anniversaries');
+const adminsRouter = require('./admins');
 const { notFound, errHandler } = require('../middlewares/errHandler');
 
 function route(app) {
@@ -14,6 +15,7 @@ function route(app) {
     app.use('/api/todo', todosRouter);
     app.use('/api/anniversary', anniversariesRouter);
     app.use('/api/notify', notifiesRouter);
+    app.use('/api/admin', adminsRouter);
     app.use(notFound)
     app.use(errHandler)
 }

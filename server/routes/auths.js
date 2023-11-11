@@ -16,6 +16,7 @@ router.get('/getAllUsers', [verifyAccessToken, isAdmin], authsController.getAllU
 router.delete('/deleteUser', verifyAccessToken, authsController.deleteUser);
 router.put('/updateUser', verifyAccessToken, uploadCloud.single('avatarUser'), authsController.updateUser);
 router.put('/banUser/:uid', [verifyAccessToken, isAdmin], authsController.banUserByAdmin);
+router.get('/searchUser', verifyAccessToken, authsController.searchUser);
 
 
 module.exports = router;
