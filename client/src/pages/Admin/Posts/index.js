@@ -110,12 +110,10 @@ function Posts() {
         const handleBan = async () => {
             setBanButton(true)
             const response = await adminServices.apiBanReport(params.row._id)
-            console.log(response)
         }
         const handleUnBan = async () => {
             setBanButton(false)
             const response = await adminServices.apiUnBanReport(params.row._id)
-            console.log(response)
         }
         return banButton ?
             <strong onClick={handleUnBan}>
@@ -145,7 +143,7 @@ function Posts() {
 
     const columnsBan = [
         {
-            field: 'isBanned', headerName: '', width: 150,
+            field: 'isBanned', headerName: '', width: 110,
             renderCell: (params) => <BanButton params={params} />,
         },
         {
@@ -183,11 +181,6 @@ function Posts() {
         },
     ];
 
-
-    const handleSave = (id) => {
-        // Handle delete action here
-        console.log('Save item with ID:', id);
-    };
     return (
         <div className={cx('wrapper')}>
             <div className={cx('accounts')}>

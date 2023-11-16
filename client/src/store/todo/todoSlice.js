@@ -5,6 +5,7 @@ export const todoSlice = createSlice({
     name: 'todo',
     initialState: {
         todos: [],
+        isLoading: false,
     },
     reducers: {
     },

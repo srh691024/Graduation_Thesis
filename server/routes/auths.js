@@ -18,5 +18,10 @@ router.put('/updateUser', verifyAccessToken, uploadCloud.single('avatarUser'), a
 router.put('/banUser/:uid', [verifyAccessToken, isAdmin], authsController.banUserByAdmin);
 router.get('/searchUser', verifyAccessToken, authsController.searchUser);
 
+router.patch('/reportAccount/:userId', verifyAccessToken, authsController.reportAccount);
+router.post('/changePassword', verifyAccessToken, authsController.changePassword);
+
+router.post('/reportProblem', verifyAccessToken, uploadCloud.single('image'), authsController.reportProblem);
+
 
 module.exports = router;

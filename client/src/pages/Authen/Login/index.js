@@ -25,7 +25,9 @@ function Login() {
                 </div>
                 <LoginForm />
                 <div className={cx('forgot-pass')}>
-                    <button onClick={() => setShowModalForgotPassword(true)}><p>Forgot password?</p></button>
+                    <button onClick={() => setShowModalForgotPassword(true)}>
+                        <p>Forgot password?</p>
+                    </button>
                 </div>
 
                 {/* Modal forgot password */}

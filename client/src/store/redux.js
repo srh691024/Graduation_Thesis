@@ -12,6 +12,7 @@ import userSlice from "~/store/user/userSlice";
 import coupleSlice from "~/store/couple/coupleSlice";
 import todoSlice from "~/store/todo/todoSlice";
 import anniversarySlice from "~/store/anniversary/anniversarySlice";
+import postSlice from "~/store/post/postSlice";
 
 const commonConfig = {
     key: 'web/user',
@@ -37,10 +38,15 @@ const anniversaryConfig = {
     key: 'anniversary',
     storage
 }
+const postConfig = {
+    key: 'post',
+    storage
+}
 
 
 export const store = configureStore({
     reducer: {
+        post: persistReducer(postConfig, postSlice),
         anniversary: persistReducer(anniversaryConfig, anniversarySlice),
         todo: persistReducer(todoConfig, todoSlice),
         couple: persistReducer(coupleConfig, coupleSlice),

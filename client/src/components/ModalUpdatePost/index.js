@@ -45,7 +45,6 @@ function ModalUpdatePost({ data, onClose }) {
             dateAnni: Yup.date().max(new Date(), 'Date must not be later than the current date.').nullable(),
         }),
         onSubmit: async (values) => {
-            // values.dateAnni = moment(values.dateAnni).toISOString();
             // add data to formData
             const formData = new FormData();
             formData.append('content', values.content);
@@ -58,7 +57,6 @@ function ModalUpdatePost({ data, onClose }) {
             for (let deleteName of deletedImages) {
                 formData.append('deletedImages', deleteName)
             }
-            // formData.append('deletedImages', deletedImages);
             for (let image of values.images) {
                 if (typeof image === 'string') {
                     formData.append('imagesLink', image);
@@ -67,19 +65,16 @@ function ModalUpdatePost({ data, onClose }) {
                 }
             }
 
-            formData.forEach(function (value, key) {
-                console.log(key, value);
-            });
+            // formData.forEach(function (value, key) {
+            //     console.log(key, value);
+            // });
 
             // fetch API create post
             const response = await postServices.apiUpdatePost(data._id, formData);
             if (!response.success) {
                 Swal.fire('Oops!', response.result, 'error');
             }
-            // console.log(values.imagenames)
-            // console.log(deletedImages)
-            // onClose()
-            // console.log(values.images)
+            onClose()
         }
     })
 

@@ -50,3 +50,24 @@ export const apiGetAllPosts = () => axios({
     url: 'post/getAllPosts',
     method: 'GET',
 })
+
+export const apiSearchPublic = (searchQuery, page) => axios({
+    url: `post/searchPublic?keyword=${searchQuery}&page=${page}`,
+    method: 'GET',
+})
+
+export const apiChangeStatusFilterComment = () => axios({
+    url: 'post/changeStatusFilterComment',
+    method: 'POST'
+})
+
+export const apiChangeContentCustomFilterComment = (data) => axios({
+    url: 'post/changeContentCustomFilterComment',
+    method: 'POST',
+    data
+})
+
+export const apiGetCustomForbidden = () => axios({
+    url: 'post/getCustomForbidden',
+    method: 'GET',
+})

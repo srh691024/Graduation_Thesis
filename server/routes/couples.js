@@ -22,6 +22,8 @@ router.post('/acceptRestoreCouple/:invitationId', verifyAccessToken, couplesCont
 router.get('/getListInvitation', verifyAccessToken, couplesController.getListInvitation);
 router.post('/acceptInvitationTwo/:invitationId', verifyAccessToken, couplesController.acceptInvitationTwo);
 
+router.get('/searchCouple', verifyAccessToken, couplesController.searchCouple);
+
 
 
 module.exports = router;

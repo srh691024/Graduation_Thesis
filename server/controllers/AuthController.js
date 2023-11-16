@@ -1,5 +1,6 @@
 const Couple = require('../models/Couple');
 const User = require('../models/User');
+const Report = require('../models/Report');
 const asyncHandler = require('express-async-handler')
 const { generateAccessToken, generateRefreshToken } = require('../middlewares/jwt')
 const jwt = require('jsonwebtoken');
@@ -203,10 +204,10 @@ const resetPassword = asyncHandler(async (req, res) => {
 })
 
 const getAllUsers = asyncHandler(async (req, res) => {
-    const response = await User.find().select('-refreshToken -password -role')
+    const response = await User.find({ role: 16 }).select('isBlocked reports avatar name username email gender address')
     return res.status(200).json({
         success: response ? true : false,
-        users: response
+        result: response
     })
 })
 
@@ -265,8 +266,78 @@ const searchUser = asyncHandler(async (req, res) => {
         success: users ? true : false,
         result: users
     })
-
 })
+
+const reportAccount = asyncHandler(async (req, res) => {
+    const { _id } = req.user
+    const { userId } = req.params
+    const user = await User.findById(userId)
+    if (!user) return res.status(400).json({
+        success: false,
+        result: 'User not found'
+    })
+
+    const alreadyReported = user?.reports?.find(report => report.toString() === _id)
+    if (alreadyReported) return res.status(400).json({
+        success: false,
+        result: 'You are already reported this user'
+    })
+    const addReport = await User.findByIdAndUpdate(userId, { $push: { reports: _id } }, { new: true })
+    return res.status(200).json({
+        success: addReport ? true : false,
+        result: addReport ? addReport : 'Can not report this user'
+    })
+})
+
+const changePassword = asyncHandler(async (req, res) => {
+    const { _id } = req.user
+    const { oldPassword, newPassword } = req.body
+    if (oldPassword === newPassword) return res.status(400).json({
+        success: false,
+        result: 'New password must be different from your current password'
+    })
+    const user = await User.findById(_id)
+    if (!user) return res.status(404).json({ success: false, result: 'Can not find user' })
+    const checkPassword = await user.isCorrectPassword(oldPassword)
+    if (!checkPassword) return res.status(404).json({ success: false, result: 'Wrong password' })
+    user.password = newPassword
+    await user.save()
+    return res.status(200).json({ success: true, result: 'Change password successfully' })
+})
+
+const reportProblem = asyncHandler(async (req, res) => {
+    const { content } = req.body
+    const { _id } = req.user
+
+    if (!content) return res.status(404).json({ success: false, result: 'Detail is not empty' })
+    if (req.file) {
+        image = req.file.path
+        imagename = req.file.filename
+        const newReport = await Report.create({ content, image, imagename, useSend: _id })
+
+        return res.status(200).json({
+            success: newReport ? true : false,
+            result: newReport ? newReport : 'Can not report problem'
+        })
+    } else {
+        const newReport = await Report.create({ content, useSend: _id })
+        return res.status(200).json({
+            success: newReport ? true : false,
+            result: newReport ? newReport : 'Can not report problem'
+        })
+    }
+})
+
+// const getUserByEmail = asyncHandler(async(req, res)=>{
+//     const {email} = req.params 
+//     const user = await User.findOne({email: email})
+//     return res.status(200).json({
+//         success: user ? true : false,
+//         result: user ? user : 'Can not find user'
+//     })
+// })
+
+
 module.exports = {
     login,
     register,
@@ -281,4 +352,7 @@ module.exports = {
     updateUser,
     banUserByAdmin,
     searchUser,
+    reportAccount,
+    changePassword,
+    reportProblem,
 };

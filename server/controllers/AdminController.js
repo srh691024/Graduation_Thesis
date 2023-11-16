@@ -2,7 +2,9 @@ const asyncHandler = require('express-async-handler');
 const User = require('../models/User')
 const Couple = require('../models/Couple');
 const Post = require('../models/Post');
+const Report = require('../models/Report');
 const moment = require('moment');
+const deleteImage = require('../utils/deleteImage');
 
 const getTotalStatistic = asyncHandler(async (req, res) => {
     const listTotal = [
@@ -397,7 +399,7 @@ const dataForBarStackChart = asyncHandler(async (req, res) => {
 
 const banReport = asyncHandler(async (req, res) => {
     const { postId } = req.params
-    const post = await Post.findByIdAndUpdate(postId, { isBanned: true, mode: 'Private' })
+    const post = await Post.findByIdAndUpdate(postId, { isBanned: true, mode: 'Private' }, { new: true })
 
     return res.status(200).json({
         success: post ? true : false,
@@ -407,7 +409,7 @@ const banReport = asyncHandler(async (req, res) => {
 
 const unBanReport = asyncHandler(async (req, res) => {
     const { postId } = req.params
-    const post = await Post.findByIdAndUpdate(postId, { isBanned: false })
+    const post = await Post.findByIdAndUpdate(postId, { isBanned: false }, { new: true })
 
     return res.status(200).json({
         success: post ? true : false,
@@ -415,7 +417,69 @@ const unBanReport = asyncHandler(async (req, res) => {
     })
 })
 
+const banAccount = asyncHandler(async (req, res) => {
+    const { userId } = req.params
+    const user = await User.findByIdAndUpdate(userId, { isBlocked: true }, { new: true })
 
+    return res.status(200).json({
+        success: user ? true : false,
+        result: user ? user : 'Can not ban this user'
+    })
+})
+
+const unBanAccount = asyncHandler(async (req, res) => {
+    const { userId } = req.params
+    const user = await User.findByIdAndUpdate(userId, { isBlocked: false }, { new: true })
+    return res.status(200).json({
+        success: user ? true : false,
+        result: user ? user : 'Can not unban this user'
+    })
+})
+
+const getAllReports = asyncHandler(async (req, res) => {
+    const reports = await Report.find().populate('useSend', 'avatar name')
+    return res.status(200).json({
+        success: reports ? true : false,
+        result: reports ? reports : 'Can not find any reports'
+    })
+})
+
+const responseProblem = asyncHandler(async (req, res) => {
+    const { reportId } = req.params
+    const { response } = req.body
+    const report = await Report.findById(reportId)
+    if (!report) return res.status(404).json({ success: false, result: 'Not found this report' })
+    if (report.isResponsed) return res.status(200).json({ success: true, result: 'You are already response this problem' })
+    report.response = response
+    report.isResponsed = true
+    await report.save()
+    return res.status(200).json({
+        success: true,
+        result: report
+    })
+})
+
+const getReportByUser = asyncHandler(async (req, res) => {
+    const { _id } = req.user
+    const reports = await Report.find({ useSend: _id }).populate('useSend', 'avatar name')
+    return res.status(200).json({
+        success: true,
+        result: reports
+    })
+})
+
+const deleteReport = asyncHandler(async (req, res) => {
+    const { reportId } = req.params
+    const report = await Report.findById(reportId)
+    if (!report) return res.status(404).json({ success: false, result: 'Can not find report' })
+    if (report.image) {
+        const array = []
+        array.push(report.image)
+        deleteImage(array)
+    }
+    await report.deleteOne()
+    return res.status(200).json({ success: true, result: 'Delete successfully' })
+})
 
 
 module.exports = {
@@ -426,5 +490,11 @@ module.exports = {
     getDataDoughnut,
     dataForBarStackChart,
     banReport,
-    unBanReport
+    unBanReport,
+    banAccount,
+    unBanAccount,
+    getAllReports,
+    responseProblem,
+    getReportByUser,
+    deleteReport
 }

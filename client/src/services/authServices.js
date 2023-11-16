@@ -30,3 +30,25 @@ export const apiSearchUser = (searchQuery) => axios({
     url: `auth/searchUser?email=${searchQuery}`,
     method: 'GET',
 })
+
+export const apiReportAccount = (userId) => axios({
+    url: `auth/reportAccount/${userId}`,
+    method: 'PATCH',
+})
+
+export const apiGetAllUsers = () => axios({
+    url: 'auth/getAllUsers',
+    method: 'GET',
+})
+
+export const apiChangePassword = (data) => axios({
+    url: 'auth/changePassword',
+    method: 'POST',
+    data
+})
+
+export const apiReportProblem = (data) => axios({
+    url: 'auth/reportProblem',
+    method: 'POST',
+    data
+})

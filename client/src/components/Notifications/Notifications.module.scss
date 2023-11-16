@@ -13,6 +13,7 @@
     transform: translateX(0);
     transition: 200ms ease;
 }
+
 .wrapper-noti.inactive {
     opacity: 0;
     visibility: hidden;
@@ -120,8 +121,13 @@
                         }
                     }
 
+                    .changeBackground {
+                        background-color: #fcdee6;
+                    }
+
                     .sub-noti {
                         display: block;
+
 
                         .sub-noti-one {
                             padding: 8px 24px;

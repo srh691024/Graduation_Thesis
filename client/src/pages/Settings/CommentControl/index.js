@@ -1,9 +1,53 @@
 import classNames from "classnames/bind";
 import styles from "~/pages/Settings/CommentControl/CommentControl.module.scss"
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import * as postServices from '~/services/postServices'
+import { useEffect, useState } from "react";
 
 const cx = classNames.bind(styles);
 
 function CommentControl() {
+    const [status, setStatus] = useState(false)
+    const [getInfoStatus, setGetInfoStatus] = useState('')
+
+
+    useEffect(() => {
+        async function fetchStatus() {
+            const response = await postServices.apiGetCustomForbidden()
+            if (response.success) {
+                setGetInfoStatus(response.result.keyword?.join(','))
+                setStatus(response.result.isApply)
+            }
+        }
+        fetchStatus()
+    }, [])
+
+    const formik = useFormik({
+        initialValues: {
+            content: getInfoStatus || '',
+        },
+        validationSchema: Yup.object({
+            content: Yup.string().max(1000, 'This current list is too long'),
+        }),
+        onSubmit: async (values) => {
+            const response = await postServices.apiChangeContentCustomFilterComment(values)
+        }
+    })
+
+    // useEffect để cập nhật giá trị content khi getInfoStatus thay đổi
+    useEffect(() => {
+        formik.setFieldValue('content', getInfoStatus || '');
+    }, [getInfoStatus]);
+
+    const handleValueStatus = async (e) => {
+        //click => call API change isApply
+        const response = await postServices.apiChangeStatusFilterComment(e.target.checked)
+        setStatus(!status)
+
+    }
+
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('wrapper-one')}>
@@ -22,7 +66,7 @@ function CommentControl() {
                         <span className={cx('sub-des')}>Protect yourself from comments
                             that contain offensive words, phrases.</span>
                     </div>
-                    <div className={cx('title')}>
+                    {/* <div className={cx('title')}>
                         <span>Hide comments</span>
                         <div className={cx('push-noti-two')}>
                             <div className={cx('button-pause')}>
@@ -35,20 +79,24 @@ function CommentControl() {
                     <div className={cx('sub-description')}>
                         <span className={cx('sub-des')}>Comments that may be offensive
                             will automatically be hidden in a separate section of your diary posts.</span>
-                    </div>
+                    </div> */}
                     <div className={cx('title')}>
                         <span>Advanced comment filtering</span>
                         <div className={cx('push-noti-two')}>
                             <div className={cx('button-pause')}>
                                 <div className={cx('button-pause-one')}>
-                                    <input type="checkbox" className={cx('pause-input')} />
+                                    <input
+                                        checked={status}
+                                        type="checkbox"
+                                        className={cx('pause-input')}
+                                        onChange={(e) => handleValueStatus(e)} />
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div className={cx('sub-description')}>
                         <span className={cx('sub-des')}>Additional comments that may contain offensive words
-                            and phrases will be hidden. You can always review and unhide individual comments.</span>
+                            and phrases will not be send.</span>
                     </div>
                 </div>
                 <div className={cx('header-edit-profile')}>
@@ -66,9 +114,18 @@ function CommentControl() {
                         <span>Hide comments that contain any of the words or phrases you type above from your posts.</span>
                     </div>
                     <form>
-                        <textarea placeholder="Add keywords, separated by commas"></textarea>
-                        <div className={cx('button-submit')}>
-                        <div className={cx('button-submit-one')}>Submit</div>
+                        <textarea
+                            name="content"
+                            value={formik.values.content}
+                            onChange={formik.handleChange}
+                            placeholder="Add keywords, separated by commas"></textarea>
+                        {
+                            formik.errors.content && formik.touched.content && (
+                                <small className={cx('validate-login')}>{formik.errors.content}</small>
+                            )
+                        }
+                        <div className={cx('button-submit')} onClick={formik.handleSubmit}>
+                            <div className={cx('button-submit-one')}>Submit</div>
                         </div>
                     </form>
                 </div>

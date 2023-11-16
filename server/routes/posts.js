@@ -20,7 +20,13 @@ router.delete('/:postId/comment/:commentId', verifyAccessToken, postsController.
 
 router.patch('/reportPost/:postId', verifyAccessToken, postsController.reportPost);
 
-router.get('/getAllPosts', [verifyAccessToken, isAdmin], postsController.getAllPosts)
+router.get('/getAllPosts', [verifyAccessToken, isAdmin], postsController.getAllPosts);
+
+router.get('/searchPublic', verifyAccessToken, postsController.searchPublic);
+
+router.post('/changeStatusFilterComment', verifyAccessToken, postsController.changeStatusFilterComment);
+router.post('/changeContentCustomFilterComment', verifyAccessToken, postsController.changeContentCustomFilterComment);
+router.get('/getCustomForbidden', verifyAccessToken, postsController.getCustomForbidden);
 
 
 module.exports = router;

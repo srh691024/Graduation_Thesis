@@ -4,11 +4,17 @@ import { useEffect, useState } from "react";
 import * as notifiServices from '~/services/notifyServices'
 import { useSelector } from "react-redux";
 import moment from "moment";
+import { io } from 'socket.io-client';
+
+const socket = io('http://localhost:5000', {
+    reconnection: true,
+})
 
 const cx = classNames.bind(styles);
 
 function Notifications(props) {
     const { couple } = useSelector(state => state.couple)
+    const { current } = useSelector(state => state.user)
     const [notiOfCouple, setNotiOfCouple] = useState([]);
     const [generalNoti, setGeneralNoti] = useState([]);
 
@@ -16,14 +22,57 @@ function Notifications(props) {
         async function getNotifies() {
             const noti = await notifiServices.apiGetNotify()
             if (noti.success) {
-                if (couple.isConnected) {
+                // if (couple.isConnected) {
                     setNotiOfCouple(noti?.result?.filter(no => no.user._id.toString() === couple?.createdUser?.toString() || no.user._id.toString() === couple?.loverUserId?.toString()))
                     setGeneralNoti(noti?.result?.filter(no => no.user._id.toString() !== couple?.createdUser?.toString() && no.user._id.toString() !== couple?.loverUserId?.toString()))
-                }
+                // }
             }
         }
         getNotifies()
     }, [couple?.createdUser, couple.isConnected, couple?.loverUserId])
+
+    useEffect(() => {
+        socket.on('notifyCouple', (data) => {
+            if (data.notification?.recipients[0] === current._id) {
+                setNotiOfCouple([data.notification, ...notiOfCouple])
+            }
+        })
+        return () => { socket.off('notifyCouple') }
+    }, [notiOfCouple, current._id])
+
+    useEffect(() => {
+        socket.on('notifyPublic', (data) => {
+            data.notification.recipients.map((recipient) => {
+                if (recipient === current._id) {
+                    setGeneralNoti([data.notification, ...generalNoti])
+                }
+                return recipient;
+            }
+            )
+        })
+        return () => { socket.off('notifyPublic') }
+    }, [generalNoti, current._id])
+
+    const handleNotificationClick = async (notification) => {
+        // Đánh dấu thông báo là đã đọc
+        if (!notification.isRead) {
+            // Gọi API hoặc sử dụng hàm cập nhật trạng thái đã đọc
+            await notifiServices.apiIsReadNotify(notification._id);
+
+            // Cập nhật trạng thái trong state để render lại component
+            setNotiOfCouple((prevNoti) =>
+                prevNoti.map((nc) =>
+                    nc._id === notification._id ? { ...nc, isRead: true } : nc
+                )
+            );
+            setGeneralNoti((prevNoti) =>
+                prevNoti.map((gn) =>
+                    gn._id === notification._id ? { ...gn, isRead: true } : gn
+                )
+            );
+            props.onMarkAsRead();
+        }
+    };
 
     return (
         <div className={cx('wrapper-noti', props.text)}>
@@ -48,7 +97,11 @@ function Notifications(props) {
                                     </span>
                                 </div>
                                 {notiOfCouple?.map((nc, index) =>
-                                    <div className={cx('sub-noti')} key={index}>
+                                    <div
+                                        className={cx('sub-noti', `${!nc.isRead && 'changeBackground'}`)}
+                                        key={index}
+                                        onClick={() => handleNotificationClick(nc)}
+                                    >
                                         <div className={cx('sub-noti-one')}>
                                             <div className={cx('avatar')}>
                                                 <a href="/">
@@ -89,7 +142,11 @@ function Notifications(props) {
                                     </span>
                                 </div>
                                 {generalNoti?.map((gn, index) =>
-                                    <div className={cx('sub-noti')} key={index}>
+                                    <div
+                                        className={cx('sub-noti', `${!gn.isRead && 'changeBackground'}`)}
+                                        key={index}
+                                        onClick={() => handleNotificationClick(gn)}
+                                    >
                                         <div className={cx('sub-noti-one')}>
                                             <div className={cx('avatar')}>
                                                 <a href="/">

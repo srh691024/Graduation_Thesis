@@ -6,13 +6,14 @@ const createNotify = asyncHandler(async (req, res) => {
     const { _id } = req.user
 
 
-    const { recipients, text, image , type} = req.body;
+    const { recipients, text, image, type } = req.body;
     if (recipients.includes(_id)) return;
 
-    const notify = await Notify.create({ recipients, text, image, user: _id , type})
+    const notify = await Notify.create({ recipients, text, image, user: _id, type })
+    const response = await Notify.findById(notify._id).populate('user', 'avatar name')
     return res.status(200).json({
-        success: notify ? true : false,
-        result: notify ? notify : 'Can not create notification'
+        success: response ? true : false,
+        result: response ? response : 'Can not create notification'
     })
 })
 
@@ -26,11 +27,29 @@ const removeNotify = asyncHandler(async (req, res) => {
 })
 
 const getNotify = asyncHandler(async (req, res) => {
-    const {_id} = req.user
-    const notifies = await Notify.find({recipients: _id }).sort('-createdAt').populate('user', 'avatar name')
+    const { _id } = req.user
+    const notifies = await Notify.find({ recipients: _id }).sort('-createdAt').populate('user', 'avatar name')
     return res.status(200).json({
         success: notifies ? true : false,
         result: notifies ? notifies : 'No notifications were found'
+    })
+})
+
+const isReadNotify = asyncHandler(async (req, res) => {
+    const { notiId } = req.params
+    const notify = await Notify.findByIdAndUpdate(notiId, { isRead: true }, { new: true })
+    return res.status(200).json({
+        success: notify ? true : false,
+        result: notify ? notify : 'Read notify went wrong'
+    })
+})
+
+const deleteAllNotifies = asyncHandler(async (req, res) => {
+    const { _id } = req.user
+    const notifies = await Notify.deleteMany({ recipients: _id })
+    return res.status(200).json({
+        success: notifies ? true : false,
+        result: notifies ? notifies : 'Delete notify went wrong'
     })
 })
 
@@ -38,5 +57,7 @@ const getNotify = asyncHandler(async (req, res) => {
 module.exports = {
     createNotify,
     removeNotify,
-    getNotify
+    getNotify,
+    isReadNotify,
+    deleteAllNotifies
 }

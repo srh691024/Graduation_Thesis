@@ -20,8 +20,16 @@ import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import ModalDetailPost from "../ModalDetailPost";
+import { io } from 'socket.io-client';
+
+const socket = io('http://localhost:5000', {
+    reconnection: true,
+})
 
 const cx = classNames.bind(styles);
+
+
+// const socket = io.connect("http://localhost:5000")
 
 function Post({ current, post }) {
     const { couple } = useSelector(state => state.couple)
@@ -31,6 +39,7 @@ function Post({ current, post }) {
     const [openOptionPost, setOpenOptionPost] = useState(false);
     const [showModalDeletePost, setShowModalDeletePost] = useState(false);
     const [selectedPost, setSelectedPost] = useState({});
+    const [openDeleteComment, setOpenDeleteComment] = useState(false);
 
     const settings = {
         dots: true,
@@ -41,7 +50,7 @@ function Post({ current, post }) {
     };
 
     useEffect(() => {
-        if (post.likes.find(like => like === current._id)) {
+        if (post?.likes?.find(like => like === current._id)) {
             setIsLike(true)
         }
 
@@ -49,7 +58,6 @@ function Post({ current, post }) {
 
     const handleReport = async () => {
         const response = await postServices.apiReportPost(post._id)
-        console.log(response)
         if (!response.success) {
             Swal.fire('Oops!', response.result, 'error')
         } else {
@@ -61,6 +69,7 @@ function Post({ current, post }) {
         setIsLike(true)
         const response = await postServices.apiLikePost(post._id)
         if (response.result.couple._id.toString() === couple._id.toString()) {
+            socket.emit('like', { postId: post._id, like: response.result});
             let notifyLover = {};
             if (current._id.toString() === couple.loverUserId.toString()) {
                 notifyLover = {
@@ -78,7 +87,8 @@ function Post({ current, post }) {
                 }
             }
             async function fetchLike() {
-                await notifyServices.apiCreateNotify(notifyLover);
+                const noti = await notifyServices.apiCreateNotify(notifyLover);
+                socket.emit('notifyCouple', { notiId: noti.result._id, notification: noti.result });
             }
             fetchLike()
         } else {
@@ -89,14 +99,17 @@ function Post({ current, post }) {
                 type: 'image'
             }
             async function fetchLike() {
-                await notifyServices.apiCreateNotify(notify)
+                const noti = await notifyServices.apiCreateNotify(notify)
+                socket.emit('notifyPublic', { notiId: noti.result._id, notification: noti.result });
             }
             fetchLike()
         }
     }
+
     const handleUnlike = async () => {
         setIsLike(false)
-        await postServices.apiLikePost(post._id)
+        const response = await postServices.apiLikePost(post._id)
+        socket.emit('like', { postId: post._id, like: response.result});
     }
 
     //Add comment
@@ -109,54 +122,60 @@ function Post({ current, post }) {
         }),
         onSubmit: async (values) => {
             const comment = await postServices.apiAddComment(post._id, values)
-            if (comment.success) {
-                Swal.fire('Congratulations', 'Add comment successfully', 'success')
-            } else {
+            if (!comment.success) {
                 Swal.fire('Oops!', 'Add comment failed', 'error')
-            }
-
-            if (comment.result.couple._id.toString() === couple._id.toString()) {
-                let notifyLover = {};
-                if (current._id.toString() === couple.loverUserId.toString()) {
-                    notifyLover = {
-                        recipients: couple.createdUser,
-                        text: '- your lover commented on our diary.',
-                        image: post.images[0],
-                        type: 'image'
-                    }
-                } else if (current._id.toString() === couple.createdUser.toString()) {
-                    notifyLover = {
-                        recipients: couple.loverUserId,
-                        text: '- your lover commented on our diary.',
-                        image: post.images[0],
-                        type: 'image'
-                    }
-                }
-                await notifyServices.apiCreateNotify(notifyLover);
             } else {
-                const notify = {
-                    recipients: [comment.result.couple.createdUser, comment.result.couple.loverUserId],
-                    text: `from ${couple.nameCouple} commented on your diary.`,
-                    image: comment.result.images[0],
-                    type: 'image'
+                // socket.emit('comment', comment.result.comments)
+                socket.emit('new-comment', { postId: post._id, comment: comment.result});
+                formik.setFieldValue('text', '')
+
+                if (comment.result.couple._id.toString() === couple._id.toString()) {
+                    let notifyLover = {};
+                    if (current._id.toString() === couple.loverUserId.toString()) {
+                        notifyLover = {
+                            recipients: couple.createdUser,
+                            text: '- your lover commented on our diary.',
+                            image: post.images[0],
+                            type: 'image'
+                        }
+                    } else if (current._id.toString() === couple.createdUser.toString()) {
+                        notifyLover = {
+                            recipients: couple.loverUserId,
+                            text: '- your lover commented on our diary.',
+                            image: post.images[0],
+                            type: 'image'
+                        }
+                    }
+                    const noti = await notifyServices.apiCreateNotify(notifyLover);
+                    socket.emit('notifyCouple', { notiId: noti.result._id, notification: noti.result });
+                } else {
+                    const notify = {
+                        recipients: [comment.result.couple.createdUser, comment.result.couple.loverUserId],
+                        text: `from ${couple.nameCouple} commented on your diary.`,
+                        image: comment.result.images[0],
+                        type: 'image'
+                    }
+                    async function fetchLike() {
+                        const noti = await notifyServices.apiCreateNotify(notify)
+                        socket.emit('notifyPublic', { notiId: noti.result._id, notification: noti.result });
+                    }
+                    fetchLike()
                 }
-                async function fetchLike() {
-                    await notifyServices.apiCreateNotify(notify)
-                }
-                fetchLike()
             }
         }
     })
 
-    // const handleDeleteComment = async(commentId)=>{
-    //     const deleteComment = await postServices.apiDeleteComment(post._id, commentId)
-    //     console.log(deleteComment.result)
-    // }
+    const handleDeleteComment = async (commentId) => {
+        const deleteComment = await postServices.apiDeleteComment(post._id, commentId)
+        setOpenDeleteComment(false)
+    }
 
     const handleClickPost = (post) => {
         setSelectedPost(post);
         setShowModalDetailPost(true)
     }
+
+    // let uiCommentUpdate = commentsRealtime.length > 0 ? commentsRealtime: post?.comments;
 
     return (
         <div className={cx('wrapper')}>
@@ -165,7 +184,7 @@ function Post({ current, post }) {
                     <div className={cx('avatar-name-date')}>
                         <div className={cx('and')}>
                             <div className={cx('avatar-post')}>
-                                <img src={post.couple.avatarCouple} alt='' />
+                                <img src={post?.couple?.avatarCouple} alt='' />
                             </div>
                             <div className={cx('name-date')}>
                                 <div className={cx('nd')}>
@@ -173,7 +192,7 @@ function Post({ current, post }) {
                                         <div className={cx('name')} >
                                             <div className={cx('name-first')}>
                                                 <span>
-                                                    <a href="/" >{post.couple.nameCouple}</a>
+                                                    <a href="/" >{post?.couple?.nameCouple}</a>
                                                 </span>
                                             </div>
                                         </div>
@@ -189,7 +208,7 @@ function Post({ current, post }) {
                                         </div>
                                     </div>
                                     <div className={cx('nd-second')}>
-                                        <span>Written by {post.author.name}</span>
+                                        <span>Written by {post?.author?.name}</span>
                                     </div>
                                 </div>
                             </div>
@@ -257,7 +276,7 @@ function Post({ current, post }) {
                         </div>
                     </div>
                     <Slider className={cx('carousel')} {...settings}>
-                        {post.images.map((image, index) => (
+                        {post?.images?.map((image, index) => (
                             <div className={cx('image')} key={index}>
                                 <div className={cx('image-one')}>
                                     <div className={cx('image-two')}>
@@ -273,7 +292,6 @@ function Post({ current, post }) {
                                 </div>
                             </div>
                         ))}
-
                     </Slider>
                     <div className={cx('actions')}>
                         <div className={cx('actions-one')}>
@@ -311,7 +329,7 @@ function Post({ current, post }) {
                                             <div className={cx('lcc-icon')}>
                                                 <div className={cx('lcc-icon-one')}>
                                                     <div className={cx('lcc-count')}>
-                                                        <span>{post.likes.length}</span>
+                                                        <span>{post?.likes?.length}</span>
                                                     </div>
                                                     <div className={cx('icon-count')}>
                                                         <FontAwesomeIcon className={cx('icon')} icon={faHearts} />
@@ -323,7 +341,7 @@ function Post({ current, post }) {
                                             <div className={cx('lcc-icon')}>
                                                 <div className={cx('lcc-icon-one')}>
                                                     <div className={cx('lcc-count')}>
-                                                        <span>{post.comments.length}</span>
+                                                        <span>{post?.comments?.length}</span>
                                                     </div>
                                                     <div className={cx('icon-count')}>
                                                         <FontAwesomeIcon className={cx('icon')} icon={faComments} />
@@ -337,15 +355,15 @@ function Post({ current, post }) {
                                     <div className={cx('author-content')}>
                                         <div className={cx('author')}>
                                             <div className={cx('author-one')}>
-                                                <Link>{post.author.name}</Link>
+                                                <Link>{post?.author?.name}</Link>
                                             </div>
                                         </div>
                                         <span>
-                                            <span className={cx('content')}>{post.content}</span>
+                                            <span className={cx('content')}>{post?.content}</span>
                                         </span>
                                     </div>
                                 </div>
-                                {post?.comments.length > 0 &&
+                                {post?.comments?.length > 0 &&
                                     <div className={cx('sub-comment')}>
                                         <div className={cx('view-all-comment')}>
                                             {post?.comments?.length > 1 &&
@@ -372,11 +390,17 @@ function Post({ current, post }) {
                                                             <span className={cx('content-comment')}>
                                                                 <span>{post?.comments[0]?.textComment}</span>
                                                             </span>
-                                                            <div><FontAwesomeIcon
-                                                                //  onClick={handleDeleteComment(comment._id)} 
-                                                                icon={faEllipsis} /></div>
                                                         </div>
                                                     </div>
+                                                </div>
+                                                {current._id === post?.comments[0].postedBy._id &&
+                                                    <div className={cx('iconOptions')} onClick={() => setOpenDeleteComment(!openDeleteComment)}>
+                                                        <FontAwesomeIcon icon={faEllipsis} />
+                                                    </div>
+                                                }
+                                                {/* Dropdown menu */}
+                                                <div className={cx('dropdown-menu', `${openDeleteComment ? 'active' : 'inactive'}`)} onClick={() => handleDeleteComment(post?.comments[0]._id)}>
+                                                    Delete
                                                 </div>
                                             </div>
                                         </ul>

@@ -2,10 +2,17 @@ import classNames from "classnames/bind";
 import styles from "~/layouts/SettingPrivateLayout/SettingPrivateLayout.module.scss";
 import Header from '~/layouts/components/Header';
 import SidebarSetting from "../components/SidebarSetting";
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
+import config from "~/config";
 
 const cx = classNames.bind(styles);
 
 function SettingPrivateLayout({ children }) {
+    const { current } = useSelector(state => state.user)
+    if (current.role === '22') {
+        return <Navigate to={config.routes.login} />
+    }
     return (
         <div className={cx("wrapper")}>
             <div className={cx('inner')}>
@@ -18,7 +25,7 @@ function SettingPrivateLayout({ children }) {
                                     <div className={cx('section')}>
                                         <div className={cx('main')}>
                                             <div className={cx('divide-column')}>
-                                                <SidebarSetting/>
+                                                <SidebarSetting />
                                                 <div className={cx('border-line')}>
                                                     <div className={cx('border-line-one')}></div>
                                                 </div>

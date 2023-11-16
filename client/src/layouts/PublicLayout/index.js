@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { getCurrentUser } from "~/store/user/asyncAction";
 import Swal from "sweetalert2";
 import { Navigate } from "react-router-dom";
+import config from "~/config";
 
 const cx = classNames.bind(styles);
 
@@ -16,6 +17,9 @@ function PublicLayout({ children }) {
     useEffect(() => {
         if (isLoggedIn) dispatch(getCurrentUser())
     }, [dispatch, isLoggedIn])
+    if (current.role === '22') {
+        return <Navigate to={config.routes.login} />
+    }
     if (!couple.isConnected) {
         Swal.fire('Notify', 'You are not connected so cannot go to public social', 'info')
         return <Navigate to={`/diarypost/${couple.userNameCouple}`} />

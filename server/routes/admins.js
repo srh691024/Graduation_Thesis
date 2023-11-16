@@ -14,5 +14,14 @@ router.get('/dataForBarStackChart', [verifyAccessToken, isAdmin], adminsControll
 router.patch('/banReport/:postId', [verifyAccessToken, isAdmin], adminsController.banReport)
 router.patch('/unBanReport/:postId', [verifyAccessToken, isAdmin], adminsController.unBanReport)
 
+router.patch('/banAccount/:userId', [verifyAccessToken, isAdmin], adminsController.banAccount);
+router.patch('/unBanAccount/:userId', [verifyAccessToken, isAdmin], adminsController.unBanAccount);
+
+router.get('/getAllReports', [verifyAccessToken, isAdmin], adminsController.getAllReports);
+
+router.patch('/responseProblem/:reportId', [verifyAccessToken, isAdmin], adminsController.responseProblem);
+router.get('/getReportByUser', verifyAccessToken, adminsController.getReportByUser);
+router.delete('/deleteReport/:reportId', verifyAccessToken, adminsController.deleteReport)
+
 
 module.exports = router;

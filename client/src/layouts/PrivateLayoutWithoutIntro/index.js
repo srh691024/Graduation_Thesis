@@ -1,10 +1,17 @@
 import classNames from "classnames/bind";
 import styles from "~/layouts/PrivateLayoutWithoutIntro/PrivateLayoutWithoutIntro.module.scss"
 import {Header, Themes} from "../components";
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
+import config from "~/config";
 
 
 const cx = classNames.bind(styles);
 function PrivateLayoutWithoutIntro({ children }) {
+    const {current} = useSelector(state=>state.user)
+    if(current.role === '22'){
+        return <Navigate to={config.routes.login}/>
+    }
     return (
         <>
             <div className={cx('wrapper')}>

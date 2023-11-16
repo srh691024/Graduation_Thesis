@@ -466,6 +466,27 @@ const acceptInvitationTwo = asyncHandler(async (req, res) => {
     })
 })
 
+const searchCouple = asyncHandler(async (req, res) => {
+    const { username } = req.query
+    const couples = await Couple.find(
+        {
+            $and:
+                [
+                    {
+                        $or: [
+                            { userNameCouple: { $regex: username, $options: 'i' } },
+                            { nameCouple: { $regex: username, $options: 'i' } }
+                        ]
+                    },
+                    { isConnected: true }
+                ]
+        }).limit(8)
+    return res.status(200).json({
+        success: couples ? true : false,
+        result: couples
+    })
+})
+
 module.exports = {
     getCouple,
     getCoupleByCurrentUser,
@@ -484,4 +505,5 @@ module.exports = {
     acceptRestoreCouple,
     getListInvitation,
     acceptInvitationTwo,
+    searchCouple
 }

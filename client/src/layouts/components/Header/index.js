@@ -15,6 +15,12 @@ import Swal from "sweetalert2";
 import { getCurrentCouple } from '~/store/couple/asyncAction';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css'; // optional
+import * as notifiServices from '~/services/notifyServices'
+import { io } from 'socket.io-client';
+
+const socket = io('http://localhost:5000', {
+    reconnection: true,
+})
 
 const cx = classNames.bind(styles)
 
@@ -24,6 +30,7 @@ function Header() {
     const dispatch = useDispatch();
     const [openNotification, setOpenNotification] = useState(false);
     // const [showModalFeeling, setShowModalFeeling] = useState(false);
+    const [notiUnRead, setNotiUnRead] = useState(0);
 
     const { isLoggedIn, current, mes } = useSelector(state => state.user);
     useEffect(() => {
@@ -40,6 +47,39 @@ function Header() {
             navigate(`${config.routes.login}`);
         })
     }, [dispatch, mes, navigate])
+
+    useEffect(() => {
+        async function getNotifies() {
+            const noti = await notifiServices.apiGetNotify()
+            if (noti.success) {
+                setNotiUnRead((noti.result.filter(noti => noti.isRead === false)).length)
+            }
+        }
+        getNotifies()
+    }, [])
+
+    useEffect(() => {
+        socket.on('notifyCouple', (data) => {
+            if (data.notification.recipients[0] === current._id) {
+            setNotiUnRead(notiUnRead + 1)
+            }
+        })
+        return () => { socket.off('notifyCouple') }
+    }, [notiUnRead, current._id])
+    useEffect(() => {
+        socket.on('notifyPublic', (data) => {
+            if (data.notification.user._id.toString() !== couple?.createdUser?.toString() && data.notification.user._id.toString() !== couple?.loverUserId?.toString()) {
+            setNotiUnRead(notiUnRead + 1)
+            }
+        })
+        return () => { socket.off('notifyPublic') }
+    }, [notiUnRead, couple?.createdUser, couple?.loverUserId])
+
+    const handleMarkAsRead = async () => {
+        // Cập nhật số lượng thông báo chưa đọc
+        const updatedUnreadCount = notiUnRead > 0 ? notiUnRead - 1 : 0;
+        setNotiUnRead(updatedUnreadCount);
+    };
     return (
         <div className={cx('wrapper-header')}>
             <div className={cx('inner')}>
@@ -214,6 +254,7 @@ function Header() {
                                                                 <div className={cx('icon-first')}>
                                                                     <div className={cx('icon-second')}>
                                                                         <FontAwesomeIcon className={cx('icon-third')} icon={faBell} />
+                                                                        {notiUnRead > 0 && <span className={cx('num')}>{notiUnRead}</span>}
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -300,7 +341,7 @@ function Header() {
                             </div>
                         </div>
                     </div>
-                    <Notifications text={openNotification ? 'active' : 'inactive'} />
+                    <Notifications text={openNotification ? 'active' : 'inactive'} onMarkAsRead={handleMarkAsRead} />
                 </div>
             </div>
         </div>

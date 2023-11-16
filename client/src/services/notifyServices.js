@@ -10,3 +10,8 @@ export const apiGetNotify = () => axios({
     url: `notify/getNotify`,
     method: 'GET'
 });
+
+export const apiIsReadNotify = (notiId) => axios({
+    url: `notify/isReadNotify/${notiId}`,
+    method: 'PATCH',
+})

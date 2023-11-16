@@ -25,6 +25,11 @@ export const apiGetDataDoughnut = () => axios({
     method: 'GET',
 })
 
+export const apiGetReportByUser = () => axios({
+    url: 'admin/getReportByUser',
+    method: 'GET',
+})
+
 export const apiDataForBarStackChart = () => axios({
     url: 'admin/dataForBarStackChart',
     method: 'GET',
@@ -38,4 +43,30 @@ export const apiBanReport = (postId) => axios({
 export const apiUnBanReport = (postId) => axios({
     url: `admin/unBanReport/${postId}`,
     method: 'PATCH',
+})
+
+export const apiBanAccount = (userId) => axios({
+    url: `admin/banAccount/${userId}`,
+    method: 'PATCH',
+})
+
+export const apiUnBanAccount = (userId) => axios({
+    url: `admin/unBanAccount/${userId}`,
+    method: 'PATCH',
+})
+
+export const apiGetAllReports = () => axios({
+    url: `admin/getAllReports`,
+    method: 'GET',
+})
+
+export const apiResponseProblem = (reportId, data) => axios({
+    url: `admin/responseProblem/${reportId}`,
+    method: 'PATCH',
+    data
+})
+
+export const apiDeleteReport = (reportId) => axios({
+    url: `admin/deleteReport/${reportId}`,
+    method: 'DELETE',
 })

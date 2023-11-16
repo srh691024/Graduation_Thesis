@@ -16,8 +16,13 @@ import * as notifyServices from '~/services/notifyServices'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Swal from "sweetalert2";
+import { io } from 'socket.io-client';
 
 const cx = classNames.bind(styles)
+
+const socket = io('http://localhost:5000', {
+    reconnection: true,
+})
 
 function ModalDetailPost({ current, post, onClose }) {
     const [openOptionPost, setOpenOptionPost] = useState(false);
@@ -25,6 +30,7 @@ function ModalDetailPost({ current, post, onClose }) {
     const [showModalDeletePost, setShowModalDeletePost] = useState(false);
     const { couple } = useSelector(state => state.couple)
     const [isLike, setIsLike] = useState(false)
+    const [openDeleteComment, setOpenDeleteComment] = useState(null);
 
     //Add comment
     const formik = useFormik({
@@ -36,41 +42,43 @@ function ModalDetailPost({ current, post, onClose }) {
         }),
         onSubmit: async (values) => {
             const comment = await postServices.apiAddComment(post._id, values)
-            if (comment.success) {
-                Swal.fire('Congratulations', 'Add comment successfully', 'success')
-            } else {
+            if (!comment.success) {
                 Swal.fire('Oops!', 'Add comment failed', 'error')
-            }
-
-            if (comment.result.couple._id.toString() === couple._id.toString()) {
-                let notifyLover = {};
-                if (current._id.toString() === couple.loverUserId.toString()) {
-                    notifyLover = {
-                        recipients: couple.createdUser,
-                        text: '- your lover commented on our diary.',
-                        image: post.images[0],
-                        type: 'image'
-                    }
-                } else if (current._id.toString() === couple.createdUser.toString()) {
-                    notifyLover = {
-                        recipients: couple.loverUserId,
-                        text: '- your lover commented on our diary.',
-                        image: post.images[0],
-                        type: 'image'
-                    }
-                }
-                const notiLover = await notifyServices.apiCreateNotify(notifyLover);
             } else {
-                const notify = {
-                    recipients: [comment.result.couple.createdUser, comment.result.couple.loverUserId],
-                    text: `from ${couple.nameCouple} commented on your diary.`,
-                    image: comment.result.images[0],
-                    type: 'image'
+                socket.emit('comment', comment.result.comments)
+
+                formik.setFieldValue('text', '')
+
+                if (comment.result.couple._id.toString() === couple._id.toString()) {
+                    let notifyLover = {};
+                    if (current._id.toString() === couple.loverUserId.toString()) {
+                        notifyLover = {
+                            recipients: couple.createdUser,
+                            text: '- your lover commented on our diary.',
+                            image: post.images[0],
+                            type: 'image'
+                        }
+                    } else if (current._id.toString() === couple.createdUser.toString()) {
+                        notifyLover = {
+                            recipients: couple.loverUserId,
+                            text: '- your lover commented on our diary.',
+                            image: post.images[0],
+                            type: 'image'
+                        }
+                    }
+                    const notiLover = await notifyServices.apiCreateNotify(notifyLover);
+                } else {
+                    const notify = {
+                        recipients: [comment.result.couple.createdUser, comment.result.couple.loverUserId],
+                        text: `from ${couple.nameCouple} commented on your diary.`,
+                        image: comment.result.images[0],
+                        type: 'image'
+                    }
+                    async function fetchLike() {
+                        const noti = await notifyServices.apiCreateNotify(notify)
+                    }
+                    fetchLike()
                 }
-                async function fetchLike() {
-                    const noti = await notifyServices.apiCreateNotify(notify)
-                }
-                fetchLike()
             }
         }
     })
@@ -124,6 +132,11 @@ function ModalDetailPost({ current, post, onClose }) {
         await postServices.apiLikePost(post._id)
     }
 
+    const handleDeleteComment = async (commentId) => {
+        const deleteComment = await postServices.apiDeleteComment(post._id, commentId)
+        setOpenDeleteComment(null)
+    }
+
     const settings = {
         dots: true,
         infinite: true,
@@ -131,6 +144,24 @@ function ModalDetailPost({ current, post, onClose }) {
         slidesToShow: 1,
         slidesToScroll: 1,
     };
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            // Check if the click is outside the comment area
+            if (!event.target.closest(`.${cx('iconOptions')}`)) {
+                setOpenDeleteComment(null); // Close the dropdown menu
+            }
+        };
+
+        // Attach the event listener to the document
+        document.addEventListener('click', handleClickOutside);
+
+        // Clean up the event listener on component unmount
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
+
     return (
         <div className={cx('wrapperr')}>
             <div className={cx('wrapper-modal')}>
@@ -152,7 +183,7 @@ function ModalDetailPost({ current, post, onClose }) {
                                             <div className={cx('articleWrapper')}>
                                                 <div className={cx('imageWrapper')}>
                                                     <Slider className={cx('carousel')} {...settings}>
-                                                        {post.images.map((image, index) => (
+                                                        {post?.images.map((image, index) => (
                                                             <div className={cx('image')} key={index}>
                                                                 <div className={cx('image-one')}>
                                                                     <div className={cx('image-two')}>
@@ -173,7 +204,7 @@ function ModalDetailPost({ current, post, onClose }) {
                                                     <div className={cx('inforOne')}>
                                                         <div className={cx('and')}>
                                                             <div className={cx('avatar-post')}>
-                                                                <img src={post.couple.avatarCouple} alt='' />
+                                                                <img src={post?.couple.avatarCouple} alt='' />
                                                             </div>
                                                             <div className={cx('name-date')}>
                                                                 <div className={cx('nd')}>
@@ -181,7 +212,7 @@ function ModalDetailPost({ current, post, onClose }) {
                                                                         <div className={cx('name')} >
                                                                             <div className={cx('name-first')}>
                                                                                 <span>
-                                                                                    <a href="/" >{post.couple.nameCouple}</a>
+                                                                                    <a href="/" >{post?.couple.nameCouple}</a>
                                                                                 </span>
                                                                             </div>
                                                                         </div>
@@ -197,7 +228,7 @@ function ModalDetailPost({ current, post, onClose }) {
                                                                         </div>
                                                                     </div>
                                                                     <div className={cx('nd-second')}>
-                                                                        <span>Written by {post.author.name}</span>
+                                                                        <span>Written by {post?.author?.name}</span>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -301,14 +332,22 @@ function ModalDetailPost({ current, post, onClose }) {
                                                                                             <span className={cx('content-comment')}>
                                                                                                 <span>{comment.textComment}</span>
                                                                                             </span>
-                                                                                            <div><FontAwesomeIcon
-                                                                                                //  onClick={handleDeleteComment(comment._id)} 
-                                                                                                icon={faEllipsis} /></div>
                                                                                         </div>
-
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
+                                                                            {current._id === comment.postedBy._id &&
+                                                                                <>
+                                                                                    <div className={cx('iconOptions')} onClick={() => setOpenDeleteComment(comment._id)}>
+                                                                                        <FontAwesomeIcon icon={faEllipsis} />
+                                                                                    </div>
+
+                                                                                    {/* Dropdown menu */}
+                                                                                    <div className={cx('dropdown-menu', `${openDeleteComment === comment._id ? 'active' : 'inactive'}`)} onClick={() => handleDeleteComment(comment._id)}>
+                                                                                        Delete
+                                                                                    </div>
+                                                                                </>
+                                                                            }
                                                                         </div>
                                                                     ))}
                                                                 </ul>

@@ -11,6 +11,12 @@ import 'slick-carousel/slick/slick-theme.css';
 import * as postServices from '../../services/postServices'
 import * as notifyServices from '../../services/notifyServices'
 import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
+import { io } from 'socket.io-client';
+
+const socket = io('http://localhost:5000', {
+    reconnection: true,
+})
 
 
 const cx = classNames.bind(styles);
@@ -52,36 +58,43 @@ function ModalNewDiary({ current, onClose }) {
             for (let image of values.images) formData.append('images', image);
 
             const response = await postServices.apiCreatePost(formData);
-            if (couple.loverUserId) {
-                let notifyLover = {};
-                if(current._id === couple.loverUserId){
-                    notifyLover = {
-                        recipients: couple.createdUser,
-                        text: '- your lover add a new diary.',
+            if (response.success) {
+                if (couple.loverUserId) {
+                    let notifyLover = {};
+                    if (current._id === couple.loverUserId) {
+                        notifyLover = {
+                            recipients: couple.createdUser,
+                            text: '- your lover add a new diary.',
+                            image: response.result.images[0],
+                            type: 'image'
+                        }
+                    } else if (current._id === couple.createdUser) {
+                        notifyLover = {
+                            recipients: couple.loverUserId,
+                            text: '- your lover add a new diary.',
+                            image: response.result.images[0],
+                            type: 'image'
+                        }
+                    }
+                    const noti = await notifyServices.apiCreateNotify(notifyLover);
+                    socket.emit('notifyCouple', { notiId: noti.result._id, notification: noti.result });
+
+                }
+
+                if (response.result.mode === 'Public') {
+                    const notify = {
+                        recipients: couple.followers,
+                        text: `from ${couple.nameCouple} couple add a new diary.`,
                         image: response.result.images[0],
                         type: 'image'
                     }
-                }else if(current._id === couple.createdUser){
-                    notifyLover = {
-                        recipients: couple.loverUserId,
-                        text: '- your lover add a new diary.',
-                        image: response.result.images[0],
-                        type: 'image'
-                    }
+                    const noti = await notifyServices.apiCreateNotify(notify)
+                    socket.emit('notifyPublic', { notiId: noti.result._id, notification: noti.result });
                 }
-                const notiLover = await notifyServices.apiCreateNotify(notifyLover);
+                onClose()
+            } else {
+                Swal.fire('Oops!', response.result, 'error')
             }
-            
-            if (response.result.mode === 'Public') {
-                const notify = {
-                    recipients: couple.followers,
-                    text: `from ${couple.nameCouple} couple add a new diary.`,
-                    image: response.result.images[0],
-                    type: 'image'
-                }
-                const noti = await notifyServices.apiCreateNotify(notify)
-            }
-            onClose()
         }
     })
 
@@ -206,7 +219,8 @@ function ModalNewDiary({ current, onClose }) {
                                                                                 </div>
                                                                                 <div className={cx('information')}>
                                                                                     <div className={cx('content-new')}>
-                                                                                        <div className={cx('write-here')}><textarea name='content' value={formik.values.content} onChange={formik.handleChange} placeholder="Add keywords, separated by commas"></textarea>
+                                                                                        <div className={cx('write-here')}>
+                                                                                            <textarea name='content' value={formik.values.content} onChange={formik.handleChange} placeholder="Add keywords, separated by commas"></textarea>
                                                                                             {
                                                                                                 formik.errors.content && formik.touched.content && (
                                                                                                     <small className={cx('validate-login')}>{formik.errors.content}</small>

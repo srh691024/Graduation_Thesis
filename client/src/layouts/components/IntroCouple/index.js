@@ -2,11 +2,12 @@ import classNames from "classnames/bind";
 import styles from "~/layouts/components/IntroCouple/IntroCouple.module.scss";
 import images from "~/assets/images";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faCakeCandles, faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faCakeCandles, faLocationDot, faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { faTiktok, faFacebookF, faInstagram } from "@fortawesome/free-brands-svg-icons";
 import { useState, useEffect } from "react";
 import * as coupleServices from '../../../services/coupleServices'
 import * as notifyServices from '~/services/notifyServices'
+import * as authServices from '~/services/authServices'
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getCurrentUser } from '~/store/user/asyncAction';
@@ -15,6 +16,12 @@ import { createPortal } from "react-dom";
 import { ModalEditInfoCouple } from "~/components";
 import config from "~/config";
 import ModalEditTempLover from "~/components/ModalEditTempLover";
+import Swal from "sweetalert2";
+import { io } from 'socket.io-client';
+
+const socket = io('http://localhost:5000', {
+    reconnection: true,
+})
 
 const cx = classNames.bind(styles);
 
@@ -31,6 +38,8 @@ function IntroCouple() {
     const [showModalEditInfoCouple, setShowModalEditInfoCouple] = useState(false);
     const [showModalEditTempLover, setShowModalEditTempLover] = useState(false);
     const [followed, setFollowed] = useState(false);
+    const [openReportUser, setOpenReportUser] = useState(false);
+    const [openReportUserTwo, setOpenReportUserTwo] = useState(false);
 
     useEffect(() => {
         const setTimeoutId = setTimeout(() => {
@@ -84,11 +93,21 @@ function IntroCouple() {
             image: '',
             type: 'follow'
         }
-        await notifyServices.apiCreateNotify(notify)
+        const noti = await notifyServices.apiCreateNotify(notify)
+        socket.emit('notifyPublic', { notiId: noti.result._id, notification: noti.result });
     }
     const handleUnfollow = async () => {
         setFollowed(false)
         await coupleServices.apiFollowCouple(infoCouple._id)
+    }
+    const handleReport = async (userId) => {
+        const response = await authServices.apiReportAccount(userId)
+        console.log(response)
+        if (!response.success) {
+            Swal.fire('Oops!', response.result, 'error')
+        } else {
+            Swal.fire('Notify', 'You have reported this user', 'warning')
+        }
     }
     return (
         <div className={cx('wrapper')}>
@@ -190,6 +209,15 @@ function IntroCouple() {
                                             <span>{infoCreatedUser?.followings?.length} followings</span>
                                         </div>
                                     </div>
+                                    {current._id !== infoLoverUser._id && current._id !== infoCreatedUser._id ?
+                                        <div className={cx('options')} onClick={() => { setOpenReportUser(!openReportUser) }}>
+                                            <FontAwesomeIcon className={cx('icon')} icon={faEllipsisVertical} />
+                                        </div>
+                                        : null}
+                                    {/* Dropdown menu */}
+                                    <div className={cx('dropdown-menu', `${openReportUser ? 'active' : 'inactive'}`)} onClick={() => handleReport(infoCreatedUser._id)}>
+                                        Report account
+                                    </div>
                                 </div>
                                 <div className={cx('dob-partner')}>
                                     <FontAwesomeIcon className={cx('sub-icon')} icon={faCakeCandles} />
@@ -259,6 +287,17 @@ function IntroCouple() {
                                             </div>
                                             : null
                                         }
+                                    </div>
+                                    {current._id !== infoLoverUser._id && current._id !== infoCreatedUser._id ?
+
+                                        <div className={cx('options')} onClick={() => { setOpenReportUserTwo(!openReportUserTwo) }}>
+                                            <FontAwesomeIcon className={cx('icon')} icon={faEllipsisVertical} />
+                                        </div>
+                                        : null
+                                    }
+                                    {/* Dropdown menu */}
+                                    <div className={cx('dropdown-menu', `${openReportUserTwo ? 'active' : 'inactive'}`)} onClick={() => handleReport(infoLoverUser?._id)}>
+                                        Report account
                                     </div>
                                 </div>
                                 <div className={cx('dob-partner')}>

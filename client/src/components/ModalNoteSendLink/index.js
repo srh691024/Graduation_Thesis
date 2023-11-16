@@ -6,17 +6,23 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import * as coupleServices from '~/services/coupleServices';
 import * as authServices from '~/services/authServices'
+import * as notifyServices from '~/services/notifyServices'
 import Swal from "sweetalert2";
 import HeadlessTippy from '@tippyjs/react/headless';
 import 'tippy.js/dist/tippy.css'; // optional
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { io } from 'socket.io-client';
+
+const socket = io('http://localhost:5000', {
+    reconnection: true,
+})
 
 const cx = classNames.bind(styles);
 function ModalNoteSendLink({ onClose }) {
     const [searchUserReceive, setSearchUserReceive] = useState([])
     const [showResult, setShowResult] = useState(false);
-
+    const [idReceiver, setIdReceiver] = useState('')
 
     const formik = useFormik({
         initialValues: {
@@ -32,6 +38,14 @@ function ModalNoteSendLink({ onClose }) {
             const sendInvitation = await coupleServices.apiSendInvitation(values);
             if (sendInvitation.success) {
                 Swal.fire('Congratulations', sendInvitation.result, 'success')
+                let notifyLover = {
+                    recipients: idReceiver,
+                    text: `invites you to become a couple`,
+                    image: '',
+                    type: 'follow'
+                }
+                const noti = await notifyServices.apiCreateNotify(notifyLover)
+                socket.emit('notifyPublic', { notiId: noti.result._id, notification: noti.result });
             } else {
                 Swal.fire('Oops!', sendInvitation.result, 'error');
             }
@@ -49,11 +63,13 @@ function ModalNoteSendLink({ onClose }) {
         }
         searchUser()
     }, [formik.values.email])
+
     const handleHideResult = () => {
         setShowResult(false);
     };
-    const handleClickUser = (email) => {
-        formik.setFieldValue('email', email);
+    const handleClickUser = (result) => {
+        formik.setFieldValue('email', result.email);
+        setIdReceiver(result._id)
     }
     return (
         <div className={cx('wrapper')}>
@@ -108,7 +124,7 @@ function ModalNoteSendLink({ onClose }) {
                                                                                 <div className={cx('searchWrapper')}>
                                                                                     <h4 className={cx('searchTitle')}>Accounts</h4>
                                                                                     {searchUserReceive.map((result) => (
-                                                                                        <Link key={result._id} onClick={() => handleClickUser(result.email)}>
+                                                                                        <Link key={result._id} onClick={() => handleClickUser(result)}>
                                                                                             <div className={cx('styleUserAvatar')}>
                                                                                                 <span className={cx('styleAvatar')}>
                                                                                                     <img src={result.avatar} alt="" />

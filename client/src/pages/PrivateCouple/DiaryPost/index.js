@@ -10,6 +10,11 @@ import * as postServices from '~/services/postServices'
 import * as coupleServices from '~/services/coupleServices'
 import moment from "moment";
 import { useSelector } from "react-redux";
+import { io } from 'socket.io-client';
+
+const socket = io('http://localhost:5000', {
+    reconnection: true,
+})
 
 const cx = classNames.bind(styles);
 
@@ -38,6 +43,37 @@ function DiaryPost() {
         }
         fetchPostByCouple()
     }, [usernameCouple])
+
+    useEffect(() => {
+        socket.on('new-comment', (data) => {
+            setPostsByCouple((prevPosts) => {
+                const updatedPosts = prevPosts.map((post) => {
+                    if (post._id === data.postId) {
+                        post = data.comment
+                    }
+                    return post
+                })
+                return updatedPosts
+            })
+        })
+        return () => { socket.off('new-comment') }
+    }, [])
+
+    useEffect(() => {
+        socket.on('like', (data) => {
+            setPostsByCouple((prevPosts) => {
+                const updatedPosts = prevPosts.map((post) => {
+                    if (post._id === data.postId) {
+                        post = data.like
+                    }
+                    return post
+                })
+                return updatedPosts
+            })
+        })
+        return () => { socket.off('like') }
+    }, [])
+
 
     return (
         <div className={cx('container')}>
@@ -95,8 +131,6 @@ function DiaryPost() {
                                         </div>
                                     </div>
                                 ))
-
-
                                 : <><div>No posts found</div></>}
                         </div>
                     </div>

@@ -20,7 +20,7 @@
     margin-top: -16px;
     position: sticky;
     top: 60px;
-    z-index: 100;
+    z-index: 1;
     padding-top: 8px;
     display: flex;
     align-items: center;
@@ -62,13 +62,14 @@
                 left: 0px;
                 width: 27px;
                 transition: width 0.3s ease 0s, left 0.3s ease 0s, right 0.3s ease 0s;
-                height: 2px;
+                height: 3px;
                 background: #FE6E91;
                 position: absolute;
                 pointer-events: none;
                 bottom: 0px;
                 border-radius: 4px;
                 font-weight: 700;
+                border-radius: 4px;
 
             }
         }
@@ -140,6 +141,9 @@
                     .styleAvatarCoupleLink {
                         flex: 0 0 64px;
                         margin: 16px;
+                        justify-content: center;
+                        align-items: center;
+                        display: flex;
 
                         .divContainer {
                             width: 60px;
@@ -184,6 +188,7 @@
                         font-size: 14px;
                         flex: 1 1 0%;
                         margin: 16px 0px;
+                        text-decoration: none;
 
                         .pTitle {
                             font-weight: 700;
@@ -192,7 +197,7 @@
                         }
 
                         .subTitleWrapper {
-                            color: rgba(115, 115, 115, 0.5);
+                            color: rgba(115, 115, 115, 0.8);
                             font-family: var(--font-family);
                             font-size: 14px;
                             margin-top: 1px;
@@ -200,17 +205,19 @@
                             .userSubTitle {
                                 font-family: var(--font-family);
                                 font-weight: 400;
-                                font-size: 14px;
+                                font-size: 13px;
                                 display: inline;
                             }
 
                             strong {
                                 color: rgb(22, 24, 35);
                                 font-weight: 600;
+                                font-size: 13px;
 
                                 span {
                                     color: rgba(22, 24, 35, 0.75);
                                     font-weight: 400;
+                                    font-size: 13px;
                                 }
                             }
                         }
@@ -220,6 +227,7 @@
 
                             strong {
                                 font-weight: 400;
+                                font-size: 13px;
                             }
                         }
                     }
@@ -231,6 +239,22 @@
                 }
             }
 
+            .pSeeMore {
+                color: #FE6E91;
+                font-family: var(--font-family);
+                font-weight: 600;
+                font-size: 14px;
+                margin: 0px;
+                display: inline-flex;
+                align-items: center;
+                cursor: pointer;
+
+                .icon {
+                    color: #FE6E91;
+                    width: 14px;
+                    height: 14px;
+                }
+            }
             .listOfDiary {
                 width: 100%;
 
@@ -393,8 +417,7 @@
 
                                 .cardCaption {
                                     display: inline;
-                                    overflow: hidden;
-                                    text-overflow: ellipsis;
+                                    // overflow: hidden;
                                     margin-top: 4px;
                                     word-break: break-word;
                                     cursor: pointer;
@@ -402,7 +425,18 @@
                                     .divContainer {
                                         font-size: 16px;
                                         word-break: break-word;
+                                        max-height: 50px;
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+
+                                        span {
+                                            max-width: 100px;
+                                            max-height: 50px;
+                                            overflow: hidden;
+                                            text-overflow: ellipsis;
+                                        }
                                     }
+
                                 }
 
                                 .useNameCouple {
@@ -433,7 +467,8 @@
                                             vertical-align: middle;
                                             border-radius: 50%;
                                             background-color: rgba(136, 136, 136, 0.5);
-                                            img{
+
+                                            img {
                                                 width: 100%;
                                                 height: 100%;
                                                 object-fit: cover;

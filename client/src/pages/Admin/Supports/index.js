@@ -1,163 +1,141 @@
 import classNames from "classnames/bind";
 import styles from '~/pages/Admin/Supports/Supports.module.scss';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import IconButton from '@mui/material/IconButton';
-import SaveIcon from '@mui/icons-material/Save';
+import {
+    DataGrid,
+    gridClasses,
+    GridToolbar,
+    gridPageCountSelector,
+    gridPageSelector,
+    useGridApiContext,
+    useGridSelector
+} from '@mui/x-data-grid';
+import { alpha, styled } from '@mui/material/styles';
+import { useEffect, useState } from "react";
+import Pagination from '@mui/material/Pagination';
+import PaginationItem from '@mui/material/PaginationItem';
+import { Avatar } from '@mui/material';
+import moment from "moment";
+import * as adminServices from '~/services/adminServices'
+import { createPortal } from "react-dom";
+import { ModalResponseProblem } from "~/components";
 
 const cx = classNames.bind(styles);
-function Supports() {
-    const columns = [
-        { field: 'id', headerName: 'No', width: 20 },
-        {
-            field: 'status',
-            headerName: 'STATUS',
-            width: 150,
-            editable: false,
-        },
-        {
-            field: 'type',
-            headerName: 'TYPE',
-            width: 150,
-            editable: false,
-        },
-        {
-            field: 'avatar',
-            headerName: '',
-            width: 150,
-            editable: false,
-        },
-        {
-            field: 'user',
-            headerName: 'USER',
-            width: 150,
-            editable: false,
-        },
-        {
-            field: 'content',
-            headerName: 'CONTENT',
-            width: 150,
-            editable: false,
-        },
-        {
-            field: 'image',
-            headerName: 'IMAGE',
-            width: 150,
-            editable: false,
-        },
-    ];
-    const columnsBan = [
-        { field: 'id', headerName: 'No', width: 20 },
-        {
-            field: 'status',
-            headerName: 'STATUS',
-            with: 50,
-            editable: false,
-        },
-        {
-            field: 'type',
-            headerName: 'TYPE',
-            width: 100,
-            editable: true,
-        },
-        {
-            field: 'avatar',
-            headerName: '',
-            width: 150,
-            editable: false,
-        },
-        {
-            field: 'user',
-            headerName: 'USER',
-            width: 150,
-            editable: false,
-        },
-        {
-            field: 'content',
-            headerName: 'CONTENT',
-            width: 150,
-            editable: false,
-        },
-        {
-            field: 'image',
-            headerName: 'IMAGE',
-            width: 150,
-            editable: false,
-        },
+const PAGE_SIZE = 10;
 
-        {
-            field: 'action',
-            headerName: 'Action',
-            width: 120,
-            renderCell: (params) => (
-                <IconButton
-                    color="secondary"
-                    aria-label="Save"
-                    onClick={() => handleSave(params.row.id)}
-                >
-                    <SaveIcon
-                        sx={{
-                            fontSize: 20,
-                            color: 'rgb(254, 110, 145)'
-                        }}
-                    />
-                </IconButton>
+const ODD_OPACITY = 0.2;
+function CustomPagination() {
+    const apiRef = useGridApiContext();
+    const page = useGridSelector(apiRef, gridPageSelector);
+    const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+
+    return (
+        <Pagination
+            color="primary"
+            variant="outlined"
+            shape="rounded"
+            page={page + 1}
+            count={pageCount}
+            // @ts-expect-error
+            renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
+            onChange={(event, value) => apiRef.current.setPage(value - 1)}
+        />
+    );
+}
+const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
+    [`& .${gridClasses.row}.even`]: {
+        backgroundColor: theme.palette.grey[200],
+        '&:hover, &.Mui-hovered': {
+            backgroundColor: alpha(theme.palette.primary.main, ODD_OPACITY),
+            '@media (hover: none)': {
+                backgroundColor: 'transparent',
+            },
+        },
+        '&.Mui-selected': {
+            backgroundColor: alpha(
+                theme.palette.primary.main,
+                ODD_OPACITY + theme.palette.action.selectedOpacity,
             ),
+            '&:hover, &.Mui-hovered': {
+                backgroundColor: alpha(
+                    theme.palette.primary.main,
+                    ODD_OPACITY +
+                    theme.palette.action.selectedOpacity +
+                    theme.palette.action.hoverOpacity,
+                ),
+                // Reset on touch devices, it doesn't add specificity
+                '@media (hover: none)': {
+                    backgroundColor: alpha(
+                        theme.palette.primary.main,
+                        ODD_OPACITY + theme.palette.action.selectedOpacity,
+                    ),
+                },
+            },
+        },
+    },
+}));
+function Supports() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedRowData, setSelectedRowData] = useState(null);
+
+    const [dataReport, setDataReport] = useState([])
+    const [paginationModel, setPaginationModel] = useState({
+        pageSize: PAGE_SIZE,
+        page: 0,
+    });
+
+    useEffect(() => {
+        async function fetchReports() {
+            const response = await adminServices.apiGetAllReports()
+            setDataReport(response.result)
+        }
+        fetchReports();
+    }, [])
+
+    const columnsBan = [
+        {
+            field: 'isResponsed', headerName: 'Is Responsed', width: 120, type: 'boolean'
+        },
+        {
+            field: 'avatar', headerName: '', width: 60,
+            renderCell: params => <Avatar src={params.row.useSend.avatar} />,
+            sortable: false, editable: false
+        },
+        {
+            field: 'userSend', headerName: 'User', width: 200,
+            renderCell: params => params.row.useSend.name
+        },
+        { field: 'content', headerName: 'Problem', width: 320 },
+        {
+            field: 'createdAt', headerName: 'Created At', width: 150,
+            renderCell: params => moment(params.row.createdAt).format('HH:MM A DD/MM/YYYY ')
         },
     ];
-
-    const rowsBan = [
-        { id: 1, status: 'Not yet', type: 'false', avatar: 'Knsa', user: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 2, status: 'Not yet', type: 'true', avatar: 'Knsa', user: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 3,status: 'Not yet', type: 'true', avatar: 'Knsa', user: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 4, status: 'Not yet', type: 'false', avatar: 'Knsa', user: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 5, status: 'Not yet',  type: 'true', avatar: 'Knsa', user: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 6, status: 'Not yet', type: 'true', avatar: 'Knsa', user: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 7, status: 'Not yet', type: 'false', avatar: 'Knsa', user: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 8, status: 'Not yet', type: 'true', avatar: 'Knsa', user: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 9, status: 'Not yet', type: 'false', avatar: 'Knsa', user: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 10, status: 'Not yet',  type: 'true', avatar: 'Knsa', user: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-        { id: 11, status: 'Not yet',  type: 'false', avatar: 'Knsa', user: 'hakuhanzi@gmail.com', couple: 'Connected', content: '10 days', image: 'Image' },
-
-    ];
-    const rows = [
-        { id: 1, status: 'Done', type: 'Knsa', avatar: 'hakuhanzi@gmail.com', user: 'Connected', content: '10 days', image: 'Image' },
-        { id: 2,status: 'Done', type: 'Knsa', avatar: 'hakuhanzi@gmail.com', user: 'Connected', content: '10 days', image: 'Image' },
-        { id: 3,status: 'Done', type: 'Knsa', avatar: 'hakuhanzi@gmail.com', user: 'Connected', content: '10 days', image: 'Image' },
-        { id: 4,status: 'Done', type: 'Knsa', avatar: 'hakuhanzi@gmail.com', user: 'Connected', content: '10 days', image: 'Image' },
-        { id: 5,status: 'Done', type: 'Knsa', avatar: 'hakuhanzi@gmail.com', user: 'Connected', content: '10 days', image: 'Image' },
-        { id: 6,status: 'Done', type: 'Knsa', avatar: 'hakuhanzi@gmail.com', user: 'Connected', content: '10 days', image: 'Image' },
-    ];
-
-    const handleSave = (id) => {
-        // Handle delete action here
-        console.log('Save item with ID:', id);
+    const handleRowClick = (params) => {
+        setIsModalOpen(true);
+        setSelectedRowData(params.row);
     };
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('accounts')}>
                 <div className={cx('accountsTitle')}>
-                    <span>Supports</span>
+                    <span>Manage posts</span>
                 </div>
             </div>
             <div className={cx('banUsers')}>
-                <div className={cx('title')}></div>
-                <DataGrid
-                    rows={rowsBan}
+                <div className={cx('title')}>Manage reported posts</div>
+                <StripedDataGrid
+                    rows={dataReport}
                     columns={columnsBan}
-                    initialState={{
-                        pagination: {
-                            paginationModel: {
-                                pageSize: 5,
-                            },
-                        },
+                    loading={!dataReport}
+                    getRowId={(row) => row._id}
+                    paginationModel={paginationModel}
+                    onPaginationModelChange={setPaginationModel}
+                    pageSizeOptions={[PAGE_SIZE]}
+                    slots={{
+                        pagination: CustomPagination,
+                        toolbar: GridToolbar
                     }}
-                    // disableRowSelectionOnClick
-                    pageSizeOptions={[5, 10, 25]}
-
-                    disableColumnFilter
-                    disableColumnSelector
-                    disableDensitySelector
-                    slots={{ toolbar: GridToolbar }}
                     slotProps={{
                         toolbar: {
                             showQuickFilter: true,
@@ -174,44 +152,15 @@ function Supports() {
                         bgcolor: 'white',
                         color: 'rgb(62,51,65)',
                     }}
+                    getRowClassName={(params) =>
+                        params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                    }
+                    onRowClick={handleRowClick}
                 />
-            </div>
-            <div className={cx('allUsers')}>
-                <div className={cx('title')}>Problem solved</div>
-                <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    initialState={{
-                        pagination: {
-                            paginationModel: {
-                                pageSize: 5,
-                            },
-                        },
-                    }}
-                    disableRowSelectionOnClick
-                    pageSizeOptions={[5, 10, 25]}
-
-                    disableColumnFilter
-                    disableColumnSelector
-                    disableDensitySelector
-                    slots={{ toolbar: GridToolbar }}
-                    slotProps={{
-                        toolbar: {
-                            showQuickFilter: true,
-                        },
-                    }}
-                    sx={{
-                        boxShadow: 5,
-                        border: 0,
-                        borderColor: 'primary.light',
-                        borderRadius: 3,
-                        fontSize: 13,
-                        p: 2,
-                        mt: 1,
-                        bgcolor: 'white',
-                        color: 'rgb(62,51,65)',
-                    }}
-                />
+                {isModalOpen && createPortal(
+                    <ModalResponseProblem report={selectedRowData} onClose={() => setIsModalOpen(false)} />,
+                    document.body
+                )}
             </div>
         </div>
     );

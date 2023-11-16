@@ -27,7 +27,7 @@ export const apiSendInvitation = (email) => axios({
     withCredentials: true
 });
 
-export const apiCancelInvitation = (invitationId)=> axios({
+export const apiCancelInvitation = (invitationId) => axios({
     url: `couple/cancelInvitation/${invitationId}`,
     method: 'DELETE',
 })
@@ -59,35 +59,40 @@ export const apiFollowCouple = (coupleId) => axios({
     method: 'PATCH'
 });
 
-export const apiDisconnectConnection = (coupleId, agree)=> axios({
+export const apiDisconnectConnection = (coupleId, agree) => axios({
     url: `couple/disconnectConnection/${coupleId}`,
     method: 'POST',
     data: agree
 })
 
-export const apigetHistoryCoupleByCurrentUser = ()=> axios({
+export const apigetHistoryCoupleByCurrentUser = () => axios({
     url: 'couple/getHistoryCoupleByCurrentUser',
     method: 'GET'
 })
 
-export const apiInviteRestoreCouple = (coupleId)=> axios({
+export const apiInviteRestoreCouple = (coupleId) => axios({
     url: `couple/inviteRestoreCouple/${coupleId}`,
     method: 'POST'
 })
 
-export const apiAcceptRestoreCouple = (invitationId)=> axios({
+export const apiAcceptRestoreCouple = (invitationId) => axios({
     url: `couple/acceptRestoreCouple/${invitationId}`,
     method: 'POST'
 })
 
-export const apiGetListInvitation = ()=> axios({
+export const apiGetListInvitation = () => axios({
     url: 'couple/getListInvitation',
     method: 'GET'
 })
 
-export const apiAcceptInvitationTwo = (invitationId)=> axios({
+export const apiAcceptInvitationTwo = (invitationId) => axios({
     url: `couple/acceptInvitationTwo/${invitationId}`,
     method: 'POST'
+})
+
+export const apiSearchCouple = (searchQuery) => axios({
+    url: `couple/searchCouple?username=${searchQuery}`,
+    method: 'GET',
 })
 
 

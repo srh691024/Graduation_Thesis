@@ -99,10 +99,8 @@ function ModalEditInfoCouple({ infoCouple, onClose }) {
                                                             <div className={cx('avatar')}>
                                                                 <div className={cx('avatar-one')}>
                                                                     <button>
-
                                                                         <PreviewImage file={formik.values.imageCouple} />
                                                                     </button>
-
                                                                 </div>
                                                             </div>
                                                             <div className={cx('name-change-avatar')}>
@@ -112,7 +110,11 @@ function ModalEditInfoCouple({ infoCouple, onClose }) {
                                                                 <div className={cx('name-change-avatar-two')}>Change profile photo</div>
                                                                 <div className={cx('form-avatar')}>
                                                                     <form encType="multipart/form-data">
-                                                                        <input name="imageCouple" onChange={(e) => (formik.setFieldValue('imageCouple', e.target.files[0]))} accept="image/jpeg, image/png, image/jpg" type="file" />
+                                                                        <input 
+                                                                        name="imageCouple" 
+                                                                        onChange={(e) => (formik.setFieldValue('imageCouple', e.target.files[0]))} 
+                                                                        accept="image/jpeg, image/png, image/jpg" 
+                                                                        type="file" />
                                                                     </form>
                                                                 </div>
                                                                 {

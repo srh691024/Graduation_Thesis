@@ -738,6 +738,46 @@ article {
                                 flex-direction: row;
                                 margin-bottom: 4px;
 
+                                .dropdown-menu {
+                                    position: absolute;
+                                    // top: 80px;
+                                    right: 50px;
+                                    background-color: white;
+                                    border-radius: 8px;
+                                    padding: 8px 0;
+                                    width: 140px;
+                                    z-index: 1;
+                                    box-shadow: 1px 0 4px 0.5px rgba(0, 0, 0, 0.2);
+                                    display: flex;
+                                    justify-content: center;
+                                    font-weight: 500;
+                                    color: #3E3341;
+                                    cursor: pointer;
+                                }
+
+                                .dropdown-menu.active {
+                                    opacity: 1;
+                                    visibility: visible;
+                                    transform: translateY(0);
+                                    transition: 200ms ease;
+
+                                }
+
+                                .dropdown-menu.inactive {
+                                    opacity: 0;
+                                    visibility: hidden;
+                                    transform: translateY(-10px);
+                                    transition: 200ms ease;
+
+                                }
+
+                                .iconOptions {
+                                    margin-right: 5px;
+                                    color: #FE6E91;
+                                    cursor: pointer;
+                                    font-size: 16px;
+                                }
+
                                 .comment-one {
                                     margin-right: 4px;
                                     border-radius: 0;
@@ -1121,7 +1161,8 @@ article {
 
                                         }
                                     }
-                                    button{
+
+                                    button {
                                         color: white;
                                         font-weight: 600;
                                         background-color: #FE6E91;

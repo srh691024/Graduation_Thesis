@@ -43,6 +43,7 @@ const User = new Schema({
         default: 16,
     },
     isBlocked: { type: Boolean, default: false },
+    reports: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     refreshToken: { type: String },
     passwordChangedAt: { type: String, },
     passwordResetToken: { type: String, },

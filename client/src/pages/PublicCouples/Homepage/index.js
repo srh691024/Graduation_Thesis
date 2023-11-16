@@ -4,6 +4,11 @@ import { useSelector } from "react-redux";
 import { Post } from "~/components";
 import styles from '~/pages/PublicCouples/Homepage/Homepage.module.scss'
 import * as postServices from '~/services/postServices'
+import { io } from 'socket.io-client';
+
+const socket = io('http://localhost:5000', {
+    reconnection: true,
+})
 
 const cx = classNames.bind(styles);
 
@@ -19,6 +24,39 @@ function Homepage() {
         }
         fetchAllPostPublic()
     }, [])
+
+    useEffect(() => {
+        socket.on('new-comment', (data)=>{
+            console.log(data)
+            setAllPostPublic((prevPosts)=>{
+                const updatedPosts = prevPosts.map((post)=>{
+                    if(post._id === data.postId){
+                        post = data.comment
+                    }
+                    return post
+                })
+                return updatedPosts
+            })
+        })
+        return ()=>{socket.off('new-comment')}
+    },[])
+
+    useEffect(() => {
+        socket.on('like', (data) => {
+            setAllPostPublic((prevPosts) => {
+                const updatedPosts = prevPosts.map((post) => {
+                    if (post._id === data.postId) {
+                        post = data.like
+                    }
+                    return post
+                })
+                return updatedPosts
+            })
+        })
+        return () => { socket.off('like') }
+    }, [])
+
+    
     return (
         <div className={cx('wrapper')}>
             <div className={cx('oneColumnContainer')}>
