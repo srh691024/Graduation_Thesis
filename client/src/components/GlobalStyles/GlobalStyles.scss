@@ -38,11 +38,17 @@ body {
 
 }
 
+@media screen and (max-width: 46.1875em) {
+    body {
+        font-size: 1rem;
+    }
+}
+
 //Scrollbar CSS
 html *::-webkit-scrollbar {
     border-radius: 0;
     width: 9px;
-    
+
 }
 
 html *::-webkit-scrollbar-thumb {
@@ -62,13 +68,17 @@ html *::-webkit-scrollbar-track {
     z-index: 1000;
     opacity: 0.6;
 }
-.slick-next::before, .slick-prev::before{
+
+.slick-next::before,
+.slick-prev::before {
     font-size: 30px;
 }
-.slick-next{
+
+.slick-next {
     right: 9px;
 }
-.slick-prev{
+
+.slick-prev {
     left: 0;
 }
 

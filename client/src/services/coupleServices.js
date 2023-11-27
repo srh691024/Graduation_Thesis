@@ -95,6 +95,17 @@ export const apiSearchCouple = (searchQuery) => axios({
     method: 'GET',
 })
 
+export const apiEditThemes = (coupleId, formData) => axios({
+    url: `couple/editThemes/${coupleId}`,
+    method: 'PUT',
+    data: formData
+});
+
+export const apiDeleteHistoryCouple = (coupleId) => axios({
+    url: `couple/deleteHistoryCouple/${coupleId}`,
+    method: 'DELETE',
+})
+
 
 
 

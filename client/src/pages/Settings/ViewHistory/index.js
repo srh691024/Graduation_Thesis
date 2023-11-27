@@ -5,16 +5,23 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import * as coupleServices from '~/services/coupleServices';
+import * as notifyServices from '~/services/notifyServices';
 import moment from "moment";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
+import { io } from 'socket.io-client';
+
+const socket = io('http://localhost:5000', {
+    reconnection: true,
+})
 
 const cx = classNames.bind(styles);
 
 function ViewHistory() {
     const [historyCouple, setHistoryCouple] = useState([]);
-    const [infoInvitation, setInfoInvitation] = useState({})
-    const [haveInvitation, setHaveInvitation] = useState(false)
+    const [infoInvitation, setInfoInvitation] = useState('')
+    const [haveInvitation, setHaveInvitation] = useState('')
+    const [openDeleteComment, setOpenDeleteComment] = useState(null);
 
     const { current } = useSelector(state => state.user)
     useEffect(() => {
@@ -22,8 +29,8 @@ function ViewHistory() {
             setTimeout(async () => {
                 const invitation = await coupleServices.apiGetCurrentInvitation()
                 if (invitation.success) {
-                    setInfoInvitation(invitation.result)
-                    setHaveInvitation(invitation.success)
+                    setInfoInvitation(invitation.result._id)
+                    setHaveInvitation(invitation.result.coupleId)
                 }
             }, 100)
         }
@@ -51,24 +58,62 @@ function ViewHistory() {
     }
 
     const handleCancelInvitation = async () => {
-        setHaveInvitation(false)
-        const response = await coupleServices.apiCancelInvitation(infoInvitation._id)
+        setHaveInvitation('')
+        const response = await coupleServices.apiCancelInvitation(infoInvitation)
         if (response.success) {
             Swal.fire('Notifications', response.result, 'success');
         } else {
             Swal.fire('Oops!', response.result, 'error');
         }
     }
-    const handleClickRestore = async (coupleId) => {
+    const handleClickRestore = async (couple) => {
 
-        const response = await coupleServices.apiInviteRestoreCouple(coupleId)
+        const response = await coupleServices.apiInviteRestoreCouple(couple._id)
         if (response.success) {
-            Swal.fire('Notifications', response.result, 'success');
-            setHaveInvitation(true)
+            Swal.fire('Notifications', 'Send restore invitation successfully', 'success');
+            setHaveInvitation(response.result.coupleId)
+            setInfoInvitation(response.result._id)
+            let idReceiver = ''
+            if (current._id === couple.createdUser._id) {
+                idReceiver = couple.loverUserId._id
+            } else if (current._id === couple.loverUserId._id) {
+                idReceiver = couple.createdUser._id
+            }
+            let notifyLover = {
+                recipients: idReceiver,
+                text: `invites you to become a couple again`,
+                image: '',
+                type: 'follow'
+            }
+            const noti = await notifyServices.apiCreateNotify(notifyLover)
+            socket.emit('notifyPublic', { notiId: noti.result._id, notification: noti.result });
         } else {
             Swal.fire('Oops!', response.result, 'error');
         }
     }
+
+    const handleDeleteComment = async (coupleId) => {
+        console.log(coupleId)
+        const response = await coupleServices.apiDeleteHistoryCouple(coupleId)
+        setOpenDeleteComment(null)
+        setHistoryCouple(historyCouple.filter(h => h._id !== coupleId))
+    }
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            // Check if the click is outside the comment area
+            if (!event.target.closest(`.${cx('icon-option')}`)) {
+                setOpenDeleteComment(null); // Close the dropdown menu
+            }
+        };
+
+        // Attach the event listener to the document
+        document.addEventListener('click', handleClickOutside);
+
+        // Clean up the event listener on component unmount
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
 
     return (
         <div className={cx('wrapper')}>
@@ -96,7 +141,7 @@ function ViewHistory() {
 
                     {/* Have connection */}
                     {historyCouple.length > 0 && historyCouple.map((el, index) =>
-                        <div className={cx('have-connection')} key={index}>
+                        <div className={cx('have-connection')} key={el._id}>
                             <div className={cx('have-connection-one')}>
                                 <div className={cx('from-date')}>
                                     <div className={cx('date')}>
@@ -105,8 +150,12 @@ function ViewHistory() {
                                         to
                                         &nbsp;{moment(el.disconnectedDate).format('DD, MMMM, YYYY')}&nbsp;
                                     </div>
-                                    <div className={cx('icon-option')}>
+                                    <div className={cx('icon-option')} onClick={() => setOpenDeleteComment(el._id)}>
                                         <FontAwesomeIcon icon={faEllipsisVertical} />
+                                    </div>
+                                    {/* Dropdown menu */}
+                                    <div className={cx('dropdown-menu', `${openDeleteComment === el._id ? 'active' : 'inactive'}`)} onClick={() => handleDeleteComment(el._id)}>
+                                        <span>Delete</span>
                                     </div>
                                 </div>
                                 <div className={cx('connected-with')}>This connection history can be restored</div>
@@ -126,11 +175,11 @@ function ViewHistory() {
                                         <div className={cx('d-day')}>Expiration in D-
                                             {getExpiration(el)}
                                         </div>
-                                        {haveInvitation ?
-                                            <div className={cx('click')} onClick={handleCancelInvitation}>Cancel the invitation</div>
+                                        {haveInvitation === el._id ?
+                                            <div className={cx('click')} onClick={()=>handleCancelInvitation()}>Cancel the invitation</div>
                                             :
                                             <div className={cx('click')}
-                                                onClick={() => handleClickRestore(el._id)}
+                                                onClick={() => handleClickRestore(el)}
                                             >Restore the connection</div>
                                         }
                                     </div>

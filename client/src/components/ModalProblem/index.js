@@ -7,10 +7,28 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import PreviewImage from "../PreviewImage";
 import * as authServices from '~/services/authServices'
+import * as adminServices from '~/services/adminServices'
+import * as notifyServices from '~/services/notifyServices'
+import { useEffect, useState } from "react";
+import { io } from 'socket.io-client';
+
+const socket = io('http://localhost:5000', {
+    reconnection: true,
+})
 
 const cx = classNames.bind(styles)
 
 function ModalProblem({ onClose }) {
+    const [loading, setLoading] = useState(false);
+    const [adminIds, setAdminIds] = useState([]);
+
+    useEffect(() => {
+        async function fetchAdminIds() {
+            const response = await adminServices.apiGetAllAdmins()
+            setAdminIds(response.result);
+        }
+        fetchAdminIds()
+    }, [])
     const formik = useFormik({
         initialValues: {
             image: '',
@@ -26,16 +44,22 @@ function ModalProblem({ onClose }) {
             const formData = new FormData();
             formData.append('image', values.image);
             formData.append('content', values.content);
-            formData.forEach(function (value, key) {
-                console.log(key, value);
-            });
-
+            setLoading(true)
             const response = await authServices.apiReportProblem(formData)
             if (response.success) {
                 Swal.fire('Congratulations', 'You have reported a problem successfully', 'success')
+                let notify = {
+                    recipients: adminIds,
+                    text: 'has sent a report',
+                    image: response.result?.image ? response.result?.image : '',
+                    type: 'image'
+                }
+                const noti = await notifyServices.apiCreateNotify(notify);
+                socket.emit('notifyPublic', { notiId: noti.result._id, notification: noti.result });
             } else {
                 Swal.fire('Oops!', response.result, 'error')
             }
+            setLoading(false)
             onClose()
         }
     })
@@ -133,7 +157,9 @@ function ModalProblem({ onClose }) {
                                                                 <div className={cx('input-infor')}>
                                                                     <div className={cx('submit-button')}>
                                                                         <div className={cx('submit-button-one')} onClick={formik.handleSubmit}>
-                                                                            <span>Send</span>
+                                                                            <span>
+                                                                                {loading ? 'Sending...' : 'Send'}
+                                                                            </span>
                                                                         </div>
                                                                     </div>
                                                                 </div>

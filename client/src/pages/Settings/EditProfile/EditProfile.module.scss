@@ -126,7 +126,7 @@
 
             button {
                 border: 0;
-               
+
                 height: 100%;
                 padding: 0;
                 width: 100%;
@@ -333,6 +333,10 @@
             margin-top: 6px;
             display: block;
 
+            @media screen and (max-width: 46.1875em) {
+                flex: 0;
+            }
+
             label {
                 font-size: 14px;
                 font-weight: 500;
@@ -361,6 +365,11 @@
             padding: 0;
             position: relative;
             vertical-align: baseline;
+
+            @media screen and (max-width: 46.1875em) {
+                flex-basis: 200px;
+                margin-right: 20px;
+            }
 
             .input-infor-email {
                 max-width: 355px;

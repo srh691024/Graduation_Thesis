@@ -18,6 +18,12 @@ import Pagination from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
 import Button from '@mui/material/Button';
 import { alpha, styled } from '@mui/material/styles';
+import * as notifyServices from '~/services/notifyServices';
+import { io } from 'socket.io-client';
+
+const socket = io('http://localhost:5000', {
+    reconnection: true,
+})
 
 const cx = classNames.bind(styles);
 
@@ -109,11 +115,20 @@ function Posts() {
 
         const handleBan = async () => {
             setBanButton(true)
-            const response = await adminServices.apiBanReport(params.row._id)
+            await adminServices.apiBanReport(params.row._id)
+
+            const notify = {
+                recipients: params.row.author._id,
+                text: `have been banned your post. You can not share this post in public social anymore.`,
+                image: params.row.images[0],
+                type: 'image'
+            }
+            const noti = await notifyServices.apiCreateNotify(notify);
+            socket.emit('notifyPublic', { notiId: noti.result._id, notification: noti.result });
         }
         const handleUnBan = async () => {
             setBanButton(false)
-            const response = await adminServices.apiUnBanReport(params.row._id)
+            await adminServices.apiUnBanReport(params.row._id)
         }
         return banButton ?
             <strong onClick={handleUnBan}>

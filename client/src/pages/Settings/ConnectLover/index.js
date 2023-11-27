@@ -32,7 +32,7 @@ function ConnectLover() {
     const { current } = useSelector(state => state.user)
     const [showModalNoteSendLink, setShowModalNoteSendLink] = useState(false);
     const [showModalDisconnect, setShowModalDisconnect] = useState(false);
-    
+
     useEffect(() => {
         async function fetchInfoInvitation() {
             setTimeout(async () => {

@@ -82,5 +82,6 @@ export const anniversarySlice = createSlice({
     }
 })
 
+// eslint-disable-next-line no-empty-pattern
 export const { } = anniversarySlice.actions;
 export default anniversarySlice.reducer

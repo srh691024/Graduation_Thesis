@@ -7,6 +7,7 @@ const Couple = new Schema({
     },
     avatarCouplename: { type: String },
     themes: { type: String},
+    themesName: { type: String },
     createdUser: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     loverUserId: { type: Schema.Types.ObjectId, ref: 'User' },
     startLoveDate: { type: Date },

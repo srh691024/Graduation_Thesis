@@ -15,7 +15,7 @@ import Swal from "sweetalert2";
 import { getCurrentCouple } from '~/store/couple/asyncAction';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css'; // optional
-import * as notifiServices from '~/services/notifyServices'
+import * as notifiServices from '~/services/notifyServices';
 import { io } from 'socket.io-client';
 
 const socket = io('http://localhost:5000', {
@@ -24,7 +24,7 @@ const socket = io('http://localhost:5000', {
 
 const cx = classNames.bind(styles)
 
-function Header() {
+function Header({ openNavbarSetting }) {
     const { couple } = useSelector(state => state.couple)
     const navigate = useNavigate()
     const dispatch = useDispatch();
@@ -61,7 +61,7 @@ function Header() {
     useEffect(() => {
         socket.on('notifyCouple', (data) => {
             if (data.notification.recipients[0] === current._id) {
-            setNotiUnRead(notiUnRead + 1)
+                setNotiUnRead(notiUnRead + 1)
             }
         })
         return () => { socket.off('notifyCouple') }
@@ -69,7 +69,7 @@ function Header() {
     useEffect(() => {
         socket.on('notifyPublic', (data) => {
             if (data.notification.user._id.toString() !== couple?.createdUser?.toString() && data.notification.user._id.toString() !== couple?.loverUserId?.toString()) {
-            setNotiUnRead(notiUnRead + 1)
+                setNotiUnRead(notiUnRead + 1)
             }
         })
         return () => { socket.off('notifyPublic') }
@@ -317,6 +317,29 @@ function Header() {
                                 }
                             </div>
                             <div className={cx('setting')}>
+                                <div className={cx('setting-first')}>
+                                    <div className={cx('sub-first')}>
+                                        <span>
+                                            <div className={cx('sub-second')}>
+                                                <Tippy content='Settings' placement='right'>
+                                                    <Link to={config.routes.settingEditProfile}>
+                                                        <div className={cx('sub-third')}>
+                                                            <div className={cx('icon')}>
+                                                                <div className={cx('icon-first')}>
+                                                                    <div className={cx('icon-second')}>
+                                                                        <FontAwesomeIcon className={cx('icon-third')} icon={faBars} />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </Link>
+                                                </Tippy>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={cx('openSetting')} onClick={openNavbarSetting}>
                                 <div className={cx('setting-first')}>
                                     <div className={cx('sub-first')}>
                                         <span>

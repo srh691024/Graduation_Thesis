@@ -88,6 +88,10 @@ const sendInvitation = asyncHandler(async (req, res) => {
             type: 'new',
             emailReceiveUser: email
         })
+
+        setTimeout(async () => {
+            await Invitation.deleteOne({ invitationId: invitationIdEdited })
+        }, 24 * 60 * 60 * 1000);
         return res.status(200).json({
             success: newInvitation ? true : false,
             result: newInvitation ? "Send invitation to your lover successfully" : 'Can not send invitation to your lover'
@@ -121,7 +125,7 @@ const sendInvitation = asyncHandler(async (req, res) => {
         }
         setTimeout(async () => {
             await Invitation.deleteOne({ invitationId: invitationIdEdited })
-        }, 10 * 60 * 1000);
+        }, 24 * 60 * 60 * 1000);
         return res.json({
             success: true,
             result: newInvitation ? 'Send connection invitation to email lover successfully' : 'Send connection invitation failed'
@@ -323,7 +327,20 @@ const disconnectConnection = asyncHandler(async (req, res) => {
 const getHistoryCoupleByCurrentUser = asyncHandler(async (req, res) => {
     const { _id } = req.user
 
-    const historyCouple = await Couple.find({ $and: [{ $or: [{ createdUser: _id }, { loverUserId: _id }] }, { isHidden: true }] }).populate('createdUser', 'name').populate('loverUserId', 'name')
+    const historyCouple = await Couple.find({
+        $and: [
+            {
+                $or: [
+                    { createdUser: _id },
+                    { loverUserId: _id }
+                ]
+            },
+            { isHidden: true }
+        ]
+    })
+        .sort('-disconnectedDate')
+        .populate('createdUser', 'name')
+        .populate('loverUserId', 'name')
     return res.status(200).json({
         success: historyCouple ? true : false,
         result: historyCouple ? historyCouple : 'No history connection found'
@@ -337,7 +354,7 @@ const inviteRestoreCouple = asyncHandler(async (req, res) => {
     const findUser = await User.findById(_id)
 
     const checkCoupleUser = await Couple.findOne({ $and: [{ $or: [{ createdUser: _id }, { loverUserId: _id }] }, { isHidden: false }] })
-    if (checkCoupleUser.isConnected) throw new Error('You already has a couple. Cannot restore this couple.')
+    if (checkCoupleUser.isConnected) return res.status(200).json({ success: false, result: 'You already has a couple. Cannot restore this couple.' })
 
     //check if invitation have
     const checkInvitation = await Invitation.findOne({ userSend: _id })
@@ -367,11 +384,11 @@ const inviteRestoreCouple = asyncHandler(async (req, res) => {
 
         setTimeout(async () => {
             await Invitation.deleteOne({ invitationId: invitationIdEdited })
-        }, 10 * 60 * 1000);
+        }, 24 * 60 * 60 * 1000);
 
         return res.status(200).json({
             success: newInvitation ? true : false,
-            result: newInvitation ? 'Send restore invitation successfully' : 'Can not send restore invitation'
+            result: newInvitation ? newInvitation : 'Can not send restore invitation'
         })
 
     } else {
@@ -487,6 +504,54 @@ const searchCouple = asyncHandler(async (req, res) => {
     })
 })
 
+const editThemes = asyncHandler(async (req, res) => {
+    let { image, imagename } = req.body
+    const { coupleId } = req.params
+    if (typeof image !== 'string') {
+        const array = []
+        array.push(imagename)
+        deleteImage(array)
+        image = req.file.path
+        imagename = req.file.filename
+    }
+    const updateTheme = await Couple.findByIdAndUpdate(coupleId, { themes: image, themesName: imagename }, { new: true })
+    return res.status(200).json({
+        success: updateTheme ? true : false,
+        result: updateTheme ? updateTheme : 'Can not update theme'
+    })
+})
+
+const deleteHistoryCouple = asyncHandler(async (req, res) => {
+    const { coupleId } = req.params
+    const couple = await Couple.findById(coupleId)
+    if (!couple) return res.status(404).json({ success: false, result: 'Can not find this memories of couple' })
+
+    const deleteAnni = await Anniversary.deleteMany({ coupleId })
+    const deleteTodo = await Todo.deleteMany({ coupleId })
+    const getPosts = await Post.find({ couple: coupleId })
+
+    const imageNames = getPosts.reduce((acc, post) => acc.concat(post.imagesname), []);
+    deleteImage(imageNames)
+
+    const results = await Post.deleteMany({ couple: coupleId })
+
+    if (couple.themesName) {
+        const array = []
+        array.push(couple.themesName)
+        deleteImage(array)
+    }
+    if (couple.avatarCouplename) {
+        const array = []
+        array.push(couple.avatarCouplename)
+        deleteImage(array)
+    }
+    const result = await couple.deleteOne()
+    return res.status(200).json({
+        success: result ? true : false,
+        result: result ? result : 'Something went wrong. Can not delete this memories'
+    })
+})
+
 module.exports = {
     getCouple,
     getCoupleByCurrentUser,
@@ -505,5 +570,7 @@ module.exports = {
     acceptRestoreCouple,
     getListInvitation,
     acceptInvitationTwo,
-    searchCouple
+    searchCouple,
+    editThemes,
+    deleteHistoryCouple
 }

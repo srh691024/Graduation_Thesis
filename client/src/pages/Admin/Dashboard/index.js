@@ -4,12 +4,61 @@ import styles from '~/pages/Admin/Dashboard/Dashboard.module.scss'
 import { CombinationChart, TotalAccountvsCouple, DoughnutChart, LineChart, ActiveUserChart } from "~/components";
 import { Link } from "react-router-dom";
 import * as adminServices from '~/services/adminServices';
+import * as postServices from '~/services/postServices';
+import * as authServices from '~/services/authServices';
 import { useEffect, useState } from "react";
+import config from "~/config";
+
+import { io } from 'socket.io-client';
+
+const socket = io('http://localhost:5000');
 
 const cx = classNames.bind(styles);
 
 function Dashboard() {
     const [totalStatistic, setTotalStatistic] = useState([])
+    const [reportPostsCount, setReportPostsCount] = useState(0)
+    const [reportAccountsCount, setReportAccountsCount] = useState(0)
+    const [problemCount, setProblemCount] = useState(0)
+    const [responseCount, setResponseCount] = useState(0)
+
+    const [onlineUsers, setOnlineUsers] = useState([]);
+
+    useEffect(() => {
+        // Lắng nghe sự kiện khi danh sách người dùng trực tuyến thay đổi
+        const interval = setInterval(() => {
+            socket.on("online-users", (users) => {
+                setOnlineUsers(users);
+            });
+        }, 5000); // Update every 5 seconds
+
+        return () => clearInterval(interval); // Clear interval on component unmount
+    }, []);
+
+    useEffect(() => {
+        async function fetchReports() {
+            const response = await adminServices.apiGetAllReports()
+            setProblemCount((response.result.filter(report => report.isResponsed === false)).length)
+            setResponseCount((response.result.filter(report => report.isResponsed)).length)
+        }
+        fetchReports();
+    }, [])
+
+    useEffect(() => {
+        async function fetchAccounts() {
+            const response = await authServices.apiGetAllUsers()
+            setReportAccountsCount((response.result.filter(user => user.reports?.length > 0)).length)
+        }
+        fetchAccounts()
+    }, [])
+
+    useEffect(() => {
+        async function fetchPosts() {
+            const response = await postServices.apiGetAllPosts()
+            setReportPostsCount((response.result.filter(post => post.reports?.length > 0)).length)
+        }
+        fetchPosts();
+    }, [])
     useEffect(() => {
         async function fetchTotalStatistic() {
             const response = await adminServices.apiGetTotalStatistic();
@@ -17,6 +66,8 @@ function Dashboard() {
         }
         fetchTotalStatistic()
     }, [])
+
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('dashboard')}>
@@ -37,7 +88,7 @@ function Dashboard() {
                             <div className={cx('number')}>
                                 <span>
                                     {totalStatistic[0]?.totalAccounts}
-                                    </span>
+                                </span>
                             </div>
                             <div className={cx('rate')}>
                                 <span>
@@ -122,38 +173,38 @@ function Dashboard() {
                         </div>
                         <div className={cx('listTracking')}>
                             <div className={cx('row')}>
-                                <Link className={cx('itemContainer', 'reportDiary')}>
+                                <Link to={config.routes.posts} className={cx('itemContainer', 'reportDiary')}>
                                     <div className={cx('nameItem')}>
                                         <span>Report public post</span>
                                     </div>
                                     <div className={cx('numItem')}>
-                                        <span>130</span>
+                                        <span>{reportPostsCount}</span>
                                     </div>
                                 </Link>
-                                <Link className={cx('itemContainer', 'reportAccount')}>
+                                <Link to={config.routes.accounts} className={cx('itemContainer', 'reportAccount')}>
                                     <div className={cx('nameItem')}>
                                         <span>Report account</span>
                                     </div>
                                     <div className={cx('numItem')}>
-                                        <span>283</span>
+                                        <span>{reportAccountsCount}</span>
                                     </div>
                                 </Link>
                             </div>
                             <div className={cx('row')}>
-                                <Link className={cx('itemContainer', 'reportSupport')}>
+                                <Link to={config.routes.supports} className={cx('itemContainer', 'reportSupport')}>
                                     <div className={cx('nameItem')}>
                                         <span>Support requests</span>
                                     </div>
                                     <div className={cx('numItem')}>
-                                        <span>21</span>
+                                        <span>{problemCount}</span>
                                     </div>
                                 </Link>
-                                <Link className={cx('itemContainer', 'response')}>
+                                <Link to={config.routes.supports} className={cx('itemContainer', 'response')}>
                                     <div className={cx('nameItem')}>
                                         <span>Support responses</span>
                                     </div>
                                     <div className={cx('numItem')}>
-                                        <span>17</span>
+                                        <span>{responseCount}</span>
                                     </div>
                                 </Link>
                             </div>
@@ -162,7 +213,7 @@ function Dashboard() {
                     <div className={cx('realtimeChart')}>
                         <div className={cx('introChart')}>
                             <span className={cx('headerChart')}>Active users right now</span>
-                            <span className={cx('numberUser')}>382</span>
+                            <span className={cx('numberUser')}>{onlineUsers.length}</span>
                             <span className={cx('descChart')}>Page views 5 seconds</span>
                         </div>
                         <div className={cx('line')}></div>

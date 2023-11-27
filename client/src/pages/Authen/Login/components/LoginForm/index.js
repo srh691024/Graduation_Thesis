@@ -1,7 +1,7 @@
 // import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import classNames from "classnames/bind";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
@@ -15,15 +15,16 @@ import { login } from "~/store/user/userSlice"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { getCurrentCouple } from "~/store/couple/asyncAction";
-import { getCurrentUser } from "~/store/user/asyncAction";
 import config from "~/config";
+import { useState } from "react";
 
 const cx = classNames.bind(styles);
 
 function LoginForm() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { current } = useSelector(state => state.user)
+    const [loading, setLoading] = useState(false);
+
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -40,31 +41,37 @@ function LoginForm() {
         }),
         onSubmit: async (values) => {
             // e.preventDefault();
+            setLoading(true);
             const response = await authServices.apiLogin(values);
             if (response.success) {
-                dispatch(login({
-                    isLoggedIn: true, token: response.accessToken, userData: response.findUser
-                }));
-                setTimeout(async () => {
-                    if (response.findUser.role === '16') {
-
-                        const currentUserCouple = await coupleServices.apiGetCoupleByCurrentUser();
-                        if (currentUserCouple.success) {
-                            const usernameCouple = currentUserCouple.result.userNameCouple
-                            dispatch(getCurrentCouple())
-                            navigate(`/diarypost/${usernameCouple}`)
+                if (response.findUser.isBlocked === false) {
+                    dispatch(login({
+                        isLoggedIn: true, token: response.accessToken, userData: response.findUser
+                    }));
+                    setTimeout(async () => {
+                        if (response.findUser.role === '16') {
+                            const currentUserCouple = await coupleServices.apiGetCoupleByCurrentUser();
+                            if (currentUserCouple.success) {
+                                const usernameCouple = currentUserCouple.result.userNameCouple
+                                dispatch(getCurrentCouple())
+                                navigate(`/diarypost/${usernameCouple}`)
+                            }
+                            else { Swal.fire('Oops!', currentUserCouple.result, 'error') }
+                        } else if (response.findUser.role === '22') {
+                            navigate(`${config.routes.dashboard}`)
                         }
-                        else { Swal.fire('Oops!', currentUserCouple.result, 'error') }
-                    } else if (response.findUser.role === '22') {
-                        navigate(`${config.routes.dashboard}`)
-                    }
-                }, 100)
-
+                    }, 100)
+                } else {
+                    Swal.fire('Warning!', 'This account has been banned', 'error')
+                }
             } else Swal.fire('Oops!', response.message, 'error');
+            setLoading(false);
         }
     })
+    // if (loading) return <Loading />;
     return (
         <div className={cx("wrapper")}>
+            {/* {loading && <Loading />} */}
             <form className={cx("login-form")}>
                 <div className={cx('inputWrapper')}>
                     <div className={cx('input-box')}>
@@ -103,7 +110,10 @@ function LoginForm() {
                 </div>
                 <button type="submit" className={cx('btn-login')}
                     onClick={formik.handleSubmit}
-                >Login</button>
+                >
+                    {loading ? 'Waiting...' : 'Login'}
+                    {/* Login */}
+                </button>
             </form>
         </div>
     );

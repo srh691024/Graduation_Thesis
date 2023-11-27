@@ -96,6 +96,12 @@
         background-color: rgb(var(--lodi-primary-background));
         overflow-y: auto;
         display: block;
+        
+        @media screen and (max-width: 46.1875em) {
+            max-width: 390px;
+            min-width: 390px;
+            width: 390px;
+        }
 
 
         .form-two {
@@ -105,6 +111,11 @@
             min-width: 550px;
             width: 766px;
             display: block;
+            @media screen and (max-width: 46.1875em) {
+                max-width: 390px;
+                min-width: 390px;
+                width: 390px;
+            }
 
 
             .form-three {
@@ -139,6 +150,9 @@
     position: relative;
     flex-grow: 0;
     position: fixed;
+    @media screen and (max-width: 46.1875em) {
+        width: 348px;
+    }
 
 
     .create-one {

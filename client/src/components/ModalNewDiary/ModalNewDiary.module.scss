@@ -133,6 +133,12 @@
                         overflow-y: auto;
                         display: block;
 
+                        @media screen and (max-width: 46.1875em) {
+                            max-width: 390px;
+                            min-width: 390px;
+                            width: 390px;
+                        }
+
 
                         .form-two {
                             max-height: 652px;
@@ -141,6 +147,12 @@
                             min-width: 688px;
                             width: 766px;
                             display: block;
+
+                            @media screen and (max-width: 46.1875em) {
+                                max-width: 390px;
+                                min-width: 390px;
+                                width: 390px;
+                            }
 
 
                             .form-three {
@@ -341,7 +353,8 @@
                                                         list-style: none;
                                                         width: auto;
                                                         color: #FE6E91;
-                                                        button{
+
+                                                        button {
                                                             border: none;
                                                             color: white;
                                                             background-color: #FE6E91;
@@ -371,6 +384,15 @@
                                     height: calc(100vmin - 112px - 43px - 64px);
                                     display: flex;
 
+                                    @media screen and (max-width: 46.1875em) {
+                                        flex-direction: column;
+                                        height: 300px;
+                                        max-height: 348px;
+                                        min-height: 348px;
+                                        overflow: auto;
+
+                                    }
+
                                     .content-one {
                                         opacity: 1;
                                         justify-content: center;
@@ -379,6 +401,11 @@
                                         align-items: flex-start;
                                         height: 100%;
                                         position: relative;
+
+                                        @media screen and (max-width: 46.1875em) {
+                                            width: 390px;
+                                        }
+
 
                                         .content-two {
                                             height: 100%;
@@ -538,6 +565,13 @@
                                         display: flex;
                                         position: relative;
                                         width: 340px;
+
+                                        @media screen and (max-width: 46.1875em) {
+                                            margin-top: 50px;
+                                            width: 390px;
+
+                                        }
+
 
                                         .write-one {
                                             overflow-y: visible;
@@ -835,11 +869,13 @@
                                                                     position: relative;
                                                                     flex-grow: 1;
                                                                     align-items: flex-start;
-                                                                    select{
+
+                                                                    select {
                                                                         width: 100px;
-                                                                        border: 1px solid rgb(219,219,219);
+                                                                        border: 1px solid rgb(219, 219, 219);
                                                                         font-size: 13px;
                                                                     }
+
                                                                     // .mode-one {
                                                                     //     display: flex;
                                                                     //     position: relative;
@@ -959,18 +995,21 @@
                                                                     }
                                                                 }
                                                             }
-                                                            .pickDate{
+
+                                                            .pickDate {
                                                                 display: flex;
                                                                 flex-direction: column;
                                                                 padding: 0 16px;
-                                                                input{
-                                                                    border: 1px solid rgb(219,219,219);
+
+                                                                input {
+                                                                    border: 1px solid rgb(219, 219, 219);
                                                                     height: 25px;
                                                                     padding: 3px;
                                                                     border-radius: 4px;
                                                                     margin: 2px 0;
                                                                 }
-                                                                input:focus-visible{
+
+                                                                input:focus-visible {
                                                                     outline: 1px solid rgb(var(--lodi-color-pink-much));
                                                                 }
                                                             }
@@ -990,7 +1029,12 @@
     }
 }
 
-.carousel{
+.carousel {
     width: 100%;
-    
+
+}
+
+.imageWrapper {
+    width: 350px;
+    height: 350px;
 }

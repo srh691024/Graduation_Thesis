@@ -13,6 +13,7 @@ import * as notifyServices from '../../services/notifyServices'
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { io } from 'socket.io-client';
+import { useState } from "react";
 
 const socket = io('http://localhost:5000', {
     reconnection: true,
@@ -23,6 +24,7 @@ const cx = classNames.bind(styles);
 
 function ModalNewDiary({ current, onClose }) {
     const { couple } = useSelector(state => state.couple)
+    const [loading, setLoading] = useState(false)
 
     const settings = {
         dots: true,
@@ -57,6 +59,7 @@ function ModalNewDiary({ current, onClose }) {
             formData.append('mode', values.mode);
             for (let image of values.images) formData.append('images', image);
 
+            setLoading(true)
             const response = await postServices.apiCreatePost(formData);
             if (response.success) {
                 if (couple.loverUserId) {
@@ -95,6 +98,7 @@ function ModalNewDiary({ current, onClose }) {
             } else {
                 Swal.fire('Oops!', response.result, 'error')
             }
+            setLoading(false);
         }
     })
 
@@ -141,7 +145,9 @@ function ModalNewDiary({ current, onClose }) {
                                                                     <div className={cx('add')}>
                                                                         <div className={cx('add-one')}>
                                                                             <div className={cx('add-two')}>
-                                                                                <button type="submit" onClick={formik.handleSubmit} >Save</button>
+                                                                                <button type="submit" onClick={formik.handleSubmit} >
+                                                                                    {loading ? 'Posting...' : 'Save'}
+                                                                                    </button>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -155,7 +161,7 @@ function ModalNewDiary({ current, onClose }) {
                                                                         {formik.values.images &&
                                                                             <Slider className={cx('carousel')} {...settings}>
                                                                                 {Array.from(formik.values.images).map((file, i) => (
-                                                                                    <div key={i} onClick={() => {
+                                                                                    <div className={cx('imageWrapper')} key={i} onClick={() => {
                                                                                         // Remove the clicked image from the array
                                                                                         const newImages = [...formik.values.images];
                                                                                         newImages.splice(i, 1);

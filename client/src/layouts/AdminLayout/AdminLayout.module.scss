@@ -12,10 +12,11 @@
     width: calc(100% - 240px);
     min-height: 500px;
     height: 100%;
+
     .content-page {
         margin-bottom: 63px;
         transition: all 0.4s ease-in-out;
-        
+
     }
 
     footer {
@@ -30,5 +31,29 @@
         left: 240px;
         font-size: 12px;
         position: fixed;
+    }
+}
+
+@media screen and (max-width: 46.1875em) {
+    .content {
+        width: 100%;
+        margin-left: 0;
+
+        footer {
+            width: 100%;
+            left: 0;
+        }
+    }
+}
+
+@media screen and (min-width: 46.25em) and (max-width: 63.9375em) {
+    .content {
+        width: 100%;
+        margin-left: 0;
+
+        footer {
+            width: 100%;
+            left: 0;
+        }
     }
 }

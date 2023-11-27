@@ -1,12 +1,22 @@
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { publicRoutes, privateRoutes } from '~/routes';
 import DefaultLayout from "~/layouts";
 import PrivateRoutes from "./routes/PrivateRoutes";
+import { io } from 'socket.io-client';
+import { useSelector } from "react-redux";
 
+const socket = io('http://localhost:5000', {
+  reconnection: true,
+})
 
 
 function App() {
+  const { current } = useSelector(state => state.user)
+  useEffect(() => {
+    socket.emit("authenticate", current?._id);
+  }, [current]); // Chạy một lần sau khi component được mount
+
   return (
     <Router>
       <div className="App">

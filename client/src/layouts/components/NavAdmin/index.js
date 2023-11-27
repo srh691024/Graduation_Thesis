@@ -1,5 +1,5 @@
 import { faPenToSquare, faRectangleList } from "@fortawesome/free-regular-svg-icons";
-import { faEnvelopeOpenText, faGear, faUsersViewfinder } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faEnvelopeOpenText, faGear, faUsersViewfinder } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
 import { Link } from "react-router-dom";
@@ -9,10 +9,10 @@ import styles from '~/layouts/components/NavAdmin/NavAdmin.module.scss'
 
 const cx = classNames.bind(styles);
 
-function NavAdmin() {
+function NavAdmin({ openNavbar, openNavbarAdmin }) {
 
     return (
-        <div className={cx('wrapper')}>
+        <div className={cx('wrapper', `${openNavbar ? 'navResponsive' : ''}`)}>
             <div className={cx('logoContainer')}>
                 <div className={cx('logoInner')}>
                     <Link className={cx('logo')}>
@@ -23,6 +23,13 @@ function NavAdmin() {
             <div className={cx('navContainer')}>
                 <div className={cx('navInner')}>
                     <ul>
+                        <li>
+                            <Link className={cx('subItem')}>
+                                <div className={cx('iconItem')} onClick={openNavbarAdmin}>
+                                    <FontAwesomeIcon className={cx('iconOpenTaskBar')} icon={faBars} />
+                                </div>
+                            </Link>
+                        </li>
                         <li>
                             <Link to={config.routes.dashboard} className={cx('subItem')}>
                                 <div className={cx('iconItem')}>

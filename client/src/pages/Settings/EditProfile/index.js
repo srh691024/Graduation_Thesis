@@ -5,16 +5,15 @@ import * as Yup from 'yup';
 import { useSelector } from "react-redux";
 import { PreviewImage } from "~/components";
 import { useDispatch } from "react-redux";
-import { getCurrentUser, updateUser } from "~/store/user/asyncAction";
+import { updateUser } from "~/store/user/asyncAction";
 import moment from "moment";
-import { useEffect } from "react";
 
 const cx = classNames.bind(styles)
 const horoscope = ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo', 'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces']
 
 function EditProfile() {
     const dispatch = useDispatch()
-    const {current } = useSelector(state => state.user)
+    const { current, isLoading } = useSelector(state => state.user)
 
     const formik = useFormik({
         initialValues: {
@@ -59,10 +58,44 @@ function EditProfile() {
             formData.append('instagramLink', values.instagramLink);
             formData.append('avatarname', current.avatarname);
             formData.append('horoscope', values.horoscope);
+            formData.forEach(function (value, key) {
+                console.log(key, value);
+            });
             dispatch(updateUser(formData));
         }
     })
 
+    const updateHoroscope = (dob) => {
+        const horoscope = determineHoroscope(dob);
+        console.log(determineHoroscope(dob))
+        formik.setFieldValue('horoscope', horoscope)
+    };
+
+    const determineHoroscope = (dob) => {
+        const [ month, day] = dob.split('-').map(Number);
+        // Các ngày bắt đầu của các cung hoàng đạo
+        const horoscopeStartDates = {
+            Aries: { monthStart: 3, dayStart: 21, monthEnd: 4, dayEnd: 19 },
+            Taurus: { monthStart: 4, dayStart: 20, monthEnd: 5, dayEnd: 20 },
+            Gemini: { monthStart: 5, dayStart: 21, monthEnd: 6, dayEnd: 20 },
+            Cancer: { monthStart: 6, dayStart: 21, monthEnd: 7, dayEnd: 22 },
+            Leo: { monthStart: 7, dayStart: 23, monthEnd: 8, dayEnd: 22 },
+            Virgo: { monthStart: 8, dayStart: 23, monthEnd: 9, dayEnd: 22 },
+            Libra: { monthStart: 9, dayStart: 23, monthEnd: 10, dayEnd: 22 },
+            Scorpio: { monthStart: 10, dayStart: 23, monthEnd: 11, dayEnd: 21 },
+            Sagittarius: { monthStart: 11, dayStart: 22, monthEnd: 12, dayEnd: 21 },
+            Capricorn: { monthStart: 12, dayStart: 22, monthEnd: 1, dayEnd: 19 },
+            Aquarius: { monthStart: 1, dayStart: 20, monthEnd: 2, dayEnd: 18 },
+            Pisces: { monthStart: 2, dayStart: 19, monthEnd: 3, dayEnd: 20 },
+        };
+
+        // Xác định cung hoàng đạo dựa trên ngày tháng năm sinh
+        for (const [horoscope, startDate] of Object.entries(horoscopeStartDates)) {
+            if ((month === startDate.monthStart && day >= startDate.dayStart) || (month === startDate.monthEnd && day <= startDate.dayEnd)) {
+                return horoscope;
+            }
+        }
+    };
 
     return (
         <div className={cx('wrapper')}>
@@ -215,7 +248,13 @@ function EditProfile() {
                         </aside>
                         <div className={cx('input-infor')}>
                             <div className={cx('input-infor-email')}>
-                                <input name="dob" value={formik.values.dob} onChange={formik.handleChange} type="date" />
+                                <input
+                                    name="dob"
+                                    value={formik.values.dob}
+                                    onChange={(e) => {
+                                        formik.handleChange(e);
+                                        updateHoroscope(e.target.value);
+                                    }} type="date" />
                                 {
                                     formik.errors.dob && formik.touched.dob && (
                                         <small className={cx('validate-login')}>{formik.errors.dob}</small>
@@ -230,7 +269,12 @@ function EditProfile() {
                         </aside>
                         <div className={cx('input-infor')}>
                             <div className={cx('input-infor-email')}>
-                                <select name="horoscope" value={formik.values.horoscope} onChange={formik.handleChange}>
+                                <select
+                                    name="horoscope"
+                                    value={formik.values.horoscope}
+                                    onChange={formik.handleChange}
+                                    disabled
+                                >
                                     {horoscope.map(el => (
                                         <option key={el} value={el}>
                                             {el}
@@ -321,7 +365,9 @@ function EditProfile() {
                         <div className={cx('input-infor')}>
                             <div className={cx('submit-button')} onClick={formik.handleSubmit}>
                                 <div className={cx('submit-button-one')}>
-                                    <span>Submit</span>
+                                    <span>
+                                        {isLoading ? 'Saving...' : 'Submit'}
+                                    </span>
                                 </div>
                             </div>
                         </div>

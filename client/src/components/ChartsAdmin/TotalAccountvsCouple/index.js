@@ -9,7 +9,6 @@ import {
     Legend,
 } from 'chart.js';
 
-import { faker } from '@faker-js/faker';
 import classNames from 'classnames/bind';
 import styles from '~/components/ChartsAdmin/TotalAccountvsCouple/TotalAccountvsCouple.module.scss'
 import { useEffect, useState } from 'react';

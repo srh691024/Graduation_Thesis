@@ -68,7 +68,7 @@
 
                     img {
                         width: 100%;
-                        min-width: 900px;
+                        // min-width: 900px;
                         max-height: 400px;
                         object-fit: cover;
                     }
@@ -111,10 +111,9 @@
     flex-direction: row;
     position: absolute;
     bottom: -130px;
-    width: auto;
     justify-content: center;
     align-items: center;
-    min-width: 1144px;
+    // min-width: 1144px;
     box-shadow: 0 2px rgba(0, 0, 0, 0.15);
     border-radius: 15px;
     width: 100%;
@@ -124,8 +123,13 @@
     .partner-name {
         padding: 0 15px;
         margin-top: 40px;
+        width: 22%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
         p {
+            display: flex;
             font-size: 30px;
             font-weight: 800;
         }
@@ -139,6 +143,7 @@
         border-radius: 50%;
         border: 5px solid white;
         background-color: rgb(var(--lodi-second-background));
+
 
         .circle-image {
             width: 100%;
@@ -163,6 +168,108 @@
             position: absolute;
             top: 70px;
             left: 13px;
+        }
+    }
+}
+
+@media screen and (max-width: 46.1875em) {
+    .themes {
+
+        .themes-image {
+            .image {
+                .edit-themes {
+                    padding: 2px 7px;
+                    right: 8px;
+                    bottom: 15px;
+
+                    .camera-icon {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+
+                        .icon {
+                            font-size: 11px;
+                        }
+                    }
+
+                    .title {
+                        font-size: 10px;
+                    }
+                }
+            }
+        }
+    }
+
+    .avatar-couple {
+        padding: 10px;
+        bottom: -70px;
+
+        .partner-name {
+            width: 18%;
+            margin-top: 20px;
+
+            p {
+                font-size: 16px;
+            }
+        }
+
+        .avatar-partner {
+            width: 80px;
+            height: 80px;
+        }
+
+        .heart {
+            width: 18px;
+
+            img {
+                padding-top: 20px;
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 46.25em) and (max-width: 63.9375em) {
+    .themes {
+
+        .themes-image {
+            .image {
+                .edit-themes {
+                    .icon {
+                        font-size: 15px;
+                    }
+
+                    .title {
+                        font-size: 10px;
+                    }
+                }
+            }
+        }
+    }
+
+    .avatar-couple {
+        padding: 10px;
+        bottom: -100px;
+
+        .partner-name {
+            width: 25%;
+            margin-top: 20px;
+
+            p {
+                font-size: 22px;
+            }
+        }
+
+        .avatar-partner {
+            width: 120px;
+            height: 120px;
+        }
+
+        .heart {
+            width: 38px;
+
+            img {
+                padding-top: 20px;
+            }
         }
     }
 }

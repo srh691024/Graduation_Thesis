@@ -11,13 +11,14 @@ import { addTodo, checkDone, checkImportant, deleteTask } from "~/store/todo/asy
 import moment from "moment";
 import { createPortal } from "react-dom";
 import ModalEditTodo from "../ModalEditTodo";
+import Loading from "../Loading";
 
 const cx = classNames.bind(styles);
 
 function SubTodo() {
     const dispatch = useDispatch()
     // const [isImportantStar, setIsImportantStar] = useState(false)
-    const { todos } = useSelector(state => state.todo)
+    const { todos, isLoading } = useSelector(state => state.todo)
     const { couple } = useSelector(state => state.couple)
     const coupleId = couple._id
     const [inCompleteTodos, setInCompleteTodos] = useState([])
@@ -143,106 +144,109 @@ function SubTodo() {
                             }
                             {/* End add task  */}
 
-                            <div className={cx('tasks')}>
-                                <div className={cx('task-one')}>
-                                    <div className={cx('task-scroll')}>
-                                        <div className={cx('task-scroll-one')}>
-                                            {/* Each task  */}
-                                            {inCompleteTodos.map((td, index) => (
-                                                <div className={cx('task')} key={index}>
-                                                    <div className={cx('taskItem-body')}>
-                                                        <span className={cx('check-done')} onClick={() => handleCheckDone(td._id)}>
-                                                            <FontAwesomeIcon className={cx('circle')} icon={faCircle} />
-                                                            <FontAwesomeIcon className={cx('check')} icon={faCheck} />
-                                                        </span>
-                                                        <button className={cx('content-body')}>
-                                                            <span className={cx('name-task')}>{td.content}</span>
-                                                            <div className={cx('other-filter')}>
-                                                                <span className={cx('sub-other')}>
-                                                                    <span>Due {moment(td.dueDate).format('dd, MMMM, DD')}</span>
-                                                                </span>
-                                                                <span className={cx('sub-other')}>
-                                                                    <FontAwesomeIcon icon={faUserPen} />
-                                                                    <span>&nbsp;{td.author.name}</span>
-                                                                </span>
-                                                                <span className={cx('sub-other')}>{td.type}</span>
-                                                            </div>
-                                                        </button>
-
-                                                        {/* Update todo  */}
-                                                        <FontAwesomeIcon className={cx('editTodo')} icon={faPenToSquare} onClick={() => setShowModalEditTodo(true)} />
-                                                        {/* Modal new diary */}
-                                                        {showModalEditTodo && createPortal(
-                                                            <ModalEditTodo todo={td} onClose={() => setShowModalEditTodo(false)} />,
-                                                            document.body
-                                                        )}
-
-                                                        {/* DELETE TODO  */}
-                                                        <FontAwesomeIcon className={cx('deleteTodo')} icon={faTrashCan} onClick={() => handleDeleteTodo(td._id)} />
-                                                        <div className={cx('star-important', `${td.isImportant ? 'importantStars' : ''}`)}>
-                                                            <span>
-                                                                <FontAwesomeIcon icon={faStar} onClick={() => handleCheckImportant(td._id)} />
-
+                            {isLoading ? <Loading />
+                                :
+                                <div className={cx('tasks')}>
+                                    <div className={cx('task-one')}>
+                                        <div className={cx('task-scroll')}>
+                                            <div className={cx('task-scroll-one')}>
+                                                {/* Each task  */}
+                                                {inCompleteTodos.map((td, index) => (
+                                                    <div className={cx('task')} key={index}>
+                                                        <div className={cx('taskItem-body')}>
+                                                            <span className={cx('check-done')} onClick={() => handleCheckDone(td._id)}>
+                                                                <FontAwesomeIcon className={cx('circle')} icon={faCircle} />
+                                                                <FontAwesomeIcon className={cx('check')} icon={faCheck} />
                                                             </span>
-                                                        </div>
+                                                            <button className={cx('content-body')}>
+                                                                <span className={cx('name-task')}>{td.content}</span>
+                                                                <div className={cx('other-filter')}>
+                                                                    <span className={cx('sub-other')}>
+                                                                        <span>Due {moment(td.dueDate).format('dd, MMMM, DD')}</span>
+                                                                    </span>
+                                                                    <span className={cx('sub-other')}>
+                                                                        <FontAwesomeIcon icon={faUserPen} />
+                                                                        <span>&nbsp;{td.author.name}</span>
+                                                                    </span>
+                                                                    <span className={cx('sub-other')}>{td.type}</span>
+                                                                </div>
+                                                            </button>
 
+                                                            {/* Update todo  */}
+                                                            <FontAwesomeIcon className={cx('editTodo')} icon={faPenToSquare} onClick={() => setShowModalEditTodo(true)} />
+                                                            {/* Modal new diary */}
+                                                            {showModalEditTodo && createPortal(
+                                                                <ModalEditTodo todo={td} onClose={() => setShowModalEditTodo(false)} />,
+                                                                document.body
+                                                            )}
+
+                                                            {/* DELETE TODO  */}
+                                                            <FontAwesomeIcon className={cx('deleteTodo')} icon={faTrashCan} onClick={() => handleDeleteTodo(td._id)} />
+                                                            <div className={cx('star-important', `${td.isImportant ? 'importantStars' : ''}`)}>
+                                                                <span>
+                                                                    <FontAwesomeIcon icon={faStar} onClick={() => handleCheckImportant(td._id)} />
+
+                                                                </span>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                                {/* End each task  */}
+
+                                                {/* Header completed task  */}
+                                                <div className={cx('taskCard')}>
+                                                    <div className={cx('taskCard-header')}>
+                                                        <div className={cx('taskCard-headerActions')}>
+                                                            <FontAwesomeIcon className={cx('chevDown')} icon={faChevronDown} />
+                                                        </div>
+                                                        <div className={cx('taskCard-labels')}>
+                                                            <div className={cx('taskCard-label')}>
+                                                                <span>Completed</span>
+                                                            </div>
+                                                            <div className={cx('taskCard-subLabel')}>{(todos.filter(task => task.completed)).length}</div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            ))}
-                                            {/* End each task  */}
+                                                {/* End header completed task  */}
 
-                                            {/* Header completed task  */}
-                                            <div className={cx('taskCard')}>
-                                                <div className={cx('taskCard-header')}>
-                                                    <div className={cx('taskCard-headerActions')}>
-                                                        <FontAwesomeIcon className={cx('chevDown')} icon={faChevronDown} />
-                                                    </div>
-                                                    <div className={cx('taskCard-labels')}>
-                                                        <div className={cx('taskCard-label')}>
-                                                            <span>Completed</span>
+                                                {/* Completed task  */}
+                                                {completedTodos.map((td, index) => (
+                                                    <div className={cx('completedTask')} key={index}>
+                                                        <div className={cx('taskItem-body')}>
+                                                            <span className={cx('check-done')}>
+                                                                <FontAwesomeIcon className={cx('circle')} icon={faCircle} />
+                                                                <FontAwesomeIcon className={cx('checkDid')} icon={faCheck} />
+                                                            </span>
+                                                            <button className={cx('content-body')}>
+                                                                <span className={cx('name-task', 'done')}>{td.content}</span>
+                                                                <div className={cx('other-filter')}>
+                                                                    <span className={cx('sub-other')}>
+                                                                        <span>Due {moment(td.dueDate).format('dd, MMMM, DD')}</span>
+                                                                    </span>
+                                                                    <span className={cx('sub-other')}>
+                                                                        <FontAwesomeIcon icon={faUserPen} />
+                                                                        <span>&nbsp;{td.author.name}</span>
+                                                                    </span>
+                                                                    <span className={cx('sub-other')}>{td.type}</span>
+                                                                </div>
+                                                            </button>
+                                                            <div className={cx('star-important', `${td.isImportant ? 'importantStars' : null}`)}>
+                                                                <span>
+                                                                    <FontAwesomeIcon icon={faStar} />
+                                                                </span>
+                                                            </div>
+                                                            <FontAwesomeIcon className={cx('deleteTodo', 'doneTodo')} icon={faTrashCan} onClick={() => handleDeleteTodo(td._id)} />
                                                         </div>
-                                                        <div className={cx('taskCard-subLabel')}>{(todos.filter(task => task.completed)).length}</div>
                                                     </div>
-                                                </div>
+                                                ))}
+
+                                                {/* End completed task  */}
                                             </div>
-                                            {/* End header completed task  */}
-
-                                            {/* Completed task  */}
-                                            {completedTodos.map((td, index) => (
-                                                <div className={cx('completedTask')} key={index}>
-                                                    <div className={cx('taskItem-body')}>
-                                                        <span className={cx('check-done')}>
-                                                            <FontAwesomeIcon className={cx('circle')} icon={faCircle} />
-                                                            <FontAwesomeIcon className={cx('checkDid')} icon={faCheck} />
-                                                        </span>
-                                                        <button className={cx('content-body')}>
-                                                            <span className={cx('name-task', 'done')}>{td.content}</span>
-                                                            <div className={cx('other-filter')}>
-                                                                <span className={cx('sub-other')}>
-                                                                    <span>Due {moment(td.dueDate).format('dd, MMMM, DD')}</span>
-                                                                </span>
-                                                                <span className={cx('sub-other')}>
-                                                                    <FontAwesomeIcon icon={faUserPen} />
-                                                                    <span>&nbsp;{td.author.name}</span>
-                                                                </span>
-                                                                <span className={cx('sub-other')}>{td.type}</span>
-                                                            </div>
-                                                        </button>
-                                                        <div className={cx('star-important', `${td.isImportant ? 'importantStars' : null}`)}>
-                                                            <span>
-                                                                <FontAwesomeIcon icon={faStar} />
-                                                            </span>
-                                                        </div>
-                                                        <FontAwesomeIcon className={cx('deleteTodo', 'doneTodo')} icon={faTrashCan} onClick={() => handleDeleteTodo(td._id)} />
-                                                    </div>
-                                                </div>
-                                            ))}
-
-                                            {/* End completed task  */}
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            }
                         </div>
                     </div>
                 </div>

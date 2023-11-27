@@ -5,7 +5,6 @@ import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { ModalProblem, ModalResponseProblem } from "~/components";
-import images from "~/assets/images";
 import * as adminServices from '~/services/adminServices'
 import moment from "moment";
 import Swal from "sweetalert2";

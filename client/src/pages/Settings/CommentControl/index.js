@@ -31,7 +31,7 @@ function CommentControl() {
             content: Yup.string().max(1000, 'This current list is too long'),
         }),
         onSubmit: async (values) => {
-            const response = await postServices.apiChangeContentCustomFilterComment(values)
+            await postServices.apiChangeContentCustomFilterComment(values)
         }
     })
 
@@ -42,7 +42,7 @@ function CommentControl() {
 
     const handleValueStatus = async (e) => {
         //click => call API change isApply
-        const response = await postServices.apiChangeStatusFilterComment(e.target.checked)
+        await postServices.apiChangeStatusFilterComment(e.target.checked)
         setStatus(!status)
 
     }

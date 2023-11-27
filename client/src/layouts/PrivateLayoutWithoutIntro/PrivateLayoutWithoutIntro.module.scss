@@ -89,6 +89,18 @@
     display: block;
 }
 
+@media screen and (max-width: 46.1875em) {
+    .wrapper-diarypost {
+        margin-top: 80px;
+    }
+}
+
+@media screen and (min-width: 46.25em) and (max-width: 63.9375em) {
+    .wrapper-diarypost {
+        margin-top: 120px;
+    }
+}
+
 // .divide-column {
 //     justify-content: center;
 //     display: flex;

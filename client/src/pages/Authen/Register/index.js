@@ -4,6 +4,7 @@ import images from '~/assets/images'
 import RegisterForm from "~/pages/Authen/Register/components/RegisterForm";
 // import OtherRegister from "~/pages/Authen/Register/components/OtherRegister";
 import { Link } from "react-router-dom";
+import config from "~/config";
 
 const cx = classNames.bind(styles)
 
@@ -28,7 +29,7 @@ function Register() {
                 {/* <OtherRegister /> */}
                 <div className={cx('register-link')}>
                     <p>Have an account?</p>
-                    <Link to='/login'>Login</Link>
+                    <Link to={config.routes.login}>Login</Link>
                 </div>
             </div>
         </div>

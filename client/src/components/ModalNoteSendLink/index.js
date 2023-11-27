@@ -23,6 +23,7 @@ function ModalNoteSendLink({ onClose }) {
     const [searchUserReceive, setSearchUserReceive] = useState([])
     const [showResult, setShowResult] = useState(false);
     const [idReceiver, setIdReceiver] = useState('')
+    const [loading, setLoading] = useState(false);
 
     const formik = useFormik({
         initialValues: {
@@ -35,6 +36,7 @@ function ModalNoteSendLink({ onClose }) {
                 .required('Email is required'),
         }),
         onSubmit: async (values) => {
+            setLoading(true);
             const sendInvitation = await coupleServices.apiSendInvitation(values);
             if (sendInvitation.success) {
                 Swal.fire('Congratulations', sendInvitation.result, 'success')
@@ -49,6 +51,7 @@ function ModalNoteSendLink({ onClose }) {
             } else {
                 Swal.fire('Oops!', sendInvitation.result, 'error');
             }
+            setLoading(false);
             onClose()
         }
     })
@@ -164,7 +167,7 @@ function ModalNoteSendLink({ onClose }) {
 
                                                             <li className={cx('special')}>
                                                                 <button type="button" className={cx('buttonSendLink')} onClick={formik.handleSubmit}>
-                                                                    Send connection invitation
+                                                                    {loading ? 'Sending invitation...' : 'Send connection invitation'}
                                                                 </button>
                                                             </li>
                                                         </ul>

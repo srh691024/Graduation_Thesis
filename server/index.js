@@ -40,7 +40,27 @@ app.get('/', (req, res) => { res.send("Hello word") });
 
 route(app);
 
+const onlineUsers = {};
+
 io.on("connection", (socket) => {
+    socket.on("authenticate", (userId) => {
+        if (userId) {
+            // Xác thực người dùng và liên kết socket.id với userId
+            onlineUsers[userId] = socket.id;
+            // Gửi danh sách người dùng trực tuyến cho tất cả mọi người khi có sự thay đổi
+            io.emit("online-users", Object.keys(onlineUsers));
+        }
+    });
+
+    socket.on("disconnect", () => {
+        // Xóa người dùng khỏi danh sách người dùng trực tuyến khi ngắt kết nối
+        const userId = Object.keys(onlineUsers).find((key) => onlineUsers[key] === socket.id);
+        if (userId) {
+            delete onlineUsers[userId];
+            // Gửi danh sách người dùng trực tuyến cho tất cả mọi người khi có sự thay đổi
+            io.emit("online-users", Object.keys(onlineUsers));
+        }
+    });
 
     //COMMENT 
     socket.on('new-comment', (data) => {
@@ -54,14 +74,12 @@ io.on("connection", (socket) => {
         io.emit('like', { postId: data.postId, like: data.like });
     });
 
-     //NOTIFICATION
+    //NOTIFICATION
     socket.on('notifyCouple', (data) => {
-        console.log(data.notification)
         // Gửi thông điệp đến tất cả các client đang theo dõi post này
         io.emit('notifyCouple', { notiId: data.notiId, notification: data.notification });
     });
     socket.on('notifyPublic', (data) => {
-        console.log(data.notification, 'public')
         // Gửi thông điệp đến tất cả các client đang theo dõi post này
         io.emit('notifyPublic', { notiId: data.notiId, notification: data.notification });
     });

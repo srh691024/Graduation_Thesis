@@ -2,23 +2,19 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.login-decoration {
     width: 100%;
-    height: auto;
-    position: relative;
-    overflow: hidden;
+    height: 100%;
 }
 
-// .login-image {
-//     max-width: 1535px;
-//     height: 800px;
-//     object-fit: cover;
+// .login-decoration {
+//     width: 100%;
+//     height: auto;
+//     position: relative;
+//     overflow: hidden;
 // }
 
 .overlay {
-    content: "";
+    // content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -26,16 +22,19 @@
     height: 100%;
     background-color: rgba(240, 157, 157, 0.25);
     pointer-events: none;
+    display: flex;
 }
 
 .login-features {
     background-color: transparent;
-    position: absolute;
+    position: relative;
     border: 2px solid rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(3px);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     border-radius: 15px;
-    top: 50px;
+    top: 120px;
+    display: flex;
+    flex-direction: column;
 }
 
 .logo {
@@ -106,5 +105,17 @@
 
     p {
         color: #3E3341;
+    }
+}
+
+@media screen and (max-width: 46.1875em) {
+    .login-features {
+        top: 130px;
+    }
+}
+
+@media screen and (min-width: 46.25em) and (max-width: 63.9375em) {
+    .login-features {
+        top: 130px;
     }
 }

@@ -126,5 +126,6 @@ export const todoSlice = createSlice({
     }
 })
 
+// eslint-disable-next-line no-empty-pattern
 export const { } = todoSlice.actions;
 export default todoSlice.reducer

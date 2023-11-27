@@ -70,3 +70,8 @@ export const apiDeleteReport = (reportId) => axios({
     url: `admin/deleteReport/${reportId}`,
     method: 'DELETE',
 })
+
+export const apiGetAllAdmins = () => axios({
+    url: 'admin/getAllAdmins',
+    method: 'GET',
+})

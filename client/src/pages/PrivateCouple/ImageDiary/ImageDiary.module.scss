@@ -11,6 +11,15 @@
     background-color: transparent;
 }
 
+@media screen and (max-width: 46.1875em) {
+    .container {
+        max-width: 310px;
+        flex-basis: 110px;
+    }
+}
+
+@media screen and (min-width: 46.25em) and (max-width: 63.9375em) {}
+
 .diary-post {
     display: block;
 
@@ -39,13 +48,14 @@
     }
 }
 
-.actions{
+.actions {
     display: flex;
     flex-direction: row;
     position: relative;
     margin-bottom: 16px;
     justify-content: space-between;
-    .icon-filter{
+
+    .icon-filter {
         justify-content: center;
         align-items: center;
         display: flex;
@@ -55,22 +65,26 @@
         background-color: rgb(247, 235, 240);
         cursor: pointer;
         height: 31px;
-        .icon{
+
+        .icon {
             display: flex;
             font-size: 15px;
             color: #FE6E91;
         }
-        .name{
+
+        .name {
             font-size: 14px;
             font-weight: 600;
             color: #3E3341;
             margin: 0 10px 0 10px;
         }
     }
-    .icon-filter:hover{
+
+    .icon-filter:hover {
         background-color: rgb(247, 220, 231);
     }
-    .dropdown-menu{
+
+    .dropdown-menu {
         position: absolute;
         top: 40px;
         left: 16x;
@@ -81,39 +95,43 @@
         z-index: 1;
         box-shadow: 1px 0 4px 0.5px rgba(0, 0, 0, 0.2);
     }
-    .dropdown-menu.active{
+
+    .dropdown-menu.active {
         opacity: 1;
         visibility: visible;
         transform: translateY(0);
         transition: 200ms ease;
 
     }
-    .dropdown-menu.inactive{
+
+    .dropdown-menu.inactive {
         opacity: 0;
         visibility: hidden;
         transform: translateY(-10px);
         transition: 200ms ease;
-        
+
     }
 
-    .sub-action-date{
+    .sub-action-date {
         display: flex;
         flex-direction: row;
         position: relative;
         justify-content: center;
         align-items: center;
 
-        .from-date, .to-date{
+        .from-date,
+        .to-date {
             display: flex;
             margin-right: 20px;
             justify-content: center;
             align-items: center;
 
-            label{
+            label {
                 display: flex;
                 margin-right: 5px;
             }
-            input{
+
+            input {
                 height: 31px;
                 border: 1px solid var(--lodi-color-pink);
                 border-radius: 4px;
@@ -123,12 +141,13 @@
                 width: 100%;
                 outline: none;
             }
+
             input:focus-visible {
                 border: 1.9px solid #FE6E91;
             }
         }
 
-        .button-apply{
+        .button-apply {
             cursor: pointer;
             align-self: center;
             background-color: rgb(247, 220, 231);
@@ -139,6 +158,28 @@
             padding: 5px 10px;
             height: 31px;
         }
+
+        @media screen and (max-width: 46.1875em) {
+            .button-apply {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                align-content: center;
+            }
+        }
+    }
+
+    @media screen and (max-width: 46.1875em) {
+        .sub-action-date {
+            flex-direction: column;
+        }
+    }
+}
+
+@media screen and (max-width: 46.1875em) {
+    .actions {
+        flex-direction: column;
     }
 }
 
@@ -159,6 +200,7 @@
         flex-shrink: 0;
         position: relative;
         margin-bottom: 4px;
+
 
         .one-image-in-grid {
             margin-right: 4px;
@@ -208,6 +250,13 @@
                         position: absolute;
                         display: block;
 
+                    }
+                }
+
+                @media screen and (max-width: 46.1875em) {
+                    .image {
+                        width: 90px;
+                        height: 90px;
                     }
                 }
 

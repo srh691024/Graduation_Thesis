@@ -35,5 +35,6 @@ export const coupleSlice = createSlice({
         });
     }
 })
+// eslint-disable-next-line no-empty-pattern
 export const { } = coupleSlice.actions;
 export default coupleSlice.reducer

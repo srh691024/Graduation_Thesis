@@ -34,6 +34,7 @@
     display: block;
 }
 
+
 .exit {
     z-index: 1;
     top: 10px;
@@ -413,6 +414,11 @@
                                                 align-self: auto;
                                                 position: relative;
                                                 flex-grow: 0;
+
+                                                .imageWrapper {
+                                                    width: 350px;
+                                                    height: 350px;
+                                                }
 
                                                 .icon {
                                                     position: relative;
@@ -999,4 +1005,8 @@
 .carousel {
     width: 100%;
 
+    .imageWrapper {
+        width: 350px;
+        height: 350px;
+    }
 }

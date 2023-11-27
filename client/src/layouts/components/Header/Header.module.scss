@@ -256,6 +256,7 @@
                                     width: 23px;
                                     height: 23px;
                                 }
+
                                 .num {
                                     position: absolute;
                                     top: -7px;
@@ -294,5 +295,21 @@
 
     .setting-first {
         display: block;
+    }
+}
+
+.openSetting {
+    display: none;
+}
+
+@media screen and (max-width: 46.1875em) {
+    .setting {
+        display: none;
+    }
+
+    .openSetting {
+        display: block;
+        width: 100%;
+        flex-grow: 1;
     }
 }

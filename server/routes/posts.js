@@ -27,6 +27,7 @@ router.get('/searchPublic', verifyAccessToken, postsController.searchPublic);
 router.post('/changeStatusFilterComment', verifyAccessToken, postsController.changeStatusFilterComment);
 router.post('/changeContentCustomFilterComment', verifyAccessToken, postsController.changeContentCustomFilterComment);
 router.get('/getCustomForbidden', verifyAccessToken, postsController.getCustomForbidden);
+router.get('/followingPost', verifyAccessToken, postsController.followingPost);
 
 
 module.exports = router;

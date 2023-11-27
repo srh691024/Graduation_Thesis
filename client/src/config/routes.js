@@ -1,7 +1,7 @@
 const routes = {
 
     //authen
-    login: '/login',
+    login: '/',
     register: '/register',
     finalregister: '/finalregister/:status',
     resetpassword: '/resetpassword/:token',
@@ -26,6 +26,7 @@ const routes = {
     //public couples routes
     homepage: '/homepage',
     search: '/search',
+    following: '/following',
 
     //admin routes
     dashboard: '/admin/dashboard',

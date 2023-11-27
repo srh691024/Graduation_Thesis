@@ -21,5 +21,18 @@
     height: 256px !important;
     margin-left: auto;
     margin-right: auto;
+}
 
+@media screen and (max-width: 46.1875em) {
+    .wrapper {
+        width: 100%;
+        margin-right: 0;
+    }
+}
+
+@media screen and (min-width: 46.25em) and (max-width: 63.9375em) {
+    .wrapper {
+        width: 100%;
+        margin-right: 0;
+    }
 }

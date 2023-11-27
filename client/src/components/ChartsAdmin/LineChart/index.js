@@ -9,7 +9,6 @@ import {
     Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { faker } from '@faker-js/faker';
 import classNames from 'classnames/bind';
 import styles from '~/components/ChartsAdmin/LineChart/LineChart.module.scss'
 import { useEffect, useState } from 'react';

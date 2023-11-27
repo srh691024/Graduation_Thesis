@@ -8,11 +8,13 @@ import * as coupleServices from '~/services/coupleServices'
 import { useDispatch, useSelector } from "react-redux";
 import { getCurrentCouple } from "~/store/couple/asyncAction";
 import Swal from "sweetalert2";
+import { useState } from "react";
 
 const cx = classNames.bind(styles)
 
 function ModalDisconnect({ onClose }) {
-    const {couple} = useSelector(state=> state.couple)
+    const [loading, setLoading] = useState(false)
+    const { couple } = useSelector(state => state.couple)
     const dispatch = useDispatch()
     const coupleId = couple._id
     const formik = useFormik({
@@ -29,9 +31,12 @@ function ModalDisconnect({ onClose }) {
                 }),
         }),
         onSubmit: async (values) => {
+            setLoading(true);
             const disconnectCouple = await coupleServices.apiDisconnectConnection(coupleId, values)
-            if(disconnectCouple.success) Swal.fire('Notify', 'You have disconnected with your lover', 'info')
+            if (disconnectCouple.success) Swal.fire('Notify', 'You have disconnected with your lover', 'info')
             dispatch(getCurrentCouple())
+            setLoading(false)
+            onClose()
         }
     })
     return (
@@ -86,14 +91,14 @@ function ModalDisconnect({ onClose }) {
                                                                         onChange={formik.handleChange} />
                                                                 </div>
                                                             </li>
-                                                                {
-                                                                    formik.errors.agree && formik.touched.agree && (
-                                                                        <small className={cx('validate-login')}>{formik.errors.agree}</small>
-                                                                    )
-                                                                }
+                                                            {
+                                                                formik.errors.agree && formik.touched.agree && (
+                                                                    <small className={cx('validate-login')}>{formik.errors.agree}</small>
+                                                                )
+                                                            }
                                                             <li className={cx('special')}>
                                                                 <button type="button" className={cx('buttonSendLink')} onClick={formik.handleSubmit}>
-                                                                    Disconnect
+                                                                    {loading ? 'Wating...' : 'Disconnect'}
                                                                 </button>
                                                             </li>
                                                         </ul>

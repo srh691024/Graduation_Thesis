@@ -1,4 +1,4 @@
-.wrapper{
+.wrapper {
     margin-top: 32px;
     background-color: rgb(var(--lodi-primary-background));
     box-shadow: 1px 0px 15px rgba(0, 0, 0, 0.2);
@@ -7,14 +7,29 @@
     padding: 22px;
     width: 500px;
 }
-.nameChart{
+
+.nameChart {
     font-size: 22px;
     color: rgb(var(--primary-color-text));
     font-weight: 600;
 
 }
 
-.barChart{
+.barChart {
     display: flex;
     width: 100%;
+}
+
+@media screen and (max-width: 46.1875em) {
+    .wrapper {
+        width: 100%;
+        margin-right: 0;
+    }
+}
+
+@media screen and (min-width: 46.25em) and (max-width: 63.9375em) {
+    .wrapper {
+        width: 100%;
+        margin-right: 0;
+    }
 }

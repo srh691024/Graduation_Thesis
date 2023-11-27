@@ -28,7 +28,7 @@ const removeNotify = asyncHandler(async (req, res) => {
 
 const getNotify = asyncHandler(async (req, res) => {
     const { _id } = req.user
-    const notifies = await Notify.find({ recipients: _id }).sort('-createdAt').populate('user', 'avatar name')
+    const notifies = await Notify.find({ recipients: _id }).sort('-createdAt').populate('user', 'avatar name role')
     return res.status(200).json({
         success: notifies ? true : false,
         result: notifies ? notifies : 'No notifications were found'

@@ -21,8 +21,10 @@ router.post('/inviteRestoreCouple/:coupleId', verifyAccessToken, couplesControll
 router.post('/acceptRestoreCouple/:invitationId', verifyAccessToken, couplesController.acceptRestoreCouple);
 router.get('/getListInvitation', verifyAccessToken, couplesController.getListInvitation);
 router.post('/acceptInvitationTwo/:invitationId', verifyAccessToken, couplesController.acceptInvitationTwo);
+router.put('/editThemes/:coupleId', verifyAccessToken, uploadCloud.single('image'), couplesController.editThemes);
 
 router.get('/searchCouple', verifyAccessToken, couplesController.searchCouple);
+router.delete('/deleteHistoryCouple/:coupleId', verifyAccessToken, couplesController.deleteHistoryCouple);
 
 
 

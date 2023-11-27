@@ -8,7 +8,14 @@ import config from "~/config";
 import styles from '~/layouts/components/HeaderPublic/HeaderPublic.module.scss';
 import HeadlessTippy from '@tippyjs/react/headless';
 import { useEffect, useState } from "react";
-import * as coupleServices from '~/services/coupleServices'
+import * as coupleServices from '~/services/coupleServices';
+import { io } from 'socket.io-client';
+import { NotiPublic } from "~/components";
+import * as notifiServices from '~/services/notifyServices';
+
+const socket = io('http://localhost:5000', {
+    reconnection: true,
+})
 
 const cx = classNames.bind(styles);
 
@@ -16,6 +23,41 @@ function HeaderPublic({ couple, current }) {
     const [showResult, setShowResult] = useState(false);
     const [searchValue, setSearchValue] = useState('');
     const [searchResult, setSearchResult] = useState([]);
+    const [openNotification, setOpenNotification] = useState(false);
+    const [notiUnRead, setNotiUnRead] = useState(0);
+
+    useEffect(() => {
+        async function getNotifies() {
+            const noti = await notifiServices.apiGetNotify()
+            if (noti.success) {
+                setNotiUnRead((noti.result.filter(noti => noti.isRead === false)).length)
+            }
+        }
+        getNotifies()
+    }, [])
+
+    useEffect(() => {
+        socket.on('notifyCouple', (data) => {
+            if (data.notification.recipients[0] === current._id) {
+                setNotiUnRead(notiUnRead + 1)
+            }
+        })
+        return () => { socket.off('notifyCouple') }
+    }, [notiUnRead, current._id])
+    useEffect(() => {
+        socket.on('notifyPublic', (data) => {
+            if (data.notification.user._id.toString() !== couple?.createdUser?.toString() && data.notification.user._id.toString() !== couple?.loverUserId?.toString()) {
+                setNotiUnRead(notiUnRead + 1)
+            }
+        })
+        return () => { socket.off('notifyPublic') }
+    }, [notiUnRead, couple?.createdUser, couple?.loverUserId])
+
+    const handleMarkAsRead = async () => {
+        // Cập nhật số lượng thông báo chưa đọc
+        const updatedUnreadCount = notiUnRead > 0 ? notiUnRead - 1 : 0;
+        setNotiUnRead(updatedUnreadCount);
+    };
 
     useEffect(() => {
         async function searchCouple() {
@@ -101,8 +143,9 @@ function HeaderPublic({ couple, current }) {
                     </HeadlessTippy>
                 </div>
                 <div className={cx('header-right-container')}>
-                    <div className={cx('notification')}>
+                    <div className={cx('notification')} onClick={() => { setOpenNotification(!openNotification) }}>
                         <FontAwesomeIcon className={cx('styleNoti')} icon={faBell} />
+                        {notiUnRead > 0 && <span className={cx('num')}>{notiUnRead}</span>}
                     </div>
                     <div className={cx('profile')}>
                         <Link to={`/diarypost/${couple.userNameCouple}`}>
@@ -116,6 +159,7 @@ function HeaderPublic({ couple, current }) {
                     </div>
                 </div>
             </div>
+            <NotiPublic text={openNotification ? 'active' : 'inactive'} onMarkAsRead={handleMarkAsRead} />
         </div>
     );
 }

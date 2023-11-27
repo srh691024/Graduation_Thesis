@@ -10,6 +10,8 @@ import classNames from "classnames/bind";
 import styles from '~/pages/Authen/Register/components/RegisterForm/RegisterForm.module.scss'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useState } from "react";
+
 
 
 const cx = classNames.bind(styles);
@@ -31,6 +33,7 @@ const cx = classNames.bind(styles);
 
 function RegisterForm() {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -54,6 +57,7 @@ function RegisterForm() {
                 .max(30, 'Name must be at most 30 characters'),
         }),
         onSubmit: (async (values) => {
+            setLoading(true);
             const response = await authServices.apiRegister(values);
             if (response.success) {
                 await Swal.fire('Congratulations', response.message, 'success')
@@ -61,6 +65,7 @@ function RegisterForm() {
                 navigate(`${config.routes.login}`)
                 // })
             } else Swal.fire('Oops!', response.message, 'error');
+            setLoading(false);
         })
     })
 
@@ -160,7 +165,9 @@ function RegisterForm() {
                 <button type="submit" className={cx('btn-register')}
                     onClick={formik.handleSubmit}
                 // onClick={e => { handleSubmit(e) }}
-                >Sign Up</button>
+                >
+                    {loading ? 'Waiting...' : 'Sign Up'}
+                </button>
             </form>
         </div>
     );

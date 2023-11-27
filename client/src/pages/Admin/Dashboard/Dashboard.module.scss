@@ -242,3 +242,35 @@
     justify-content: space-between;
 
 }
+
+@media screen and (max-width: 46.1875em) {
+    .chart {
+        flex-direction: column;
+
+        ul {
+            flex-direction: column;
+
+            li {
+                margin: auto;
+                margin-top: 10px;
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 46.25em) and (max-width: 63.9375em) {
+    .chart {
+        ul {
+            flex-direction: column;
+
+            li {
+                margin: auto;
+                margin-top: 10px;
+            }
+        }
+    }
+
+    .wrapper .chart:last-child {
+        flex-direction: column;
+    }
+}

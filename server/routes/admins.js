@@ -21,7 +21,8 @@ router.get('/getAllReports', [verifyAccessToken, isAdmin], adminsController.getA
 
 router.patch('/responseProblem/:reportId', [verifyAccessToken, isAdmin], adminsController.responseProblem);
 router.get('/getReportByUser', verifyAccessToken, adminsController.getReportByUser);
-router.delete('/deleteReport/:reportId', verifyAccessToken, adminsController.deleteReport)
+router.delete('/deleteReport/:reportId', verifyAccessToken, adminsController.deleteReport);
+router.get('/getAllAdmins', verifyAccessToken, adminsController.getAllAdmins);
 
 
 module.exports = router;

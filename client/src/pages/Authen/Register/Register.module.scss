@@ -81,3 +81,14 @@
         color:#3E3341 ;
     }
 }
+@media screen and (max-width: 46.1875em) {
+    .login-features {
+        top: 130px;
+    }
+}
+
+@media screen and (min-width: 46.25em) and (max-width: 63.9375em) {
+    .login-features {
+        top: 130px;
+    }
+}

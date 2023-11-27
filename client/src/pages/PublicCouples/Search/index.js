@@ -4,7 +4,6 @@ import classNames from "classnames/bind";
 import { Link, useLocation } from "react-router-dom";
 import images from "~/assets/images";
 import styles from '~/pages/PublicCouples/Search/Search.module.scss'
-import config from "~/config";
 import { useEffect, useState } from "react";
 import * as postServices from '~/services/postServices'
 import moment from "moment";
@@ -20,13 +19,14 @@ function Search() {
     const [postResults, setPostResults] = useState([]);
     const [coupleCurrentPage, setCoupleCurrentPage] = useState(1); // Trang hiện tại cặp đôi
     const [postCurrentPage, setPostCurrentPage] = useState(1); // Trang hiện tại bài post
-    const perPage = 9;
+    // const perPage = 9;
     const [coupleStatus, setCoupleStatus] = useState(true);
     const [postStatus, setPostStatus] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const searchAndDisplayResults = async (type, page) => {
-
+            setLoading(true)
             const response = await postServices.apiSearchPublic(keyword, page)
             const newData = response;
 
@@ -48,10 +48,11 @@ function Search() {
                     return [...prevResults, ...newPostResults];
                 });
             }
+            setLoading(false)
         };
         searchAndDisplayResults('couple', coupleCurrentPage);
         searchAndDisplayResults('post', postCurrentPage);
-    }, [keyword, coupleCurrentPage, postCurrentPage]);
+    }, [keyword, coupleCurrentPage, postCurrentPage, setLoading]);
 
     const handleSeeMore = (type) => {
         // Tăng trang lên và gọi lại useEffect để lấy thêm kết quả tương ứng với loại (account hoặc post)
@@ -113,40 +114,46 @@ function Search() {
 
                                         </div>
                                         {postStatus && coupleStatus ?
-                                            <div className={cx('link')} key={coupleResults[0]?._id}>
-                                                <Link className={cx('styleAvatarCoupleLink')}>
-                                                    <div className={cx('divContainer')}>
-                                                        <span className={cx('avatarContainer')}>
-                                                            <img src={coupleResults[0]?.avatarCouple} alt="" />
-                                                        </span>
+                                            <>
+                                                {coupleResults.length > 0 ?
+                                                    <div className={cx('link')} key={coupleResults[0]?._id}>
+                                                        <Link className={cx('styleAvatarCoupleLink')}>
+                                                            <div className={cx('divContainer')}>
+                                                                <span className={cx('avatarContainer')}>
+                                                                    <img src={coupleResults[0]?.avatarCouple} alt="" />
+                                                                </span>
+                                                            </div>
+                                                        </Link>
+                                                        <Link className={cx('styleInforWrapper')}>
+                                                            <p className={cx('pTitle')}>
+                                                                {coupleResults[0]?.userNameCouple}
+                                                                {/* usernameofcouple */}
+                                                            </p>
+                                                            <div className={cx('subTitleWrapper')}>
+                                                                <p className={cx('userSubTitle')}>
+                                                                    {coupleResults[0]?.nameCouple}
+                                                                    {/* Name of couple */}
+                                                                </p>
+                                                                &nbsp;
+                                                                •
+                                                                &nbsp;
+                                                                <strong>
+                                                                    {coupleResults[0]?.followers.length}&nbsp;
+                                                                    <span>Follower</span>
+                                                                </strong>
+                                                            </div>
+                                                            <p className={cx('pDesc')}>
+                                                                <strong>
+                                                                    {coupleResults[0]?.biography}
+                                                                    {/* this is biography */}
+                                                                </strong>
+                                                            </p>
+                                                        </Link>
                                                     </div>
-                                                </Link>
-                                                <Link className={cx('styleInforWrapper')}>
-                                                    <p className={cx('pTitle')}>
-                                                        {coupleResults[0]?.userNameCouple}
-                                                        {/* usernameofcouple */}
-                                                    </p>
-                                                    <div className={cx('subTitleWrapper')}>
-                                                        <p className={cx('userSubTitle')}>
-                                                            {coupleResults[0]?.nameCouple}
-                                                            {/* Name of couple */}
-                                                        </p>
-                                                        &nbsp;
-                                                        •
-                                                        &nbsp;
-                                                        <strong>
-                                                            {coupleResults[0]?.followers.length}&nbsp;
-                                                            <span>Follower</span>
-                                                        </strong>
-                                                    </div>
-                                                    <p className={cx('pDesc')}>
-                                                        <strong>
-                                                            {coupleResults[0]?.biography}
-                                                            {/* this is biography */}
-                                                        </strong>
-                                                    </p>
-                                                </Link>
-                                            </div>
+                                                    :
+                                                    <div>No couple match</div>
+                                                }
+                                            </>
                                             :
                                             <>
                                                 {coupleResults.map(couple => (
@@ -186,8 +193,6 @@ function Search() {
                                                     </div>
                                                 ))}
                                             </>
-
-
                                         }
 
                                         {coupleResults.length > 9 &&
@@ -198,8 +203,6 @@ function Search() {
                                         }
                                     </>
                                 }
-
-
                                 <div className={cx('titleDivide')}></div>
                             </div>
                             {postStatus &&
@@ -307,7 +310,6 @@ function Search() {
                 {/* button to the top */}
                 <div className={cx('bottonContainer')}></div>
             </div>
-            <script></script>
         </div>
     );
 }

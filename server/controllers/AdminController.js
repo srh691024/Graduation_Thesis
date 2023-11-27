@@ -84,15 +84,71 @@ const getTotalStatistic = asyncHandler(async (req, res) => {
     posts.map((post) => (totalComment += post.comments.length));
     listTotal[2].totalInteractions = totalLike + totalComment;
 
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1; // Lưu ý: Tháng trong JavaScript đếm từ 0 đến 11
+    const startDate = new Date(currentYear, currentMonth - 1, 1); // Tháng hiện tại
+    const endDate = new Date(currentYear, currentMonth, 1);
+
+    const pipeline = [
+        {
+            $unwind: '$comments',
+        },
+        {
+            $match: {
+                'comments.created': {
+                    $gte: startDate,
+                    $lt: endDate,
+                },
+            },
+        },
+        {
+            $group: {
+                _id: null,
+                totalComments: { $sum: 1 },
+            },
+        },
+    ];
+
+    const result = await Post.aggregate(pipeline);
+    const commentsThisMonth = result.length > 0 ? result[0].totalComments : 0;
+
+    const lastMonth = currentMonth - 1 === 0 ? 12 : currentMonth - 1; // Tháng trước, xử lý trường hợp tháng 1
+    const startDateLastMonth = new Date(currentYear, lastMonth - 1, 1); // Tháng trước
+    const endDateLastMonth = new Date(currentYear, currentMonth - 1, 1);
+
+    const pipelineLastMonth = [
+        {
+            $unwind: '$comments',
+        },
+        {
+            $match: {
+                'comments.created': {
+                    $gte: startDateLastMonth,
+                    $lt: endDateLastMonth,
+                },
+            },
+        },
+        {
+            $group: {
+                _id: null,
+                totalComments: { $sum: 1 },
+            },
+        },
+    ];
+
+    const result2 = await Post.aggregate(pipelineLastMonth);
+    const commentsLastMonth = result2.length > 0 ? result2[0].totalComments : 0;
+
     //Số lượng interaction tháng hiện tại
-    const commentsThisMonth = await Post.countDocuments({
-        'comments.created': { $gte: thisMonthStart.toDate(), $lt: now.toDate() }
-    })
+    // const commentsThisMonth = await Post.countDocuments({
+    //     'comments.created': { $gte: thisMonthStart.toDate(), $lt: now.toDate() }
+    // })
 
     //Số lượng interaction tháng trước
-    const commentsLastMonth = await Post.countDocuments({
-        'comments.created': { $gte: lastMonthStart.toDate(), $lt: thisMonthStart.toDate() }
-    })
+    // const commentsLastMonth = await Post.countDocuments({
+    //     'comments.created': { $gte: lastMonthStart.toDate(), $lt: thisMonthStart.toDate() }
+    // })
 
     // Tỷ lệ interaction tháng hiện tại và tháng trước
     const interactionRatio = (commentsThisMonth - commentsLastMonth) / commentsLastMonth * 100;
@@ -119,8 +175,8 @@ const getTotalStatistic = asyncHandler(async (req, res) => {
         success: true,
         result: listTotal
     })
-
 })
+
 
 const getPost12Months = asyncHandler(async (req, res) => {
     let currentDate = new Date(); // Lấy ngày hiện tại
@@ -180,6 +236,7 @@ const getPost12Months = asyncHandler(async (req, res) => {
         result: monthlyPostCounts
     })
 })
+
 
 const getComments12Months = asyncHandler(async (req, res) => {
     let currentDate = new Date(); // Lấy ngày hiện tại
@@ -481,6 +538,13 @@ const deleteReport = asyncHandler(async (req, res) => {
     return res.status(200).json({ success: true, result: 'Delete successfully' })
 })
 
+const getAllAdmins = asyncHandler(async (req, res) => {
+    const admins = await User.find({ role: '22' }).select('_id')
+    return res.status(200).json({
+        success: true,
+        result: admins
+    })
+})
 
 module.exports = {
     getTotalStatistic,
@@ -496,5 +560,6 @@ module.exports = {
     getAllReports,
     responseProblem,
     getReportByUser,
-    deleteReport
+    deleteReport,
+    getAllAdmins
 }

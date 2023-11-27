@@ -1,14 +1,13 @@
 import { faHouse, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames/bind";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import images from "~/assets/images";
+import config from "~/config";
 import styles from '~/layouts/components/SidebarPublic/SidebarPublic.module.scss'
 
 const cx = classNames.bind(styles);
 
-function SidebarPublic({current}) {
+function SidebarPublic({ current }) {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('sidebarContainer')}>
@@ -17,13 +16,13 @@ function SidebarPublic({current}) {
                         <div className={cx('mainNavContainer')}>
                             <ul className={cx('mainNav')}>
                                 <li>
-                                    <Link className={cx('styleLink')}>
+                                    <Link to={config.routes.homepage} className={cx('styleLink')}>
                                         <FontAwesomeIcon className={cx('icon')} icon={faHouse} />
                                         <span className={cx('mainNavText')}>For you</span>
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link className={cx('styleLink')}>
+                                    <Link to={config.routes.following} className={cx('styleLink')}>
                                         <FontAwesomeIcon className={cx('icon')} icon={faUsers} />
                                         <span className={cx('mainNavText')}>Following</span>
                                     </Link>

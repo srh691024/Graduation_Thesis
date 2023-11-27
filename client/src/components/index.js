@@ -23,3 +23,7 @@ export { default as ModalDetailPost } from '~/components/ModalDetailPost';
 export { default as ModalChangePassword } from '~/components/ModalChangePassword';
 export { default as ModalProblem } from '~/components/ModalProblem';
 export { default as ModalResponseProblem } from '~/components/ModalResponseProblem';
+export { default as Loading} from '~/components/Loading';
+export { default as ModalEditThemes} from '~/components/ModalEditThemes';
+export { default as NotiAdmin} from '~/components/NotiAdmin';
+export { default as NotiPublic} from '~/components/NotiPublic';

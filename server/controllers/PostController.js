@@ -67,6 +67,15 @@ const updatePost = asyncHandler(async (req, res) => {
 
     if (!dateAnni) dateAnni = new Date();
     if (!mode) mode = 'Private'
+    const findPost = await Post.findById(postId)
+    if (findPost.isBanned) {
+        if (mode === 'Public') {
+            return res.status(403).json({
+                success: false,
+                result: 'Your post is banned. Can not share public!'
+            })
+        }
+    }
 
     if (deletedImages) {
 
@@ -131,7 +140,14 @@ const getPostsByCouple = asyncHandler(async (req, res) => {
 })
 
 const getAllPostsPublic = asyncHandler(async (req, res) => {
-    const postsPublic = await Post.find({ mode: 'Public' }).sort('-createdAt').populate('couple', 'avatarCouple isConnected nameCouple createdUser loverUserId').populate('author', 'name avatar').populate('comments.postedBy', 'name avatar')
+    const postsPublic = await Post.find({
+        $and: [
+            { mode: 'Public' },
+            { isHidden: false }
+        ]
+    })
+        .sort('-createdAt')
+        .populate('couple', 'avatarCouple isConnected nameCouple createdUser loverUserId').populate('author', 'name avatar').populate('comments.postedBy', 'name avatar')
     return res.status(200).json({
         success: postsPublic ? true : false,
         result: postsPublic ? postsPublic : 'No posts is shared public'
@@ -148,9 +164,9 @@ const likePost = asyncHandler(async (req, res) => {
     if (alreadyLiked) {
         const response = await Post.findByIdAndUpdate(postId, { $pull: { likes: _id } }, { new: true })
         const ress = await Post.findById(postId)
-        .populate('couple', 'avatarCouple isConnected nameCouple createdUser loverUserId')
-        .populate('author', 'name avatar')
-        .populate('comments.postedBy', 'name avatar')
+            .populate('couple', 'avatarCouple isConnected nameCouple createdUser loverUserId')
+            .populate('author', 'name avatar')
+            .populate('comments.postedBy', 'name avatar')
         // main.io.emit('remove-like', ress);
         return res.status(200).json({
             success: ress ? true : false,
@@ -159,9 +175,9 @@ const likePost = asyncHandler(async (req, res) => {
     } else {
         const ress = await Post.findByIdAndUpdate(postId, { $push: { likes: _id } }, { new: true })
         const response = await Post.findById(postId)
-        .populate('couple', 'avatarCouple isConnected nameCouple createdUser loverUserId')
-        .populate('author', 'name avatar')
-        .populate('comments.postedBy', 'name avatar')
+            .populate('couple', 'avatarCouple isConnected nameCouple createdUser loverUserId')
+            .populate('author', 'name avatar')
+            .populate('comments.postedBy', 'name avatar')
         // main.io.emit('add-like', response);
         return res.status(200).json({
             success: response ? true : false,
@@ -261,8 +277,9 @@ const reportPost = asyncHandler(async (req, res) => {
 })
 
 const getAllPosts = asyncHandler(async (req, res) => {
-    const allPosts = await Post.find()
-        .select('content likes comments author reports mode isBanned createdAt')
+    const allPosts = await Post.find({ isHidden: false })
+        .sort('-createdAt')
+        .select('content likes comments author reports mode isBanned createdAt images')
         .populate('author', 'avatar name')
     return res.status(200).json({
         success: true,
@@ -370,6 +387,27 @@ const getCustomForbidden = asyncHandler(async (req, res) => {
     })
 })
 
+const followingPost = asyncHandler(async (req, res) => {
+    const { _id } = req.user
+    const user = await User.findById(_id)
+
+    const posts = await Post.find({
+        $and: [
+            { couple: { $in: user.followings } },
+            { isHidden: false },
+            { mode: 'Public' }
+        ]
+    })
+        .sort('-createdAt')
+        .populate('couple', 'avatarCouple isConnected nameCouple createdUser loverUserId')
+        .populate('author', 'name avatar')
+        .populate('comments.postedBy', 'name avatar')
+    return res.status(200).json({
+        success: true,
+        result: posts
+    })
+})
+
 
 
 module.exports = {
@@ -388,5 +426,6 @@ module.exports = {
     searchPublic,
     changeStatusFilterComment,
     changeContentCustomFilterComment,
-    getCustomForbidden
+    getCustomForbidden,
+    followingPost
 }

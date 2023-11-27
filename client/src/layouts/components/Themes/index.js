@@ -3,17 +3,21 @@ import styles from "~/layouts/components/Themes/Themes.module.scss";
 import images from "~/assets/images";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
-import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import * as coupleServices from '../../../services/coupleServices'
+import { useSelector } from 'react-redux';
+import { createPortal } from 'react-dom';
+import { ModalEditThemes } from '~/components';
 
 const cx = classNames.bind(styles)
 
-function Themes() {
-    const { usernameCouple } = useParams()
+function Themes({ usernameCouple }) {
+    // const { usernameCouple } = useParams()
     const [infoCreatedUser, setInfoCreatedUser] = useState({})
     const [infoCouple, setInfoCouple] = useState({});
     const [infoLoverUser, setInfoLoverUser] = useState({})
+    const { couple } = useSelector(state => state.couple)
+    const [showModalEditThemes, setShowModalEditThemes] = useState(false);
 
     useEffect(() => {
         async function fetchCouple() {
@@ -41,16 +45,27 @@ function Themes() {
                         <div className={cx('image')}>
                             <div className={cx('image-first')}>
                                 <div className={cx('image-second')}>
-                                    <img src={images.login_image} alt="Logo" />
+                                    {infoCouple?.themes ?
+                                        <img src={infoCouple.themes} alt="Logo" />
+                                        :
+                                        <img src={images.login_image} alt="Logo" />
+                                    }
                                 </div>
-                                <div className={cx('edit-themes')}>
-                                    <div className={cx('camera-icon')}>
-                                        <FontAwesomeIcon className={cx('icon')} icon={faCamera} />
+                                {couple.userNameCouple === usernameCouple &&
+                                    <div className={cx('edit-themes')} onClick={() => setShowModalEditThemes(true)}>
+                                        <div className={cx('camera-icon')}>
+                                            <FontAwesomeIcon className={cx('icon')} icon={faCamera} />
+                                        </div>
+                                        <div className={cx('title')}>
+                                            <span>Edit themes</span>
+                                        </div>
                                     </div>
-                                    <div className={cx('title')}>
-                                        <span>Edit themes</span>
-                                    </div>
-                                </div>
+                                }
+                                {/* Modal edit themes */}
+                                {showModalEditThemes && createPortal(
+                                    <ModalEditThemes infoCouple={infoCouple} onClose={() => setShowModalEditThemes(false)} />,
+                                    document.body
+                                )}
                             </div>
                         </div>
                     </div>

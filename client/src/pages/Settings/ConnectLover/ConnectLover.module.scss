@@ -34,6 +34,10 @@
     margin: 32px 64px 0 64px;
     display: block;
 
+    @media screen and (max-width: 46.1875em) {
+        margin: 32px 32px 0 32px;
+    }
+
     .header-edit-profile-one {
         align-items: flex-end;
         overflow-y: visible;
@@ -95,6 +99,14 @@
     position: relative;
     flex-grow: 0;
 
+    @media screen and (max-width: 46.1875em) {
+        margin: 22px;
+    }
+
+    @media screen and (min-width: 46.25em) and (max-width: 63.9375em) {
+        margin: 22px;
+    }
+
     .button-or-link {
         display: flex;
         width: 100%;
@@ -104,6 +116,14 @@
         justify-content: space-between;
         position: relative;
         margin-bottom: 16px;
+
+        @media screen and (max-width: 46.1875em) {
+            flex-direction: column;
+        }
+
+        @media screen and (min-width: 46.25em) and (max-width: 63.9375em) {
+            flex-direction: column;
+        }
 
         .button-send-link {
             font-weight: 500;
@@ -361,7 +381,7 @@
                     display: flex;
                     justify-content: center;
                     font-weight: 500;
-                    color: rgb(115,115,115);
+                    color: rgb(115, 115, 115);
                     cursor: pointer;
                 }
 
@@ -406,6 +426,16 @@
                         height: 100px;
                         border-radius: 50%;
                         overflow: hidden;
+
+                        @media screen and (max-width: 46.1875em) {
+                            width: 70px;
+                            height: 70px;
+                        }
+
+                        @media screen and (min-width: 46.25em) and (max-width: 63.9375em) {
+                            width: 70px;
+                            height: 70px;
+                        }
 
                         img {
                             width: 100%;

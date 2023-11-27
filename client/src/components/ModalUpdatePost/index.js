@@ -17,7 +17,7 @@ import Swal from "sweetalert2";
 const cx = classNames.bind(styles);
 
 function ModalUpdatePost({ data, onClose }) {
-
+    const [loading, setLoading] = useState(false)
     const settings = {
         dots: true,
         infinite: true,
@@ -69,11 +69,13 @@ function ModalUpdatePost({ data, onClose }) {
             //     console.log(key, value);
             // });
 
+            setLoading(true);
             // fetch API create post
             const response = await postServices.apiUpdatePost(data._id, formData);
             if (!response.success) {
                 Swal.fire('Oops!', response.result, 'error');
             }
+            setLoading(false);
             onClose()
         }
     })
@@ -121,7 +123,9 @@ function ModalUpdatePost({ data, onClose }) {
                                                                     <div className={cx('add')}>
                                                                         <div className={cx('add-one')}>
                                                                             <div className={cx('add-two')}>
-                                                                                <button type="submit" onClick={formik.handleSubmit} >Save</button>
+                                                                                <button type="submit" onClick={formik.handleSubmit} >
+                                                                                    {loading ? 'Updating...' : 'Save'}
+                                                                                </button>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -135,21 +139,24 @@ function ModalUpdatePost({ data, onClose }) {
                                                                         {formik.values.images &&
                                                                             <Slider className={cx('carousel')} {...settings}>
                                                                                 {formik.values.images.map((file, i) => (
-                                                                                    <div key={file} onClick={() => {
-                                                                                        // Remove the clicked image from the array
-                                                                                        const newImages = [...formik.values.images];
-                                                                                        newImages.splice(i, 1);
-                                                                                        formik.setFieldValue("images", newImages);
-                                                                                        if (typeof file === "string") {
-                                                                                            const newImageName = [...formik.values.imagenames]
-                                                                                            const deletedImage = newImageName.splice(i, 1);
-                                                                                            setDeletedImages([...deletedImages, ...deletedImage]);
-                                                                                            formik.setFieldValue("imagenames", newImageName);
-                                                                                        }
-                                                                                    }}>
+                                                                                    <div
+                                                                                        className={cx('imageWrapper')}
+                                                                                        key={i}
+                                                                                        onClick={() => {
+                                                                                            // Remove the clicked image from the array
+                                                                                            const newImages = [...formik.values.images];
+                                                                                            newImages.splice(i, 1);
+                                                                                            formik.setFieldValue("images", newImages);
+                                                                                            if (typeof file === "string") {
+                                                                                                const newImageName = [...formik.values.imagenames]
+                                                                                                const deletedImage = newImageName.splice(i, 1);
+                                                                                                setDeletedImages([...deletedImages, ...deletedImage]);
+                                                                                                formik.setFieldValue("imagenames", newImageName);
+                                                                                            }
+                                                                                        }}
+                                                                                    >
                                                                                         <PreviewImage file={file} />
                                                                                     </div>
-
                                                                                 ))}
                                                                             </Slider>
                                                                         }

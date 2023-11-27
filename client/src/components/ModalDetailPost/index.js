@@ -66,7 +66,7 @@ function ModalDetailPost({ current, post, onClose }) {
                             type: 'image'
                         }
                     }
-                    const notiLover = await notifyServices.apiCreateNotify(notifyLover);
+                    await notifyServices.apiCreateNotify(notifyLover);
                 } else {
                     const notify = {
                         recipients: [comment.result.couple.createdUser, comment.result.couple.loverUserId],
@@ -75,7 +75,7 @@ function ModalDetailPost({ current, post, onClose }) {
                         type: 'image'
                     }
                     async function fetchLike() {
-                        const noti = await notifyServices.apiCreateNotify(notify)
+                        await notifyServices.apiCreateNotify(notify)
                     }
                     fetchLike()
                 }
@@ -111,7 +111,7 @@ function ModalDetailPost({ current, post, onClose }) {
                 }
             }
             async function fetchLike() {
-                const notiLover = await notifyServices.apiCreateNotify(notifyLover);
+                await notifyServices.apiCreateNotify(notifyLover);
             }
             fetchLike()
         } else {
@@ -122,7 +122,7 @@ function ModalDetailPost({ current, post, onClose }) {
                 type: 'image'
             }
             async function fetchLike() {
-                const noti = await notifyServices.apiCreateNotify(notify)
+                await notifyServices.apiCreateNotify(notify)
             }
             fetchLike()
         }
@@ -133,7 +133,7 @@ function ModalDetailPost({ current, post, onClose }) {
     }
 
     const handleDeleteComment = async (commentId) => {
-        const deleteComment = await postServices.apiDeleteComment(post._id, commentId)
+        await postServices.apiDeleteComment(post._id, commentId)
         setOpenDeleteComment(null)
     }
 

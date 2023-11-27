@@ -221,6 +221,29 @@
                                     }
                                 }
 
+                                @media screen and (max-width: 46.1875em) {
+
+                                    .taskCreation {
+                                        flex-direction: column;
+                                        justify-content: flex-start;
+                                        align-items: flex-start;
+
+                                        select {
+                                            width: 120px;
+                                        }
+
+                                        .dateButton-container {
+                                            margin: 5px;
+
+                                        }
+
+                                        .checkStar {
+                                            margin-top: 5px;
+                                            margin-left: 0;
+                                        }
+                                    }
+                                }
+
                                 button {
                                     margin-left: auto;
                                     right: 0;
@@ -314,11 +337,12 @@
                                                 display: flex;
                                                 font-size: 10px;
                                             }
-                                            .checkDid{
+
+                                            .checkDid {
                                                 color: #FE6E91;
                                                 position: absolute;
                                                 transition: opacity 100ms;
-                                                
+
                                                 display: flex;
                                                 font-size: 10px;
                                             }
@@ -378,7 +402,7 @@
                                             display: inline;
 
                                             span {
-                                                
+
                                                 padding: 0px;
                                                 cursor: pointer;
                                                 height: 24px;
@@ -478,6 +502,12 @@
     }
 }
 
+@media screen and (max-width: 46.1875em) {
+    .center-column {
+        max-width: 280px;
+    }
+}
+
 .importantStars {
     color: white;
     background-color: #FE6E91;
@@ -487,17 +517,31 @@
     align-items: center;
     display: flex;
 }
-.deleteTodo{
+
+.deleteTodo {
     color: #FE6E91;
     font-size: 16px;
-    margin:0  10px;
+    margin: 0 10px;
 
 }
-.doneTodo{
+
+.doneTodo {
     margin-right: 0 !important;
 }
-.editTodo{
+
+.editTodo {
     color: #FE6E91;
     font-size: 16px;
-    
+
+}
+
+@media screen and (max-width: 46.1875em) {
+    .editTodo {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .deleteTodo {
+        display: inline-flex;
+    }
 }

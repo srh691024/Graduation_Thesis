@@ -69,7 +69,8 @@ function Post({ current, post }) {
         setIsLike(true)
         const response = await postServices.apiLikePost(post._id)
         if (response.result.couple._id.toString() === couple._id.toString()) {
-            socket.emit('like', { postId: post._id, like: response.result});
+            socket.emit('like', { postId: post._id, like: response.result });
+
             let notifyLover = {};
             if (current._id.toString() === couple.loverUserId.toString()) {
                 notifyLover = {
@@ -92,6 +93,7 @@ function Post({ current, post }) {
             }
             fetchLike()
         } else {
+            socket.emit('like', { postId: post._id, like: response.result });
             const notify = {
                 recipients: [response.result.couple.createdUser, response.result.couple.loverUserId],
                 text: `from ${couple.nameCouple} like your diary.`,
@@ -109,7 +111,7 @@ function Post({ current, post }) {
     const handleUnlike = async () => {
         setIsLike(false)
         const response = await postServices.apiLikePost(post._id)
-        socket.emit('like', { postId: post._id, like: response.result});
+        socket.emit('like', { postId: post._id, like: response.result });
     }
 
     //Add comment
@@ -126,7 +128,7 @@ function Post({ current, post }) {
                 Swal.fire('Oops!', 'Add comment failed', 'error')
             } else {
                 // socket.emit('comment', comment.result.comments)
-                socket.emit('new-comment', { postId: post._id, comment: comment.result});
+                socket.emit('new-comment', { postId: post._id, comment: comment.result });
                 formik.setFieldValue('text', '')
 
                 if (comment.result.couple._id.toString() === couple._id.toString()) {
@@ -166,7 +168,7 @@ function Post({ current, post }) {
     })
 
     const handleDeleteComment = async (commentId) => {
-        const deleteComment = await postServices.apiDeleteComment(post._id, commentId)
+        await postServices.apiDeleteComment(post._id, commentId)
         setOpenDeleteComment(false)
     }
 

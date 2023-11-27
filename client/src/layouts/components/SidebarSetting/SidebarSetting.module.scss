@@ -12,6 +12,11 @@
     justify-content: flex-start;
     flex-grow: 0;
 
+    @media screen and (max-width: 46.1875em) {
+        display: none;
+    }
+
+
     .wrapper-one {
         padding: 24px 0;
         overflow-y: visible;
@@ -27,6 +32,10 @@
         justify-content: flex-start;
         flex-grow: 0;
 
+        @media screen and (max-width: 46.1875em) {
+            background-color: white;
+        }
+
         .wrapper-two {
             height: 100%;
             overflow-y: visible;
@@ -40,6 +49,10 @@
             align-self: auto;
             justify-content: flex-start;
             flex-grow: 0;
+
+            @media screen and (max-width: 46.1875em) {
+                background-color: white;
+            }
 
             .wrapper-three {
                 overflow-y: visible;
@@ -56,6 +69,10 @@
                 justify-content: flex-start;
                 flex-grow: 0;
 
+                @media screen and (max-width: 46.1875em) {
+                    background-color: white;
+                }
+
                 .wrapper-four {
                     width: 315px;
                     overflow-y: visible;
@@ -70,6 +87,10 @@
                     align-self: auto;
                     justify-content: flex-start;
                     flex-grow: 0;
+
+                    @media screen and (max-width: 46.1875em) {
+                        background-color: white;
+                    }
 
                 }
             }
@@ -92,7 +113,11 @@
     align-self: auto;
     justify-content: flex-start;
     flex-grow: 0;
-    border-bottom: 1px solid rgb(219,219,219);
+    border-bottom: 1px solid rgb(219, 219, 219);
+
+    @media screen and (max-width: 46.1875em) {
+        background-color: white;
+    }
 
     span {
         overflow-y: visible;
@@ -127,9 +152,9 @@
     justify-content: flex-start;
     flex-grow: 0;
 
-    a{
+    a {
         border-style: solid;
-        border-color: rgba(0,0,0,0.4);
+        border-color: rgba(0, 0, 0, 0.4);
         border-width: 0;
         padding: 0;
         background-color: transparent;
@@ -152,7 +177,7 @@
         outline: none;
         text-decoration: none;
 
-        .text-sub-edit{
+        .text-sub-edit {
             padding: 16px;
             overflow-y: visible;
             border-radius: 0;
@@ -163,7 +188,7 @@
             overflow-x: visible;
             justify-content: flex-start;
 
-            .text-sub-edit-one{
+            .text-sub-edit-one {
                 justify-content: center;
                 min-width: 0;
                 flex-direction: column;
@@ -172,7 +197,8 @@
                 position: relative;
                 z-index: 0;
                 flex-grow: 1;
-                .text-sub-edit-two{
+
+                .text-sub-edit-two {
                     flex-wrap: nowrap;
                     display: flex;
                     align-items: center;
@@ -181,7 +207,8 @@
                     flex-direction: row;
                     position: relative;
                     z-index: 0;
-                    .text-sub-edit-three{
+
+                    .text-sub-edit-three {
                         flex-shrink: 1;
                         min-width: 0;
                         flex-basis: auto;
@@ -193,7 +220,8 @@
                         z-index: 0;
                         flex-grow: 1;
                         flex-wrap: wrap;
-                        .text-sub-edit-four{
+
+                        .text-sub-edit-four {
                             min-width: 0;
                             flex-direction: column;
                             display: flex;
@@ -202,7 +230,8 @@
                             z-index: 0;
                             flex-grow: 1;
                             max-width: 100%;
-                            .text-sub-edit-five{
+
+                            .text-sub-edit-five {
                                 overflow-y: visible;
                                 border-radius: 0;
                                 background-color: transparent;
@@ -216,7 +245,8 @@
                                 justify-content: flex-start;
                                 flex-grow: 1;
                                 align-items: flex-start;
-                                span{
+
+                                span {
                                     font-size: 13px;
                                     overflow-y: visible;
                                     font-weight: 500;
@@ -232,7 +262,7 @@
                                     max-width: 100%;
                                     word-break: break-word;
 
-                                }   
+                                }
                             }
                         }
                     }
@@ -240,15 +270,15 @@
             }
         }
 
-        .hover-sub-edit{
+        .hover-sub-edit {
             border-radius: 8px;
-            background-color: rgba(0,0,0,0.05);
+            background-color: rgba(0, 0, 0, 0.05);
             opacity: 0;
             right: 0;
             pointer-events: none;
             bottom: 0;
             transition-duration: 100ms;
-            transition-timing-function: cubic-bezier(0,0,1,1);
+            transition-timing-function: cubic-bezier(0, 0, 1, 1);
             transition-property: opacity;
             left: 0;
             top: 0;
@@ -257,6 +287,16 @@
         }
     }
 }
-.sub-edit:hover{
-    background-color: rgba(0,0,0,0.04);
+
+.sub-edit:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+@media screen and (max-width: 46.1875em) {
+    .openSettingResponsive {
+        display: inline;
+        position: absolute;
+        background-color: white;
+        z-index: 99;
+    }
 }

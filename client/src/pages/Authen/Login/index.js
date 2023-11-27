@@ -16,8 +16,8 @@ function Login() {
     const [showModalForgotPassword, setShowModalForgotPassword] = useState(false)
     return (
         <div className={cx('wrapper')}>
-            <div className={cx('login-decoration')}>
-            </div>
+            {/* <div className={cx('login-decoration')}>
+            </div> */}
             <div className={cx('overlay')}></div>
             <div className={cx('login-features')}>
                 <div className={cx('logo')}>

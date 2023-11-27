@@ -71,3 +71,8 @@ export const apiGetCustomForbidden = () => axios({
     url: 'post/getCustomForbidden',
     method: 'GET',
 })
+
+export const apiFollowingPost = () => axios({
+    url: 'post/followingPost',
+    method: 'GET',
+})

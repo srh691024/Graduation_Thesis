@@ -5,9 +5,9 @@ import { Link } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
-function SidebarSetting() {
+function SidebarSetting({ openNavbar, openNavbarSetting }) {
     return (
-        <div className={cx('wrapper')}>
+        <div className={cx('wrapper', `${openNavbar ? 'openSettingResponsive' : ''}`)}>
             <div className={cx('wrapper-one')}>
                 <div className={cx('wrapper-two')}>
                     <div className={cx('wrapper-three')}>
@@ -16,7 +16,7 @@ function SidebarSetting() {
                                 <span>Settings</span>
                             </div>
                             <div className={cx('sub-edit')}>
-                                <Link to={config.routes.settingEditProfile} >
+                                <Link to={config.routes.settingEditProfile} onClick={openNavbarSetting} >
                                     <div className={cx('text-sub-edit')}>
                                         <div className={cx('text-sub-edit-one')}>
                                             <div className={cx('text-sub-edit-two')}>
@@ -34,7 +34,7 @@ function SidebarSetting() {
                                 </Link>
                             </div>
                             <div className={cx('sub-edit')}>
-                                <Link to={config.routes.settingAccountPassword} >
+                                <Link to={config.routes.settingAccountPassword} onClick={openNavbarSetting} >
                                     <div className={cx('text-sub-edit')}>
                                         <div className={cx('text-sub-edit-one')}>
                                             <div className={cx('text-sub-edit-two')}>
@@ -52,7 +52,7 @@ function SidebarSetting() {
                                 </Link>
                             </div>
                             <div className={cx('sub-edit')}>
-                                <Link to={config.routes.settingPushNotifications} >
+                                <Link to={config.routes.settingPushNotifications} onClick={openNavbarSetting} >
                                     <div className={cx('text-sub-edit')}>
                                         <div className={cx('text-sub-edit-one')}>
                                             <div className={cx('text-sub-edit-two')}>
@@ -70,7 +70,7 @@ function SidebarSetting() {
                                 </Link>
                             </div>
                             <div className={cx('sub-edit')}>
-                                <Link to={config.routes.settingCommentControl} >
+                                <Link to={config.routes.settingCommentControl} onClick={openNavbarSetting} >
                                     <div className={cx('text-sub-edit')}>
                                         <div className={cx('text-sub-edit-one')}>
                                             <div className={cx('text-sub-edit-two')}>
@@ -88,7 +88,7 @@ function SidebarSetting() {
                                 </Link>
                             </div>
                             <div className={cx('sub-edit')}>
-                                <Link to={config.routes.settingHelp} >
+                                <Link to={config.routes.settingHelp} onClick={openNavbarSetting}  >
                                     <div className={cx('text-sub-edit')}>
                                         <div className={cx('text-sub-edit-one')}>
                                             <div className={cx('text-sub-edit-two')}>
@@ -109,7 +109,7 @@ function SidebarSetting() {
                                 <span>Couple</span>
                             </div>
                             <div className={cx('sub-edit')}>
-                                <Link to={config.routes.settingConnectLover} >
+                                <Link to={config.routes.settingConnectLover} onClick={openNavbarSetting} >
                                     <div className={cx('text-sub-edit')}>
                                         <div className={cx('text-sub-edit-one')}>
                                             <div className={cx('text-sub-edit-two')}>
@@ -127,7 +127,7 @@ function SidebarSetting() {
                                 </Link>
                             </div>
                             <div className={cx('sub-edit')}>
-                                <Link to={config.routes.settingRequestConnection} >
+                                <Link to={config.routes.settingRequestConnection} onClick={openNavbarSetting}  >
                                     <div className={cx('text-sub-edit')}>
                                         <div className={cx('text-sub-edit-one')}>
                                             <div className={cx('text-sub-edit-two')}>
@@ -145,7 +145,7 @@ function SidebarSetting() {
                                 </Link>
                             </div>
                             <div className={cx('sub-edit')}>
-                                <Link to={config.routes.settingViewConnectionsHistory} >
+                                <Link to={config.routes.settingViewConnectionsHistory} onClick={openNavbarSetting} >
                                     <div className={cx('text-sub-edit')}>
                                         <div className={cx('text-sub-edit-one')}>
                                             <div className={cx('text-sub-edit-two')}>

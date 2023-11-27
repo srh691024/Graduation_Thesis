@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import ModalEditCalendar from "../ModalEditCalendar";
 import { useDispatch, useSelector } from "react-redux";
-import { getAnniversariesByCouple, updateAnni } from "~/store/anniversary/asyncAction";
+import { getAnniversariesByCouple } from "~/store/anniversary/asyncAction";
 import moment from "moment";
 import * as anniversaryServices from '~/services/anniversaryServices'
 import ModalDeleteAnni from "../ModalDeleteAnni";
@@ -33,13 +33,13 @@ function Calendar(props) {
         description: '',
         start: '',
         end: '',
-        color:'',
+        color: '',
     })
-    const currentMonth = async(info) => {
+    const currentMonth = async (info) => {
         const m = info.view.calendar.currentDataManager.data.currentDate
         const mm = moment(m).format('M')
-        const response = await anniversaryServices.apiCurrentMonth(coupleId,{mm})
-        if(response.success) {
+        const response = await anniversaryServices.apiCurrentMonth(coupleId, { mm })
+        if (response.success) {
             props.onDataPassed(response.result)
         }
     }
@@ -52,16 +52,16 @@ function Calendar(props) {
         })
     }
 
-    const handleChange = async(info) => {
+    const handleChange = async (info) => {
         const updateAnniId = info.event._def.extendedProps._id
         const data = {
             start: info.event.startStr,
             end: info.event.endStr
         }
-        await anniversaryServices.apiUpdateEvent(updateAnniId,data)
+        await anniversaryServices.apiUpdateEvent(updateAnniId, data)
         // dispatch(updateAnni({updateAnniId, data}))
     }
-    const handleClick = (info)=>{
+    const handleClick = (info) => {
         setShowModalDeleteCalendar(true)
         const id = info.event._def.extendedProps._id
         setIdAnni(id)

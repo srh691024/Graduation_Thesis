@@ -5,6 +5,7 @@ import * as notifiServices from '~/services/notifyServices'
 import { useSelector } from "react-redux";
 import moment from "moment";
 import { io } from 'socket.io-client';
+import images from "~/assets/images";
 
 const socket = io('http://localhost:5000', {
     reconnection: true,
@@ -23,8 +24,8 @@ function Notifications(props) {
             const noti = await notifiServices.apiGetNotify()
             if (noti.success) {
                 // if (couple.isConnected) {
-                    setNotiOfCouple(noti?.result?.filter(no => no.user._id.toString() === couple?.createdUser?.toString() || no.user._id.toString() === couple?.loverUserId?.toString()))
-                    setGeneralNoti(noti?.result?.filter(no => no.user._id.toString() !== couple?.createdUser?.toString() && no.user._id.toString() !== couple?.loverUserId?.toString()))
+                setNotiOfCouple(noti?.result?.filter(no => no.user._id.toString() === couple?.createdUser?.toString() || no.user._id.toString() === couple?.loverUserId?.toString()))
+                setGeneralNoti(noti?.result?.filter(no => no.user._id.toString() !== couple?.createdUser?.toString() && no.user._id.toString() !== couple?.loverUserId?.toString()))
                 // }
             }
         }
@@ -150,7 +151,11 @@ function Notifications(props) {
                                         <div className={cx('sub-noti-one')}>
                                             <div className={cx('avatar')}>
                                                 <a href="/">
-                                                    <img src={gn?.user?.avatar} alt="" />
+                                                    {gn?.user?.role === '22' ?
+                                                        <img src={images.noUser} alt="" />
+                                                        :
+                                                        <img src={gn?.user?.avatar} alt="" />
+                                                    }
                                                 </a>
                                             </div>
                                             <div className={cx('name-content')}>
@@ -158,7 +163,11 @@ function Notifications(props) {
                                                     <a href="/">
                                                         <div className={cx('name')}>
                                                             <div className={cx('name-one')}>
-                                                                <span>{gn?.user?.name}</span>
+                                                                {gn?.user?.role === '22' ?
+                                                                    <span>Admin</span>
+                                                                    :
+                                                                    <span>{gn?.user?.name}</span>
+                                                                }
                                                             </div>
                                                         </div>
                                                     </a>

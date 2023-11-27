@@ -105,3 +105,25 @@
         }
     }
 }
+
+@media screen and (max-width: 46.1875em) {
+    .wrapper {
+        display: none;
+    }
+
+    .navResponsive {
+        display: inline;
+        position: absolute;
+    }
+}
+
+@media screen and (min-width: 46.25em) and (max-width: 63.9375em) {
+    .wrapper {
+        display: none;
+    }
+
+    .navResponsive {
+        display: inline;
+        position: absolute;
+    }
+}
