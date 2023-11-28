@@ -52,7 +52,6 @@ export const userSlice = createSlice({
             state.mes = 'Your login session has expired. Please log in again!'    
         });
 
-
         //UPDATE USER
 
         builder.addCase(actions.updateUser.pending, (state) => {

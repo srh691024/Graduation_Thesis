@@ -43,7 +43,6 @@ const postConfig = {
     storage
 }
 
-
 export const store = configureStore({
     reducer: {
         post: persistReducer(postConfig, postSlice),

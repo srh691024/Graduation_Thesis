@@ -26,13 +26,10 @@ const createPost = asyncHandler(async (req, res) => {
     if (!dateAnni) dateAnni = new Date();
     if (!mode) mode = 'Private'
 
-
     const images = req.files?.map(el => el.path)
     if (images) req.body.images = images
-
     const imagesname = req.files?.map(el => el.filename)
-    // if(imagesname) req.body.imagesname = imagesname
-    // if (!content) throw new Error('Missing information')
+
     const { _id } = req.user;
     const couple = await Couple.findOne(
         {
@@ -78,7 +75,6 @@ const updatePost = asyncHandler(async (req, res) => {
     }
 
     if (deletedImages) {
-
         if (typeof deletedImages === 'string') {
             const array = []
             array.push(deletedImages)
@@ -90,14 +86,13 @@ const updatePost = asyncHandler(async (req, res) => {
 
     // lọc file ra khỏi array 
     const imagesFileLink = (req.files || []).map(el => el.path)
-
     const imagesFileName = (req.files || []).map(el => el.filename)
-
     const allImageNames = (imagenames || []).concat(imagesFileName)
     // Gộp các đường dẫn URL hiện có và đường dẫn mới sau khi tải lên
     const allImageLinks = (imagesLink || []).concat(imagesFileLink);
 
-    const updatePost = await Post.findByIdAndUpdate(postId, { content, dateAnni, mode, images: allImageLinks, imagesname: allImageNames }, { new: true })
+    const updatePost = await Post.findByIdAndUpdate(postId,
+        { content, dateAnni, mode, images: allImageLinks, imagesname: allImageNames }, { new: true })
 
     return res.status(200).json({
         success: updatePost ? true : false,
@@ -224,8 +219,6 @@ const addComment = asyncHandler(async (req, res) => {
             })
         }
     }
-
-
 
     const cmt = await Post.findByIdAndUpdate(postId, { $push: { comments: { textComment: text, postedBy: _id } } }, { new: true })
     const comment = await Post.findById(postId).populate('couple', 'avatarCouple isConnected nameCouple createdUser loverUserId').populate('author', 'name avatar').populate('comments.postedBy', 'name avatar')

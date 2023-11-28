@@ -2,9 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const Couple = new Schema({
-    avatarCouple: {
-        type: String
-    },
+    avatarCouple: {type: String},
     avatarCouplename: { type: String },
     themes: { type: String},
     themesName: { type: String },
@@ -22,19 +20,15 @@ const Couple = new Schema({
         }
     ],
     totalLikes: { type: Number, default: 0 },
-
     tempAvatarLover: { type: String},
     tempAvatarLoverName: { type: String},
     tempNameLover: { type: String, default: 'Your Lover' },
     tempDobLover: { type: Date, default: new Date() },
     tempHoroscope: { type: String, default: 'Aries' },
-
     startConnectedDate: { type: Date },
     disconnectedDate: { type: Date },
     isHidden: {type: Boolean, default: false}
 }, {
     timestamps: true,
-}
-)
-
+})
 module.exports = mongoose.model('Couple', Couple);

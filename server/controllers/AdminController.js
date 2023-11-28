@@ -26,12 +26,10 @@ const getTotalStatistic = asyncHandler(async (req, res) => {
         }
     ]
 
-    // const currentDate = new Date();
-    // const lastMonthDate = moment(currentDate).subtract(1, 'month').toDate();
-
     const now = moment(); // Lấy ngày hiện tại
     const thisMonthStart = now.clone().startOf('month'); // Ngày đầu tiên của tháng hiện tại
     const lastMonthStart = thisMonthStart.clone().subtract(1, 'months'); // Ngày đầu tiên của tháng trước
+
     //ACCOUNTS
     const accounts = await User.find()
     listTotal[0].totalAccounts = accounts.length;
@@ -50,7 +48,6 @@ const getTotalStatistic = asyncHandler(async (req, res) => {
     const userRatio = (usersThisMonth - usersLastMonth) / usersLastMonth * 100;
     listTotal[0].rate = userRatio.toFixed(1)
 
-
     //COUPLES
     const couples = await Couple.find({ isConnected: true })
     listTotal[1].totalCouples = couples.length;
@@ -62,7 +59,6 @@ const getTotalStatistic = asyncHandler(async (req, res) => {
             { startConnectedDate: { $gte: thisMonthStart.toDate(), $lt: now.toDate() } }
         ]
     })
-
 
     //Số lượng couple tháng trước
     const couplesLastMonth = await Couple.countDocuments({
@@ -139,16 +135,6 @@ const getTotalStatistic = asyncHandler(async (req, res) => {
 
     const result2 = await Post.aggregate(pipelineLastMonth);
     const commentsLastMonth = result2.length > 0 ? result2[0].totalComments : 0;
-
-    //Số lượng interaction tháng hiện tại
-    // const commentsThisMonth = await Post.countDocuments({
-    //     'comments.created': { $gte: thisMonthStart.toDate(), $lt: now.toDate() }
-    // })
-
-    //Số lượng interaction tháng trước
-    // const commentsLastMonth = await Post.countDocuments({
-    //     'comments.created': { $gte: lastMonthStart.toDate(), $lt: thisMonthStart.toDate() }
-    // })
 
     // Tỷ lệ interaction tháng hiện tại và tháng trước
     const interactionRatio = (commentsThisMonth - commentsLastMonth) / commentsLastMonth * 100;
@@ -270,25 +256,23 @@ const getComments12Months = asyncHandler(async (req, res) => {
 
     let result = await Post.aggregate(pipeline);
 
-
-    // Tạo một đối tượng Map để theo dõi các tháng và tổng số bài post
+    // Tạo một đối tượng Map để theo dõi các tháng và tổng số bình luận 
     const monthCommentMap = new Map();
 
-    // Khởi tạo tất cả tháng có tổng số bài post là 0
+    // Khởi tạo tất cả tháng có tổng số bình luận là 0
     for (let i = 1; i <= 12; i++) {
         monthCommentMap.set(i, 0);
     }
 
-    // Cập nhật tổng số bài post từ kết quả truy vấn
+    // Cập nhật tổng số bình luận từ kết quả truy vấn
     result.forEach((record) => {
         const month = record._id.month;
         const totalComments = record.totalComments;
         monthCommentMap.set(month, totalComments);
     });
 
-    // Tạo kết quả cuối cùng với totalPost của tất cả các tháng
+    // Tạo kết quả cuối cùng với totalComments của tất cả các tháng
     const monthlyCommentCounts = [...monthCommentMap.values()];
-
 
     return res.status(200).json({
         success: true,
