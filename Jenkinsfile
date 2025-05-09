@@ -1,9 +1,7 @@
 pipeline {
     agent any
 
-    environment {
-        // Thêm biến môi trường nếu cần, ví dụ cho PATH, API keys...
-    }
+
 
     stages {
         stage('Checkout Code') {
