@@ -1,11 +1,11 @@
 pipeline {
     agent any
     tools {
-        // Đảm bảo rằng tên công cụ NodeJS bạn đã cấu hình là "NodeJS_14"
         nodejs 'NodeJS_14'  // Tên đã cấu hình trong Global Tool Configuration 
     }
     environment {
-        // Các biến môi trường khác (nếu cần)
+        // Nếu có các biến môi trường cần thiết, bạn có thể khai báo ở đây
+        NODE_ENV = 'production'  // Ví dụ biến môi trường
     }
     stages {
         stage('Checkout SCM') {
@@ -16,7 +16,7 @@ pipeline {
         stage('Install Server Dependencies') {
             steps {
                 script {
-                    // Chuyển đến thư mục server và cài đặt các dependencies của server
+                    // Cài đặt các dependencies của server
                     dir('server') {
                         sh 'npm install'  // Sử dụng NodeJS đã cài đặt từ Jenkins
                     }
@@ -26,7 +26,7 @@ pipeline {
         stage('Install Client Dependencies') {
             steps {
                 script {
-                    // Chuyển đến thư mục client và cài đặt các dependencies của client
+                    // Cài đặt các dependencies của client
                     dir('client') {
                         sh 'npm install'
                     }
@@ -36,7 +36,7 @@ pipeline {
         stage('Build Client') {
             steps {
                 script {
-                    // Build client ứng dụng
+                    // Xây dựng ứng dụng client
                     dir('client') {
                         sh 'npm run build'
                     }
@@ -45,26 +45,28 @@ pipeline {
         }
         stage('Run Dependency Check') {
             steps {
-                // Kiểm tra các dependencies
                 script {
+                    // Kiểm tra các dependencies
                     sh './dependency-check.sh'
                 }
             }
         }
         stage('Security Test with ZAP (Optional)') {
             steps {
-                // Nếu có, bạn có thể thực hiện test bảo mật ở đây
+                // Nếu có thể thực hiện test bảo mật ở đây
+                echo 'Security Test Stage - Optional'
             }
         }
         stage('Deploy (Optional)') {
             steps {
-                // Nếu có, thực hiện deploy ở đây
+                // Nếu có thể thực hiện deploy ở đây
+                echo 'Deploy Stage - Optional'
             }
         }
     }
     post {
         always {
-            // Các hành động luôn thực hiện sau khi pipeline kết thúc, ví dụ: dọn dẹp, báo cáo
+            // Các hành động luôn thực hiện sau khi pipeline kết thúc
             echo 'Pipeline finished.'
         }
         failure {
