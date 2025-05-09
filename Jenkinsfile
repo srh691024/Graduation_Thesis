@@ -2,68 +2,101 @@ pipeline {
     agent any
 
     environment {
-        NODE_ENV = 'development'
+        // Thêm biến môi trường nếu cần, ví dụ cho PATH, API keys...
     }
 
     stages {
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
-                git 'https://gitlab.com/dohuyen1/Graduation_Thesis.git' // Thay bằng URL repo bạn
+                // Checkout mã nguồn từ GitLab
+                checkout scm
             }
         }
 
         stage('Install Server Dependencies') {
             steps {
-                dir('server') {
-                    sh 'npm install'
+                // Sử dụng Docker với Node.js image
+                script {
+                    dir('server') {
+                        sh 'npm install'
+                    }
                 }
             }
         }
 
         stage('Install Client Dependencies') {
             steps {
-                dir('client') {
-                    sh 'npm install'
+                // Sử dụng Docker với Node.js image
+                script {
+                    dir('client') {
+                        sh 'npm install'
+                    }
                 }
             }
         }
 
         stage('Build Client') {
             steps {
-                dir('client') {
-                    sh 'npm run build' // nếu có lệnh build
+                // Sử dụng Docker với Node.js image để build client
+                script {
+                    dir('client') {
+                        sh 'npm run build'
+                    }
                 }
             }
         }
 
         stage('Run Dependency Check') {
             steps {
-                sh '''
-                docker run --rm \
-                -v "$PWD:/src" \
-                -v "dependency-data:/usr/share/dependency-check/data" \
-                -v "$PWD/odc-reports:/report" \
-                owasp/dependency-check \
-                --project "CoupleSocialNetwork" \
-                --scan /src \
-                --format "HTML" \
-                --out /report \
-                --enableExperimental \
-                --prettyPrint
-                '''
+                // Run OWASP Dependency-Check using Docker container
+                script {
+                    sh '''
+                    docker run --rm \
+                    -v "$(pwd)/server:/src" \
+                    -v "$(pwd)/odc-reports:/report" \
+                    owasp/dependency-check \
+                    --project "Graduation_Thesis" \
+                    --scan /src \
+                    --format "HTML" \
+                    --out /report \
+                    --enableExperimental \
+                    --prettyPrint
+                    '''
+                }
             }
         }
 
-        stage('Security Test with ZAP (optional)') {
+        stage('Security Test with ZAP (Optional)') {
             steps {
-                echo 'ZAP test sẽ được thêm nếu cần...'
+                // Optional step for ZAP security testing
+                script {
+                    echo 'Running security tests with OWASP ZAP...'
+                    // Cấu hình và chạy ZAP (nếu cần)
+                }
             }
         }
 
         stage('Deploy (Optional)') {
             steps {
-                echo 'Triển khai nếu cần'
+                script {
+                    echo 'Deploying application...'
+                    // Lệnh deploy ứng dụng của bạn (Heroku, Docker, Kubernetes,...)
+                }
             }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline finished.'
+        }
+
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+
+        failure {
+            echo 'Pipeline failed. Check logs for details.'
         }
     }
 }
