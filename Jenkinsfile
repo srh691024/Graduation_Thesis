@@ -6,7 +6,6 @@ pipeline {
     }
     
     environment {
-        // Nếu có các biến môi trường cần thiết, bạn có thể khai báo ở đây
         NODE_ENV = 'production'  // Ví dụ biến môi trường
     }
     
