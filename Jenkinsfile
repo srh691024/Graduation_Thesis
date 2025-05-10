@@ -28,17 +28,17 @@ pipeline {
         }
         
         stage('Setup and Build Frontend') {
-    steps {
-        script {
-            dir('client') {
-                sh 'rm -rf node_modules package-lock.json' // Xóa cache
-                sh 'npm install'
-                sh 'npm list react-app-rewired || true' // Debug
-                sh 'npm run build'
+            steps {
+                script {
+                    // Cài đặt dependencies và build cho frontend
+                    dir('client') {
+                        sh 'npm install'  // Cài đặt các thư viện Node.js cho client
+                        sh 'echo $PATH'  // Debug: In PATH hiện tại
+                        sh 'export PATH=./node_modules/.bin:$PATH && react-app-rewired build'  // Thêm PATH và chạy build
+                    }
+                }
             }
         }
-    }
-}
         
         stage('Run Dependency Check') {
             steps {
