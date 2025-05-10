@@ -28,16 +28,17 @@ pipeline {
         }
         
         stage('Setup and Build Frontend') {
-            steps {
-                script {
-                    // Cài đặt dependencies và build cho frontend
-                    dir('client') {
-                        sh 'npm install'  // Cài đặt các thư viện Node.js cho client
-                        sh 'npm run build'  // Build ứng dụng React
-                    }
-                }
+    steps {
+        script {
+            dir('client') {
+                sh 'rm -rf node_modules package-lock.json' // Xóa cache
+                sh 'npm install'
+                sh 'npm list react-app-rewired || true' // Debug
+                sh 'npm run build'
             }
         }
+    }
+}
         
         stage('Run Dependency Check') {
             steps {
