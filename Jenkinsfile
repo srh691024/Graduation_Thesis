@@ -28,16 +28,16 @@ pipeline {
           }
           
           stage('Setup and Build Frontend') {
-              steps {
-                  script {
-                      // Cài đặt dependencies và build cho frontend
-                      dir('client') {
-                          sh 'npm install'  // Cài đặt các thư viện Node.js cho client
-                          sh 'npx react-app-rewired build'  // Sử dụng npx để chạy build
-                      }
-                  }
-              }
-          }
+    steps {
+        catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            dir('client') {
+                sh 'npm install'
+                sh 'npm run build'  // nếu lỗi, vẫn tiếp tục pipeline
+            }
+        }
+    }
+}
+
           
           stage('Run Dependency Check') {
               steps {
