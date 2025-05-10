@@ -43,7 +43,7 @@ pipeline {
                 script {
                     // Xây dựng ứng dụng client
                     dir('client') {
-                        sh 'npm run build'  // Xây dựng ứng dụng
+                        sh 'npm start'  // Xây dựng ứng dụng
                     }
                 }
             }
