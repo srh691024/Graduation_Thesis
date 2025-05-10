@@ -16,10 +16,10 @@ pipeline {
             }
         }
         
-        stage('Install Server Dependencies') {
+        stage('Setup Backend') {
             steps {
                 script {
-                    // Cài đặt các dependencies của server
+                    // Cài đặt dependencies cho backend
                     dir('server') {
                         sh 'npm install'  // Cài đặt các thư viện Node.js cho server
                     }
@@ -27,23 +27,13 @@ pipeline {
             }
         }
         
-        stage('Install Client Dependencies') {
+        stage('Setup and Build Frontend') {
             steps {
                 script {
-                    // Cài đặt các dependencies của client
+                    // Cài đặt dependencies và build cho frontend
                     dir('client') {
                         sh 'npm install'  // Cài đặt các thư viện Node.js cho client
-                    }
-                }
-            }
-        }
-        
-        stage('Build Client') {
-            steps {
-                script {
-                    // Xây dựng ứng dụng client
-                    dir('client') {
-                        sh 'npm start'  // Xây dựng ứng dụng
+                        sh 'npm run build'  // Build ứng dụng React
                     }
                 }
             }
@@ -60,14 +50,12 @@ pipeline {
         
         stage('Security Test with ZAP (Optional)') {
             steps {
-                // Đây là một bước kiểm thử bảo mật (optional)
                 echo 'Security Test Stage - Optional'  // Placeholder cho bước kiểm thử bảo mật với OWASP ZAP
             }
         }
         
         stage('Deploy (Optional)') {
             steps {
-                // Đây là một bước deploy (optional)
                 echo 'Deploy Stage - Optional'  // Placeholder cho bước deploy
             }
         }
@@ -75,12 +63,10 @@ pipeline {
     
     post {
         always {
-            // Các hành động luôn thực hiện sau khi pipeline kết thúc
             echo 'Pipeline finished.'
         }
         
         failure {
-            // Nếu pipeline thất bại, thực hiện hành động ở đây
             echo 'Pipeline failed. Check logs for details.'
         }
     }
